@@ -2,9 +2,17 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
+import { useTranslation } from 'react-i18next';
 
 function App() {
   const [count, setCount] = useState(0);
+
+  const { t, i18n } = useTranslation('test');
+
+  const handleChangeLanguage = () => {
+    const newLanguage = i18n.language === 'ru' ? 'en' : 'ru';
+    i18n.changeLanguage(newLanguage);
+  };
 
   return (
     <>
@@ -27,11 +35,13 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
+        <button onClick={handleChangeLanguage}>translate</button>
       </div>
 
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <p>{t('test')}</p>
     </>
   );
 }
