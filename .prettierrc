@@ -3,5 +3,5 @@
   "semi": true,
   "trailingComma": "all",
   "printWidth": 80,
-  "endOfLine": "lf"
+  "endOfLine": "auto"
 }

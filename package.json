@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "prepare": "husky",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -35,7 +36,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
       "eslint --fix"
     ]
   }
