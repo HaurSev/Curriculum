@@ -1,4 +1,4 @@
-// Финальный тест хука
+// Финальный тест husky
 const testFinal = (): void => {
   console.log('test final');
 };
