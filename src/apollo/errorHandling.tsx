@@ -1,4 +1,9 @@
-import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client';
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  ApolloLink,
+} from '@apollo/client';
 import { ErrorLink } from '@apollo/client/link/error';
 import {
   CombinedGraphQLErrors,
@@ -34,7 +39,7 @@ const errorLink = new ErrorLink(({ error }) => {
   }
 });
 
-const link = from([errorLink, httpLink]);
+const link = ApolloLink.from([errorLink, httpLink]);
 
 export const client = new ApolloClient({
   link,
