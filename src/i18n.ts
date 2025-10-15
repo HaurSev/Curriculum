@@ -16,9 +16,6 @@ i18n
     debug: true,
     lng: 'en',
     ns: [],
-    backend: {
-      loadPath: '../public/locales/{{lng}}/{{ns}}.json',
-    },
   });
 
 export default i18n;
