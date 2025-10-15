@@ -3,6 +3,16 @@ import { initReactI18next } from 'react-i18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
+const initConfig = {
+  ns: [],
+  fallbackLng: 'en',
+  supportedLngs: ['en', 'ru'],
+  defaultNS: 'common',
+  interpolation: { escapeValue: false },
+  partialBundledLanguages: true,
+  react: { useSuspense: true },
+};
+
 i18n
   .use(
     resourcesToBackend((language: string, namespace: string) =>
@@ -11,11 +21,6 @@ i18n
   )
   .use(LanguageDetector)
   .use(initReactI18next)
-  .init({
-    fallbackLng: 'en',
-    debug: true,
-    lng: 'en',
-    ns: [],
-  });
+  .init(initConfig);
 
 export default i18n;

@@ -5,11 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { client } from './apollo/apollo.tsx';
 import { ApolloProvider } from '@apollo/client/react';
 import useTestStore from './store/testStore.ts';
+import './i18n.ts';
 
 function App() {
   const { count, increment, reset } = useTestStore();
 
-  const { t, i18n } = useTranslation('test');
+  const { t, i18n } = useTranslation('common');
 
   const handleChangeLanguage = () => {
     const newLanguage = i18n.language === 'ru' ? 'en' : 'ru';
@@ -41,7 +42,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <p>{t('test')}</p>
+      <p>{t('one')}</p>
     </ApolloProvider>
   );
 }
