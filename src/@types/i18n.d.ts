@@ -1,20 +1,20 @@
-import authorisation from '../locales/en-US/authorisation.json';
-import CVs from '../locales/en-US/CVs.json';
-import departaments from '../locales/en-US/departments.json';
-import languages from '../locales/en-US/languages.json';
-import positions from '../locales/en-US/positions.json';
-import projects from '../locales/en-US/projects.json';
-import skills from '../locales/en-US/skills.json';
-import users from '../locales/en-US/users.json';
-import common from '../../public/locales/en-US/common.json';
-import test from '../../public/locales/en-US/test.json';
+import authorisation from '../../public/locales/en/authorisation.json';
+import CVs from '../../public/locales/en/CVs.json';
+import departments from '../../public/locales/en/departments.json';
+import languages from '../../public/locales/en/languages.json';
+import positions from '../../public/locales/en/positions.json';
+import projects from '../../public/locales/en/projects.json';
+import skills from '../../public/locales/en/skills.json';
+import users from '../../public/locales/en/users.json';
+import common from '../../public/locales/en/common.json';
+import test from '../../public/locales/en/test.json';
 
 const resources = {
   test,
   common,
   authorisation,
   CVs,
-  departaments,
+  departments,
   languages,
   positions,
   projects,
