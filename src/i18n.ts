@@ -16,9 +16,7 @@ const initConfig = {
 i18n
   .use(
     resourcesToBackend((language: string, namespace: string) =>
-      fetch(`../public/locales/${language}/${namespace}.json`).then((res) =>
-        res.json(),
-      ),
+      fetch(`/locales/${language}/${namespace}.json`).then((res) => res.json()),
     ),
   )
   .use(LanguageDetector)
