@@ -4,10 +4,13 @@
   "email": "email",
   "password": "password",
   "welcome": "welcome back",
-  "hello_again": "Hello again! Log in to continue",
-  "forgot_password": "forgot password",
-  "register_now": "redister page",
-  "create_account": "create account",
-  "have_account": "i have an account",
-  "welcome_signup": "Welcome! Sign up to continue"
+  "helloAgain": "Hello again! Log in to continue",
+  "forgotPassword": "Forgot password",
+  "registerNow": "redister page",
+  "createAccount": "create account",
+  "haveAccount": "i have an account",
+  "welcomeSignup": "Welcome! Sign up to continue",
+  "instruction": "We will sent you an email with further instructions",
+  "resetPpassword": "reset password",
+  "cancel": "cancel"
 }
