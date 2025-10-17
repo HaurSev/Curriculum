@@ -1,0 +1,13 @@
+{
+  "login": "log in",
+  "signup": "sign up",
+  "email": "email",
+  "password": "password",
+  "welcome": "welcome back",
+  "hello_again": "Hello again! Log in to continue",
+  "forgot_password": "forgot password",
+  "register_now": "redister page",
+  "create_account": "create account",
+  "have_account": "i have an account",
+  "welcome_signup": "Welcome! Sign up to continue"
+}
