@@ -21,16 +21,25 @@ const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
   } else {
     signClassList.push('active');
   }
+
+  const handleLoginNavigate = () => {
+    navigate(AppRoutes.LOGIN);
+  };
+
+  const handleSignupNavigate = () => {
+    navigate(AppRoutes.REGISTRATION);
+  };
+
   return (
     <div className="authHeader">
       <button
-        onClick={() => navigate(AppRoutes.LOGIN)}
+        onClick={handleLoginNavigate}
         className={logClassList.length === 0 ? '' : logClassList.join(' ')}
       >
         {t('login')}
       </button>
       <button
-        onClick={() => navigate(AppRoutes.REGISTRATION)}
+        onClick={handleSignupNavigate}
         className={signClassList.length === 0 ? '' : signClassList.join(' ')}
       >
         {t('signup')}
