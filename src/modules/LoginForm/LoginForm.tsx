@@ -43,6 +43,22 @@ const LoginForm = () => {
 
       console.log('Signup result:', response.data);
 
+      const res = response.data;
+
+      const { email, id } = response.data?.login.user || {};
+
+      sessionStorage.setItem(
+        'access_token',
+        JSON.stringify(res?.login.access_token),
+      );
+
+      sessionStorage.setItem(
+        'refresh_token',
+        JSON.stringify(res?.login.refresh_token),
+      );
+
+      sessionStorage.setItem('user', JSON.stringify({ id, email }));
+
       navigate('/');
     } catch (err) {
       console.error('Signup failed:', err);
