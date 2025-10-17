@@ -6,6 +6,7 @@ import { useSignup } from '../../graphql/mutations/signup';
 import '../LoginForm/LoginForm.css';
 import { ApolloError } from 'apollo-server-errors';
 import type { GraphQLError } from 'graphql';
+import useErrorStore from '../../store/errorStore';
 
 type SignupFormData = {
   email: string;
@@ -23,12 +24,13 @@ const SignupForm = () => {
   const { register, handleSubmit } = useForm<SignupFormData>();
   const { t } = useTranslation(['authorisation', 'common']);
   const navigate = useNavigate();
-
+  const { message, setError } = useErrorStore();
   const [signup, { loading, error }] = useSignup();
 
   const onSubmit = async (data: SignupFormData) => {
+    setError('');
     if (!data.email || !data.password) {
-      throw new Error('email or password no valide');
+      setError('email or password no valide');
     }
     try {
       const response = await signup({
@@ -65,13 +67,20 @@ const SignupForm = () => {
       />
 
       <div className="error">
-        {error &&
+        {message ? (
+          <p>{message}</p>
+        ) : error ? (
           (error as ApolloError).errors.map((err: GraphQLError, i: number) => {
             const errorExtensions = err.extensions as ErrorExtensions;
-            const message = errorExtensions.response?.message;
+            const serverMessage = errorExtensions.response?.message;
 
-            return <p key={i}>{message || err.message}</p>;
-          })}
+            const finalMessage = Array.isArray(serverMessage)
+              ? serverMessage.join(', ')
+              : serverMessage || err.message;
+
+            return <p key={i}>{finalMessage}</p>;
+          })
+        ) : null}
       </div>
 
       <div>
