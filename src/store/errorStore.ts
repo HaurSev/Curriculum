@@ -7,8 +7,7 @@ interface ErrorState {
 }
 
 const useErrorStore = create<ErrorState>((set) => ({
-  message: ' ',
-  type: 'error',
+  message: '',
   setError: (message: string) => set({ message }),
   clearError: () => set({ message: '' }),
 }));
