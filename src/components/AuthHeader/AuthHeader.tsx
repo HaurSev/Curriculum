@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import './AuthHeader.css';
+import { Button, ButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 
@@ -10,41 +10,53 @@ interface AuthHeaderProps {
 
 const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
   const { t } = useTranslation('authorisation');
-
   const navigate = useNavigate();
 
-  const logClassList = [];
-  const signClassList = [];
-
-  if (active === 'login') {
-    logClassList.push('active');
-  } else {
-    signClassList.push('active');
-  }
-
-  const handleLoginNavigate = () => {
-    navigate(AppRoutes.LOGIN);
-  };
-
-  const handleSignupNavigate = () => {
-    navigate(AppRoutes.REGISTRATION);
-  };
-
   return (
-    <div className="authHeader">
-      <button
-        onClick={handleLoginNavigate}
-        className={logClassList.length === 0 ? '' : logClassList.join(' ')}
+    <ButtonGroup
+      variant="text"
+      sx={{
+        width: '100%',
+        justifyContent: 'center',
+        gap: 2,
+        '& .MuiButton-root': {
+          width: 200,
+          fontSize: 18,
+          textTransform: 'uppercase',
+          paddingY: '15px',
+          transition: '0.4s ease',
+          background: 'transparent',
+          '&:hover': {
+            background: 'rgba(128, 128, 128, 0.144)',
+          },
+          '&:active': {
+            background: 'rgba(91, 91, 91, 0.144)',
+          },
+        },
+      }}
+    >
+      <Button
+        onClick={() => navigate(AppRoutes.LOGIN)}
+        sx={{
+          color: active === 'login' ? 'red' : 'white',
+          borderBottom: active === 'login' ? '2px solid red' : 'none',
+          borderRadius: 0,
+        }}
       >
         {t('login')}
-      </button>
-      <button
-        onClick={handleSignupNavigate}
-        className={signClassList.length === 0 ? '' : signClassList.join(' ')}
+      </Button>
+
+      <Button
+        onClick={() => navigate(AppRoutes.REGISTRATION)}
+        sx={{
+          color: active === 'signup' ? 'red' : 'white',
+          borderBottom: active === 'signup' ? '2px solid red' : 'none',
+          borderRadius: 0,
+        }}
       >
         {t('signup')}
-      </button>
-    </div>
+      </Button>
+    </ButtonGroup>
   );
 };
 

@@ -110,6 +110,40 @@ const theme = createTheme({
         },
       },
     },
+    MuiButtonGroup: {
+      styleOverrides: {
+        root: {
+          '&.authHeader': {
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '20px',
+            width: '100%',
+            '& .MuiButton-root': {
+              width: '200px',
+              border: 'none',
+              background: 'transparent',
+              fontSize: '18px',
+              textTransform: 'uppercase',
+              padding: '15px 0px',
+              color: 'var(--def-text-color)',
+              '&.active': {
+                color: 'var(--active-color)',
+                borderBottom: '2px solid var(--active-color)',
+              },
+              '&:hover': {
+                background: 'rgba(128, 128, 128, 0.144)',
+                transition: '0.4s ease',
+                cursor: 'pointer',
+              },
+              '&:active': {
+                background: 'rgba(91, 91, 91, 0.144)',
+                transition: '0.4s ease',
+              },
+            },
+          },
+        },
+      },
+    },
   },
 });
 export const globalStyles = {

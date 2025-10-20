@@ -1,4 +1,3 @@
-import './App.css';
 import { client } from './apollo/apollo.tsx';
 import { ApolloProvider } from '@apollo/client/react';
 import './i18n.ts';
