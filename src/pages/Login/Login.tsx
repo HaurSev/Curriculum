@@ -1,4 +1,3 @@
-import React from 'react';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import LoginForm from '../../modules/LoginForm/LoginForm';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +11,7 @@ const Login = () => {
       <AuthHeader active="login" />
       <div className="welcomePart">
         <h1>{t('welcome')}</h1>
-        <p>{t('hello_again')}</p>
+        <p>{t('helloAgain')}</p>
         <LoginForm />
       </div>
     </div>

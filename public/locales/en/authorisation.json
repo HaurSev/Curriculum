@@ -6,11 +6,11 @@
   "welcome": "welcome back",
   "helloAgain": "Hello again! Log in to continue",
   "forgotPassword": "Forgot password",
-  "registerNow": "redister page",
+  "registerNow": "register page",
   "createAccount": "create account",
   "haveAccount": "i have an account",
   "welcomeSignup": "Welcome! Sign up to continue",
   "instruction": "We will sent you an email with further instructions",
-  "resetPpassword": "reset password",
+  "resetPassword": "reset password",
   "cancel": "cancel"
 }
