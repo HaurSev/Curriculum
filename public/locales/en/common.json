@@ -1,6 +1,6 @@
 {
   "loading": "loading",
-  "email_already_used": "This email address is already registered.",
-  "invalid_email": "Please enter a valid email address.",
-  "weak_password": "Password must be at least 8 characters long and include a number."
+  "emailAlreadyUsed": "This email address is already registered.",
+  "invalidEmail": "Please enter a valid email address.",
+  "weakPassword": "Password must be at least 8 characters long and include a number."
 }
