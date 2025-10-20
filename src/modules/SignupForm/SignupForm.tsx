@@ -13,19 +13,28 @@ import {
   Alert,
   CircularProgress,
 } from '@mui/material';
-import { CombinedGraphQLErrors } from '@apollo/client';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 type SignupFormData = {
   email: string;
   password: string;
 };
 
+const SignupUserSchema = z.object({
+  email: z
+    .string()
+    .nonempty('Email is required')
+    .email('Invalid email address'),
+  password: z.string().nonempty('Password is required'),
+});
+
 const SignupForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupFormData>();
+  } = useForm<SignupFormData>({ resolver: zodResolver(SignupUserSchema) });
 
   const { t } = useTranslation(['authorisation', 'common']);
   const navigate = useNavigate();
@@ -34,12 +43,6 @@ const SignupForm = () => {
   const [signup, { loading, error }] = useSignup();
 
   const onSubmit = async (data: SignupFormData) => {
-    setError('');
-    if (!data.email || !data.password) {
-      setError('Email or password not valid');
-      return;
-    }
-
     try {
       const response = await signup({
         variables: {
@@ -53,9 +56,10 @@ const SignupForm = () => {
       console.log('Signup result:', response.data);
       navigate(AppRoutes.LOGIN);
     } catch {
-      if (CombinedGraphQLErrors.is(error)) {
-        error.errors.forEach(({ message }) => setError(message));
-      }
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred';
+
+      setError(errorMessage);
     }
   };
 
@@ -84,7 +88,7 @@ const SignupForm = () => {
                 required: 'Email is required',
                 pattern: {
                   value: /^\S+@\S+$/i,
-                  message: t('common:invalid_email') || 'Invalid email address',
+                  message: t('common:invalidEmail') || 'Invalid email address',
                 },
               })}
               label={t('email')}

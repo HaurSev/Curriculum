@@ -12,29 +12,36 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { CombinedGraphQLErrors } from '@apollo/client';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 type LoginFormData = {
   email: string;
   password: string;
 };
 
+const LoginUserSchema = z.object({
+  email: z
+    .string()
+    .nonempty('Email is required')
+    .email('Invalid email address'),
+  password: z.string().nonempty('Password is required'),
+});
+
 const LoginForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>();
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(LoginUserSchema),
+  });
+
   const { t } = useTranslation(['authorisation', 'common']);
   const [login, { loading, error }] = useLogin();
   const { message, setError } = useErrorStore();
 
   const onSubmit = async (data: LoginFormData) => {
-    setError('');
-    if (!data.email || !data.password) {
-      setError('Email or password cannot be empty');
-      return;
-    }
-
     try {
       const response = await login({
         variables: {
@@ -82,7 +89,7 @@ const LoginForm = () => {
                 required: 'Email is required',
                 pattern: {
                   value: /^\S+@\S+$/i,
-                  message: t('common:invalid_email') || 'Invalid email address',
+                  message: t('common:invalidEmail') || 'Invalid email address',
                 },
               })}
               label={t('email')}
