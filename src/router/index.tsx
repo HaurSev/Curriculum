@@ -8,7 +8,7 @@ const router = createBrowserRouter([
   {
     path: AppRoutes.LOGIN,
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute requireAuth={false}>
         <Login />
       </ProtectedRoute>
     ),
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   {
     path: AppRoutes.REGISTRATION,
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute requireAuth={false}>
         <Signup />
       </ProtectedRoute>
     ),

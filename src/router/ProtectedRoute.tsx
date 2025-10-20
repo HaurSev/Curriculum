@@ -1,24 +1,28 @@
 import React from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { AppRoutes } from './router';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
+  requireAuth?: boolean;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = () => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  requireAuth = true,
+}) => {
   const location = useLocation();
   const token = sessionStorage.getItem('access_token');
 
-  if (!token) {
-    if (location.pathname !== AppRoutes.LOGIN) {
-      return (
-        <Navigate to={AppRoutes.LOGIN} state={{ from: location }} replace />
-      );
-    }
+  if (requireAuth && !token) {
+    return <Navigate to={AppRoutes.LOGIN} state={{ from: location }} replace />;
   }
 
-  return <Outlet />;
+  if (!requireAuth && token) {
+    return <Navigate to={AppRoutes.HOME} replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
