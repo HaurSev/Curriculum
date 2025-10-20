@@ -22,15 +22,10 @@ const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
         '& .MuiButton-root': {
           width: 200,
           fontSize: 18,
-          textTransform: 'uppercase',
           paddingY: '15px',
           transition: '0.4s ease',
-          background: 'transparent',
           '&:hover': {
             background: 'rgba(128, 128, 128, 0.144)',
-          },
-          '&:active': {
-            background: 'rgba(91, 91, 91, 0.144)',
           },
         },
       }}
@@ -38,8 +33,10 @@ const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
       <Button
         onClick={() => navigate(AppRoutes.LOGIN)}
         sx={{
-          color: active === 'login' ? 'red' : 'white',
-          borderBottom: active === 'login' ? '2px solid red' : 'none',
+          color:
+            active === 'login' ? 'var(--active-color)' : 'var(--def-color)',
+          borderBottom:
+            active === 'login' ? '2px solid var(--active-color)' : 'none',
           borderRadius: 0,
         }}
       >
@@ -49,8 +46,10 @@ const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
       <Button
         onClick={() => navigate(AppRoutes.REGISTRATION)}
         sx={{
-          color: active === 'signup' ? 'red' : 'white',
-          borderBottom: active === 'signup' ? '2px solid red' : 'none',
+          color:
+            active === 'signup' ? 'var(--active-color)' : 'var(--def-color)',
+          borderBottom:
+            active === 'signup' ? '2px solid var(--active-color)' : 'none',
           borderRadius: 0,
         }}
       >
