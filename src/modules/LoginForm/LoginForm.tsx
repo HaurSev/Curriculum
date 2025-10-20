@@ -1,36 +1,40 @@
 import { useTranslation } from 'react-i18next';
-import './LoginForm.css';
 import { useForm } from 'react-hook-form';
 import { useLogin } from '../../graphql/queries/login';
-import { useNavigate } from 'react-router-dom';
 import useErrorStore from '../../store/errorStore';
-import type { GraphQLError } from 'graphql';
-import type { ApolloError } from 'apollo-server-errors';
+import {
+  Button,
+  TextField,
+  Paper,
+  Stack,
+  Box,
+  Alert,
+  CircularProgress,
+} from '@mui/material';
+import { CombinedGraphQLErrors } from '@apollo/client';
 
 type LoginFormData = {
   email: string;
   password: string;
 };
 
-interface ErrorExtensions {
-  response?: {
-    statusCode?: number;
-    message?: string | string[];
-  };
-}
-
 const LoginForm = () => {
-  const { register, handleSubmit } = useForm<LoginFormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>();
   const { t } = useTranslation(['authorisation', 'common']);
-  const navigate = useNavigate();
   const [login, { loading, error }] = useLogin();
   const { message, setError } = useErrorStore();
 
   const onSubmit = async (data: LoginFormData) => {
     setError('');
     if (!data.email || !data.password) {
-      setError('email or password no valide');
+      setError('Email or password cannot be empty');
+      return;
     }
+
     try {
       const response = await login({
         variables: {
@@ -41,65 +45,95 @@ const LoginForm = () => {
         },
       });
 
-      console.log('Signup result:', response.data);
+      if (!response.data) return;
 
-      const res = response.data;
-
-      const { email, id } = response.data?.login.user || {};
-
-      sessionStorage.setItem(
-        'access_token',
-        JSON.stringify(res?.login.access_token),
-      );
-
+      const { email, id } = response.data.login.user;
+      sessionStorage.setItem('access_token', response.data.login.access_token);
       sessionStorage.setItem(
         'refresh_token',
-        JSON.stringify(res?.login.refresh_token),
+        response.data.login.refresh_token,
       );
-
       sessionStorage.setItem('user', JSON.stringify({ id, email }));
-
-      navigate('/');
-    } catch (err) {
-      console.error('Signup failed:', err);
+    } catch {
+      if (CombinedGraphQLErrors.is(error)) {
+        error.errors.forEach(({ message }) => setError(message));
+      }
     }
   };
 
   return (
-    <form
-      className="authForm"
-      autoComplete="off"
-      onSubmit={handleSubmit(onSubmit)}
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 2,
+      }}
     >
-      <input {...register('email')} type="text" placeholder={t('email')} />
-      <input
-        {...register('password')}
-        type="password"
-        placeholder={t('password')}
-      />
-      <div className="error">
-        {message ? (
-          <p>{message}</p>
-        ) : error ? (
-          (error as ApolloError).errors.map((err: GraphQLError, i: number) => {
-            const errorExtensions = err.extensions as ErrorExtensions;
-            const serverMessage = errorExtensions.response?.message;
+      <Paper
+        className="authForm"
+        sx={{ width: '100%', maxWidth: 600 }}
+        elevation={0}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={3}>
+            <TextField
+              {...register('email', {
+                required: 'Email is required',
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: t('common:invalid_email') || 'Invalid email address',
+                },
+              })}
+              label={t('email')}
+              variant="outlined"
+              fullWidth
+              error={!!errors.email}
+              helperText={errors.email?.message}
+              disabled={loading}
+            />
 
-            const finalMessage = Array.isArray(serverMessage)
-              ? serverMessage.join(', ')
-              : serverMessage || err.message;
+            <TextField
+              {...register('password', {
+                required: 'Password is required',
+              })}
+              label={t('password')}
+              type="password"
+              variant="outlined"
+              fullWidth
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              disabled={loading}
+            />
 
-            return <p key={i}>{finalMessage}</p>;
-          })
-        ) : null}
-      </div>
-      <div>
-        <button type="submit" disabled={loading}>
-          {loading ? t('common:loading') : t('authorisation:login')}
-        </button>
-        <button>{t('forgot_password')}</button>
-      </div>
-    </form>
+            {error && (
+              <Alert severity="error" sx={{ width: '100%' }}>
+                {message}
+              </Alert>
+            )}
+
+            <Button
+              variant="contained"
+              size="large"
+              type="submit"
+              disabled={loading}
+              fullWidth
+              sx={{ height: 45 }}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                t('authorisation:login')
+              )}
+            </Button>
+
+            <Button variant="outlined" fullWidth disabled={loading}>
+              {t('forgotPassword')}
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+    </Box>
   );
 };
 

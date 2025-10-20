@@ -3,35 +3,43 @@ import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useSignup } from '../../graphql/mutations/signup';
-import '../LoginForm/LoginForm.css';
-import { ApolloError } from 'apollo-server-errors';
-import type { GraphQLError } from 'graphql';
 import useErrorStore from '../../store/errorStore';
+import {
+  Button,
+  TextField,
+  Paper,
+  Stack,
+  Box,
+  Alert,
+  CircularProgress,
+} from '@mui/material';
+import { CombinedGraphQLErrors } from '@apollo/client';
 
 type SignupFormData = {
   email: string;
   password: string;
 };
 
-interface ErrorExtensions {
-  response?: {
-    statusCode?: number;
-    message?: string | string[];
-  };
-}
-
 const SignupForm = () => {
-  const { register, handleSubmit } = useForm<SignupFormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupFormData>();
+
   const { t } = useTranslation(['authorisation', 'common']);
   const navigate = useNavigate();
+
   const { message, setError } = useErrorStore();
   const [signup, { loading, error }] = useSignup();
 
   const onSubmit = async (data: SignupFormData) => {
     setError('');
     if (!data.email || !data.password) {
-      setError('email or password no valide');
+      setError('Email or password not valid');
+      return;
     }
+
     try {
       const response = await signup({
         variables: {
@@ -44,8 +52,10 @@ const SignupForm = () => {
 
       console.log('Signup result:', response.data);
       navigate(AppRoutes.LOGIN);
-    } catch (err) {
-      console.error('Signup failed:', err);
+    } catch {
+      if (CombinedGraphQLErrors.is(error)) {
+        error.errors.forEach(({ message }) => setError(message));
+      }
     }
   };
 
@@ -54,44 +64,83 @@ const SignupForm = () => {
   };
 
   return (
-    <form
-      className="authForm signupForm"
-      autoComplete="off"
-      onSubmit={handleSubmit(onSubmit)}
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 2,
+      }}
     >
-      <input {...register('email')} type="text" placeholder={t('email')} />
-      <input
-        {...register('password')}
-        type="password"
-        placeholder={t('password')}
-      />
+      <Paper
+        className="authForm"
+        sx={{ width: '100%', maxWidth: 600 }}
+        elevation={0}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={3}>
+            <TextField
+              {...register('email', {
+                required: 'Email is required',
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: t('common:invalid_email') || 'Invalid email address',
+                },
+              })}
+              label={t('email')}
+              variant="outlined"
+              fullWidth
+              error={!!errors.email}
+              helperText={errors.email?.message}
+              disabled={loading}
+            />
 
-      <div className="error">
-        {message ? (
-          <p>{message}</p>
-        ) : error ? (
-          (error as ApolloError).errors.map((err: GraphQLError, i: number) => {
-            const errorExtensions = err.extensions as ErrorExtensions;
-            const serverMessage = errorExtensions.response?.message;
+            <TextField
+              {...register('password', {
+                required: 'Password is required',
+              })}
+              label={t('password')}
+              type="password"
+              variant="outlined"
+              fullWidth
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              disabled={loading}
+            />
 
-            const finalMessage = Array.isArray(serverMessage)
-              ? serverMessage.join(', ')
-              : serverMessage || err.message;
+            {error && (
+              <Alert severity="error" sx={{ width: '100%' }}>
+                {message}
+              </Alert>
+            )}
 
-            return <p key={i}>{finalMessage}</p>;
-          })
-        ) : null}
-      </div>
+            <Button
+              variant="contained"
+              size="large"
+              type="submit"
+              disabled={loading}
+              fullWidth
+              sx={{ height: 45 }}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                t('authorisation:createAccount')
+              )}
+            </Button>
 
-      <div>
-        <button type="submit" disabled={loading}>
-          {loading ? t('common:loading') : t('create_account')}
-        </button>
-        <button type="button" onClick={handleNavigate}>
-          {t('have_account')}
-        </button>
-      </div>
-    </form>
+            <Button
+              variant="outlined"
+              fullWidth
+              disabled={loading}
+              onClick={handleNavigate}
+            >
+              {t('authorisation:haveAccount')}
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+    </Box>
   );
 };
 
