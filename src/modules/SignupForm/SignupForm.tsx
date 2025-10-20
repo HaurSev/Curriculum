@@ -3,7 +3,6 @@ import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useSignup } from '../../graphql/mutations/signup';
-import useErrorStore from '../../store/errorStore';
 import {
   Button,
   TextField,
@@ -39,7 +38,6 @@ const SignupForm = () => {
   const { t } = useTranslation(['authorisation', 'common']);
   const navigate = useNavigate();
 
-  const { message, setError } = useErrorStore();
   const [signup, { loading, error }] = useSignup();
 
   const onSubmit = async (data: SignupFormData) => {
@@ -55,11 +53,8 @@ const SignupForm = () => {
 
       console.log('Signup result:', response.data);
       navigate(AppRoutes.LOGIN);
-    } catch {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error occurred';
-
-      setError(errorMessage);
+    } catch (error) {
+      console.log('Signup error: ' + error);
     }
   };
 
@@ -114,7 +109,7 @@ const SignupForm = () => {
 
             {error && (
               <Alert severity="error" sx={{ width: '100%' }}>
-                {message}
+                {error.message}
               </Alert>
             )}
 

@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useLogin } from '../../graphql/queries/login';
-import useErrorStore from '../../store/errorStore';
 import {
   Button,
   TextField,
@@ -11,7 +10,6 @@ import {
   Alert,
   CircularProgress,
 } from '@mui/material';
-import { CombinedGraphQLErrors } from '@apollo/client';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -39,7 +37,6 @@ const LoginForm = () => {
 
   const { t } = useTranslation(['authorisation', 'common']);
   const [login, { loading, error }] = useLogin();
-  const { message, setError } = useErrorStore();
 
   const onSubmit = async (data: LoginFormData) => {
     try {
@@ -61,10 +58,8 @@ const LoginForm = () => {
         response.data.login.refresh_token,
       );
       sessionStorage.setItem('user', JSON.stringify({ id, email }));
-    } catch {
-      if (CombinedGraphQLErrors.is(error)) {
-        error.errors.forEach(({ message }) => setError(message));
-      }
+    } catch (error) {
+      console.log('Login error: ' + error);
     }
   };
 
@@ -115,7 +110,7 @@ const LoginForm = () => {
 
             {error && (
               <Alert severity="error" sx={{ width: '100%' }}>
-                {message}
+                {error.message}
               </Alert>
             )}
 
