@@ -1,13 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import SignupForm from '../../modules/SignupForm/SignupForm';
-import styled from 'styled-components';
-import { Typography } from '@mui/material';
+import { styled, Typography } from '@mui/material';
 
 const Signup = () => {
   const { t } = useTranslation('authorisation');
 
-  const Container = styled.div`
+  const Container = styled('div')`
     background: var(--base-color);
     color: var(--def-text-color);
     width: 100%;
@@ -18,7 +17,7 @@ const Signup = () => {
     align-items: center;
   `;
 
-  const MainPart = styled.div`
+  const MainPart = styled('div')`
     display: flex;
     flex-direction: column;
     align-items: center;

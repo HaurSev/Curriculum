@@ -1,11 +1,10 @@
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import LoginForm from '../../modules/LoginForm/LoginForm';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
-import { Typography } from '@mui/material';
+import { styled, Typography } from '@mui/material';
 
 const Login = () => {
-  const Container = styled.div`
+  const Container = styled('div')`
     background: var(--base-color);
     color: var(--def-text-color);
     width: 100%;
@@ -16,7 +15,7 @@ const Login = () => {
     align-items: center;
   `;
 
-  const MainPart = styled.div`
+  const MainPart = styled('div')`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -44,7 +43,6 @@ const Login = () => {
         <Typography
           variant="body1"
           sx={{
-            color: 'var(--def-text-color)',
             textAlign: 'center',
             maxWidth: 600,
           }}
