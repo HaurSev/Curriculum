@@ -7,11 +7,13 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme, { globalStyles } from './theme/theme.tsx';
 import { GlobalStyles } from '@mui/material';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   console.log('App rendered');
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer />
       <CssBaseline />
       <GlobalStyles styles={globalStyles} />
       <ApolloProvider client={client}>

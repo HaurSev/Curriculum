@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useLogin } from '../../graphql/queries/login';
-import { Button, TextField, Paper, Stack, Box, Alert } from '@mui/material';
+import { Button, TextField, Paper, Stack, Box } from '@mui/material';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Bounce, toast } from 'react-toastify';
 
 type LoginFormData = {
   email: string;
@@ -28,7 +29,7 @@ const LoginForm = () => {
   });
 
   const { t } = useTranslation(['authorisation', 'common']);
-  const [login, { loading, error }] = useLogin();
+  const [login, { loading }] = useLogin();
 
   const onSubmit = async (data: LoginFormData) => {
     try {
@@ -51,7 +52,12 @@ const LoginForm = () => {
       );
       sessionStorage.setItem('user', JSON.stringify({ id, email }));
     } catch (error) {
-      console.log('Login error: ' + error);
+      toast.error(`${error}`, {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
     }
   };
 
@@ -91,12 +97,6 @@ const LoginForm = () => {
               helperText={errors.password?.message}
               disabled={loading}
             />
-
-            {error && (
-              <Alert severity="error" sx={{ width: '100%' }}>
-                {error.message}
-              </Alert>
-            )}
 
             <Button
               variant="contained"

@@ -3,9 +3,10 @@ import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useSignup } from '../../graphql/mutations/signup';
-import { Button, TextField, Paper, Stack, Box, Alert } from '@mui/material';
+import { Button, TextField, Paper, Stack, Box } from '@mui/material';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Bounce, toast } from 'react-toastify';
 
 type SignupFormData = {
   email: string;
@@ -30,7 +31,7 @@ const SignupForm = () => {
   const { t } = useTranslation(['authorisation', 'common']);
   const navigate = useNavigate();
 
-  const [signup, { loading, error }] = useSignup();
+  const [signup, { loading }] = useSignup();
 
   const onSubmit = async (data: SignupFormData) => {
     try {
@@ -46,7 +47,12 @@ const SignupForm = () => {
       console.log('Signup result:', response.data);
       navigate(AppRoutes.LOGIN);
     } catch (error) {
-      console.log('Signup error: ' + error);
+      toast.error(`${error}`, {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
     }
   };
 
@@ -90,12 +96,6 @@ const SignupForm = () => {
               helperText={errors.password?.message}
               disabled={loading}
             />
-
-            {error && (
-              <Alert severity="error" sx={{ width: '100%' }}>
-                {error.message}
-              </Alert>
-            )}
 
             <Button
               variant="contained"
