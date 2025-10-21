@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, ButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
+import theme from '../../theme/theme';
 
 interface AuthHeaderProps {
   active: 'login' | 'signup';
@@ -23,20 +24,22 @@ const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
           width: 200,
           fontSize: 18,
           paddingY: '15px',
-          transition: '0.4s ease',
-          '&:hover': {
-            background: 'rgba(128, 128, 128, 0.144)',
-          },
         },
       }}
     >
       <Button
+        variant="outlined"
         onClick={() => navigate(AppRoutes.LOGIN)}
         sx={{
           color:
-            active === 'login' ? 'var(--active-color)' : 'var(--def-color)',
+            active === 'login'
+              ? theme.palette.text.secondary
+              : theme.palette.text.disabled,
           borderBottom:
-            active === 'login' ? '2px solid var(--active-color)' : 'none',
+            active === 'login'
+              ? `2px solid ${theme.palette.text.secondary}`
+              : 'none',
+
           borderRadius: 0,
         }}
       >
@@ -44,12 +47,17 @@ const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
       </Button>
 
       <Button
+        variant="outlined"
         onClick={() => navigate(AppRoutes.REGISTRATION)}
         sx={{
           color:
-            active === 'signup' ? 'var(--active-color)' : 'var(--def-color)',
+            active === 'signup'
+              ? theme.palette.text.secondary
+              : theme.palette.text.disabled,
           borderBottom:
-            active === 'signup' ? '2px solid var(--active-color)' : 'none',
+            active === 'signup'
+              ? `2px solid ${theme.palette.text.secondary}`
+              : 'none',
           borderRadius: 0,
         }}
       >
