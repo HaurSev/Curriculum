@@ -1,15 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useLogin } from '../../graphql/queries/login';
-import {
-  Button,
-  TextField,
-  Paper,
-  Stack,
-  Box,
-  Alert,
-  CircularProgress,
-} from '@mui/material';
+import { Button, TextField, Paper, Stack, Box, Alert } from '@mui/material';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -113,12 +105,9 @@ const LoginForm = () => {
               disabled={loading}
               fullWidth
               sx={{ height: 45 }}
+              loading={loading}
             >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                t('authorisation:login')
-              )}
+              {t('authorisation:login')}
             </Button>
 
             <Button variant="outlined" fullWidth disabled={loading}>

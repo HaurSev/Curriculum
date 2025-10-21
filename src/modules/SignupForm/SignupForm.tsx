@@ -3,15 +3,7 @@ import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useSignup } from '../../graphql/mutations/signup';
-import {
-  Button,
-  TextField,
-  Paper,
-  Stack,
-  Box,
-  Alert,
-  CircularProgress,
-} from '@mui/material';
+import { Button, TextField, Paper, Stack, Box, Alert } from '@mui/material';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -112,12 +104,9 @@ const SignupForm = () => {
               disabled={loading}
               fullWidth
               sx={{ height: 45 }}
+              loading={loading}
             >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                t('authorisation:createAccount')
-              )}
+              {t('authorisation:createAccount')}
             </Button>
 
             <Button
