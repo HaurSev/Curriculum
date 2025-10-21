@@ -23,7 +23,7 @@ const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
         '& .MuiButton-root': {
           width: 200,
           fontSize: 18,
-          paddingY: '15px',
+          paddingY: theme.spacing(4),
         },
       }}
     >

@@ -37,7 +37,7 @@ const theme = createTheme({
       letterSpacing: '1px',
     },
   },
-  spacing: 8,
+  spacing: 4,
   components: {
     MuiButton: {
       styleOverrides: {

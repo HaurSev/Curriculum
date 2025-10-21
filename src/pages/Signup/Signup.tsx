@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import SignupForm from '../../modules/SignupForm/SignupForm';
 import { Box, styled, Typography } from '@mui/material';
+import theme from '../../theme/theme';
 
 const Signup = () => {
   const { t } = useTranslation('authorisation');
@@ -20,8 +21,8 @@ const Signup = () => {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '20px',
-    padding: '20px',
+    gap: theme.spacing(5),
+    padding: theme.spacing(5),
     height: '80vh',
   }));
 
