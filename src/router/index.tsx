@@ -1,0 +1,32 @@
+import { createBrowserRouter } from 'react-router-dom';
+import { AppRoutes } from './router';
+import ProtectedRoute from './ProtectedRoute';
+import { lazy, Suspense } from 'react';
+
+const Login = lazy(() => import('../pages/Login/Login'));
+const Signup = lazy(() => import('../pages/Signup/Signup'));
+
+const router = createBrowserRouter([
+  {
+    path: AppRoutes.LOGIN,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProtectedRoute requireAuth={false}>
+          <Login />
+        </ProtectedRoute>
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.REGISTRATION,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProtectedRoute requireAuth={false}>
+          <Signup />
+        </ProtectedRoute>
+      </Suspense>
+    ),
+  },
+]);
+
+export default router;

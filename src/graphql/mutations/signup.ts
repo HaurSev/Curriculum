@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
-import type { AuthInput, AuthResult } from 'cv-graphql';
 import { useMutation } from '@apollo/client/react';
+import type { AuthInput, AuthResult } from 'cv-graphql';
 
 export const SIGNUP = gql`
   mutation Signup($auth: AuthInput!) {
@@ -22,6 +22,6 @@ export type SignupResult = {
   signup: AuthResult;
 };
 
-export const useSignup = () => {
+export const useLazySignup = () => {
   return useMutation<SignupResult, SignupArgs>(SIGNUP);
 };
