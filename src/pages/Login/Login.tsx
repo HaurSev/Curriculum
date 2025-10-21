@@ -1,54 +1,36 @@
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import LoginForm from '../../modules/LoginForm/LoginForm';
 import { useTranslation } from 'react-i18next';
-import { styled, Typography } from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 
 const Login = () => {
-  const Container = styled('div')`
-    background: var(--base-color);
-    color: var(--def-text-color);
-    width: 100%;
-    min-height: 100vh;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  `;
-
-  const MainPart = styled('div')`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-    height: 80vh;
-  `;
-
   const { t } = useTranslation('authorisation');
+
+  const Container = styled(Box)(({ theme }) => ({
+    color: theme.palette.text.primary,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+    minHeight: '100vh',
+  }));
+
+  const MainPart = styled(Box)(() => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '20px',
+    padding: '20px',
+    height: '80vh',
+  }));
 
   return (
     <Container>
       <AuthHeader active={'login'} />
       <MainPart>
-        <Typography
-          variant="h1"
-          sx={{
-            textTransform: 'capitalize',
-            fontWeight: 300,
-          }}
-        >
-          {t('welcome')}
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            textAlign: 'center',
-            maxWidth: 600,
-          }}
-        >
-          {t('helloAgain')}
-        </Typography>
+        <Typography variant="h1">{t('welcome')}</Typography>
+        <Typography variant="body1">{t('helloAgain')}</Typography>
 
         <LoginForm />
       </MainPart>
