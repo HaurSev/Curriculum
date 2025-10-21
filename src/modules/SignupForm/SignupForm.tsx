@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useSignup } from '../../graphql/mutations/signup';
+import { useLazySignup } from '../../graphql/mutations/signup';
 import { Button, TextField, Paper, Stack, Box } from '@mui/material';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -31,7 +31,7 @@ const SignupForm = () => {
   const { t } = useTranslation(['authorisation', 'common']);
   const navigate = useNavigate();
 
-  const [signup, { loading }] = useSignup();
+  const [signup, { loading }] = useLazySignup();
 
   const onSubmit = async (data: SignupFormData) => {
     try {

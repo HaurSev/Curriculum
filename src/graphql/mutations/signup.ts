@@ -22,6 +22,6 @@ export type SignupResult = {
   signup: AuthResult;
 };
 
-export const useSignup = () => {
+export const useLazySignup = () => {
   return useMutation<SignupResult, SignupArgs>(SIGNUP);
 };

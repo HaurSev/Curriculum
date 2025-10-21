@@ -23,6 +23,6 @@ export type LoginResult = {
   login: AuthResult;
 };
 
-export const useLogin = () => {
+export const useLazyLogin = () => {
   return useLazyQuery<LoginResult, LoginArgs>(LOGIN);
 };

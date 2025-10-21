@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { useLogin } from '../../graphql/queries/login';
+import { useLazyLogin } from '../../graphql/queries/login';
 import { Button, TextField, Paper, Stack, Box } from '@mui/material';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -29,7 +29,7 @@ const LoginForm = () => {
   });
 
   const { t } = useTranslation(['authorisation', 'common']);
-  const [login, { loading }] = useLogin();
+  const [login, { loading }] = useLazyLogin();
 
   const onSubmit = async (data: LoginFormData) => {
     try {
