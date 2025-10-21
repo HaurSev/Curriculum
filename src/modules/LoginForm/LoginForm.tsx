@@ -80,13 +80,7 @@ const LoginForm = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <TextField
-              {...register('email', {
-                required: 'Email is required',
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: t('common:invalidEmail') || 'Invalid email address',
-                },
-              })}
+              {...register('email')}
               label={t('email')}
               variant="outlined"
               fullWidth
@@ -96,9 +90,7 @@ const LoginForm = () => {
             />
 
             <TextField
-              {...register('password', {
-                required: 'Password is required',
-              })}
+              {...register('password')}
               label={t('password')}
               type="password"
               variant="outlined"
