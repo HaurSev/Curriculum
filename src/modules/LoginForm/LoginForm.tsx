@@ -5,8 +5,6 @@ import { Button, TextField, Paper, Stack, Box } from '@mui/material';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Bounce, toast } from 'react-toastify';
-import { AppRoutes } from '../../router/router';
-import { useNavigate } from 'react-router-dom';
 
 type LoginFormData = {
   email: string;
@@ -29,8 +27,6 @@ const LoginForm = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginUserSchema),
   });
-
-  const navigate = useNavigate();
 
   const { t } = useTranslation(['authorisation', 'common']);
   const [login, { loading }] = useLazyLogin();
@@ -80,14 +76,7 @@ const LoginForm = () => {
         elevation={0}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack
-            spacing={5}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <Stack spacing={3}>
             <TextField
               {...register('email')}
               label={t('email')}
@@ -115,19 +104,13 @@ const LoginForm = () => {
               type="submit"
               disabled={loading}
               fullWidth
-              sx={{ height: 45, width: 210 }}
+              sx={{ height: 45 }}
               loading={loading}
             >
               {t('authorisation:login')}
             </Button>
 
-            <Button
-              variant="outlined"
-              fullWidth
-              disabled={loading}
-              sx={{ height: 45, width: 210 }}
-              onClick={() => navigate(AppRoutes.FORGOT_PASWORD)}
-            >
+            <Button variant="outlined" fullWidth disabled={loading}>
               {t('forgotPassword')}
             </Button>
           </Stack>
