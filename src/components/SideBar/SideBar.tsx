@@ -11,6 +11,7 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import theme from '../../theme/theme';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
+import { useTranslation } from 'react-i18next';
 
 interface SideBarProps {
   active: 'employees' | 'skills' | 'language' | 'cv';
@@ -18,6 +19,7 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation('common');
   return (
     <List
       sx={{
@@ -38,7 +40,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
             }}
           />
         </ListItemIcon>
-        <ListItemText primary="Employees" />
+        <ListItemText primary={t('employees')} />
       </ListItemButton>
       <ListItemButton className={active === 'skills' ? 'active' : ''}>
         <ListItemIcon>
@@ -51,7 +53,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
             }}
           />
         </ListItemIcon>
-        <ListItemText primary="Skills" />
+        <ListItemText primary={t('skills')} />
       </ListItemButton>
       <ListItemButton className={active === 'language' ? 'active' : ''}>
         <ListItemIcon>
@@ -64,7 +66,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
             }}
           />
         </ListItemIcon>
-        <ListItemText primary="Language" />
+        <ListItemText primary={t('language')} />
       </ListItemButton>
       <ListItemButton className={active === 'cv' ? 'active' : ''}>
         <ListItemIcon>
@@ -77,7 +79,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
             }}
           />
         </ListItemIcon>
-        <ListItemText primary="CVs" />
+        <ListItemText primary={t('cv')} />
       </ListItemButton>
     </List>
   );

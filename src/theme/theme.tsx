@@ -158,6 +158,43 @@ const theme = createTheme({
         }),
       },
     },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.text.disabled,
+          width: '220px',
+          border: 'none',
+          background: 'transparent',
+          fontSize: '18px',
+          padding: '15px 10px 15px 20px',
+          borderTopRightRadius: 35,
+          borderBottomRightRadius: 35,
+          textTransform: 'capitalize',
+          '&:hover': {
+            background: 'rgba(44, 43, 43, 0.45)',
+            transition: '0.4s ease',
+            cursor: 'pointer',
+          },
+          '&:active': {
+            background: 'rgba(91, 91, 91, 0.144)',
+            transition: '0.4s ease',
+          },
+          '&.active': {
+            color: theme.palette.text.primary,
+            background: theme.palette.primary.main,
+            '&:hover': {
+              background: 'rgba(107, 36, 36, 0.31)',
+              transition: '0.4s ease',
+              cursor: 'pointer',
+            },
+            '&:active': {
+              background: 'rgba(163, 161, 161, 0.14)',
+              transition: '0.4s ease',
+            },
+          },
+        }),
+      },
+    },
   },
 });
 
