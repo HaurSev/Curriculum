@@ -1,60 +1,63 @@
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
-import { useLazyLogin } from '../../graphql/queries/login';
-import { Button, TextField, Paper, Stack, Box } from '@mui/material';
-import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Bounce, toast } from 'react-toastify';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import Button from '@mui/material/Button';
+import { Box, Stack } from '@mui/system';
+import { Paper, TextField } from '@mui/material';
+import { Bounce, toast } from 'react-toastify';
+import * as z from 'zod';
+import { useForgotPassword } from '../../graphql/mutations/forgotPassword';
+import { zodResolver } from '@hookform/resolvers/zod';
+import theme from '../../theme/theme';
 
-type LoginFormData = {
+type ForgotPasswordData = {
   email: string;
-  password: string;
 };
 
-const LoginUserSchema = z.object({
+const ForgotPasswordSchema = z.object({
   email: z
     .string()
     .nonempty('Email is required')
     .email('Invalid email address'),
-  password: z.string().nonempty('Password is required'),
 });
 
-const LoginForm = () => {
+const ForgotForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(LoginUserSchema),
+  } = useForm<ForgotPasswordData>({
+    resolver: zodResolver(ForgotPasswordSchema),
   });
 
+  const { t } = useTranslation(['authorisation', 'common']);
   const navigate = useNavigate();
 
-  const { t } = useTranslation(['authorisation', 'common']);
-  const [login, { loading }] = useLazyLogin();
+  const [forgotPassword, { loading }] = useForgotPassword();
 
-  const onSubmit = async (data: LoginFormData) => {
+  const handleNavigate = () => {
+    navigate(AppRoutes.LOGIN);
+  };
+
+  const onSubmit = async (data: ForgotPasswordData) => {
     try {
-      const response = await login({
+      const response = await forgotPassword({
         variables: {
           auth: {
             email: data.email,
-            password: data.password,
           },
         },
       });
 
-      if (!response.data) return;
-
-      const { email, id } = response.data.login.user;
-      sessionStorage.setItem('access_token', response.data.login.access_token);
-      sessionStorage.setItem(
-        'refresh_token',
-        response.data.login.refresh_token,
-      );
-      sessionStorage.setItem('user', JSON.stringify({ id, email }));
+      toast.success(`We sent an email!`, {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+      console.log(response);
+      navigate(AppRoutes.LOGIN);
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',
@@ -79,9 +82,9 @@ const LoginForm = () => {
         sx={{ width: '100%', maxWidth: 600 }}
         elevation={0}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
           <Stack
-            spacing={5}
+            spacing={theme.spacing(5)}
             sx={{
               display: 'flex',
               justifyContent: 'center',
@@ -97,18 +100,6 @@ const LoginForm = () => {
               helperText={errors.email?.message}
               disabled={loading}
             />
-
-            <TextField
-              {...register('password')}
-              label={t('password')}
-              type="password"
-              variant="outlined"
-              fullWidth
-              error={!!errors.password}
-              helperText={errors.password?.message}
-              disabled={loading}
-            />
-
             <Button
               variant="contained"
               size="large"
@@ -118,17 +109,17 @@ const LoginForm = () => {
               sx={{ height: 45, width: 210 }}
               loading={loading}
             >
-              {t('authorisation:login')}
+              {t('authorisation:resetPassword')}
             </Button>
 
             <Button
               variant="outlined"
               fullWidth
               disabled={loading}
+              onClick={handleNavigate}
               sx={{ height: 45, width: 210 }}
-              onClick={() => navigate(AppRoutes.FORGOT_PASWORD)}
             >
-              {t('forgotPassword')}
+              {t('authorisation:cancel')}
             </Button>
           </Stack>
         </form>
@@ -137,4 +128,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default ForgotForm;

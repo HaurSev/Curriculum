@@ -5,6 +5,9 @@ import { lazy, Suspense } from 'react';
 
 const Login = lazy(() => import('../pages/Login/Login'));
 const Signup = lazy(() => import('../pages/Signup/Signup'));
+const ForgotPassword = lazy(
+  () => import('../pages/ForgotPassword/ForgotPassword'),
+);
 
 const router = createBrowserRouter([
   {
@@ -23,6 +26,16 @@ const router = createBrowserRouter([
       <Suspense fallback={<div>Loading...</div>}>
         <ProtectedRoute requireAuth={false}>
           <Signup />
+        </ProtectedRoute>
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.FORGOT_PASWORD,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProtectedRoute requireAuth={false}>
+          <ForgotPassword />
         </ProtectedRoute>
       </Suspense>
     ),
