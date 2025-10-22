@@ -2,5 +2,9 @@
   "loading": "loading",
   "emailAlreadyUsed": "This email address is already registered.",
   "invalidEmail": "Please enter a valid email address.",
-  "weakPassword": "Password must be at least 8 characters long and include a number."
+  "weakPassword": "Password must be at least 8 characters long and include a number.",
+  "employees": "Employees",
+  "skills": "Skills",
+  "language": "Languages",
+  "cv": "CVs"
 }
