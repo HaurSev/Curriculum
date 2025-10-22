@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './router';
 import ProtectedRoute from './ProtectedRoute';
 import { lazy, Suspense } from 'react';
+import Users from '../pages/Users/Users';
 
 const Login = lazy(() => import('../pages/Login/Login'));
 const Signup = lazy(() => import('../pages/Signup/Signup'));
@@ -36,6 +37,16 @@ const router = createBrowserRouter([
       <Suspense fallback={<div>Loading...</div>}>
         <ProtectedRoute requireAuth={false}>
           <ForgotPassword />
+        </ProtectedRoute>
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.USERS,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProtectedRoute requireAuth={false}>
+          <Users />
         </ProtectedRoute>
       </Suspense>
     ),

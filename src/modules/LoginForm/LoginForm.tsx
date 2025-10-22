@@ -55,6 +55,8 @@ const LoginForm = () => {
         response.data.login.refresh_token,
       );
       sessionStorage.setItem('user', JSON.stringify({ id, email }));
+
+      navigate(AppRoutes.USERS);
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',
