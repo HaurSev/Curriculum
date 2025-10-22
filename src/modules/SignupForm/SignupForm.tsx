@@ -75,7 +75,14 @@ const SignupForm = () => {
         elevation={0}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing={3}>
+          <Stack
+            spacing={5}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
             <TextField
               {...register('email')}
               label={t('email')}
@@ -103,7 +110,7 @@ const SignupForm = () => {
               type="submit"
               disabled={loading}
               fullWidth
-              sx={{ height: 45 }}
+              sx={{ height: 45, width: 210 }}
               loading={loading}
             >
               {t('authorisation:createAccount')}
@@ -114,6 +121,7 @@ const SignupForm = () => {
               fullWidth
               disabled={loading}
               onClick={handleNavigate}
+              sx={{ height: 45, width: 210 }}
             >
               {t('authorisation:haveAccount')}
             </Button>
