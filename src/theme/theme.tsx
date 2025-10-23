@@ -12,7 +12,10 @@ const theme = createTheme({
       light: 'rgba(210, 2, 2, 1)',
       dark: 'rgba(168, 0, 0, 1)',
     },
-    background: { default: 'rgb(59, 61, 65)', paper: 'rgba(59, 61, 65, 0.7)' },
+    background: {
+      default: 'rgba(52, 52, 52, 1)',
+      paper: 'rgba(59, 61, 65, 0.7)',
+    },
     error: { main: 'rgba(168, 0, 0, 1)' },
     text: {
       primary: '#fff',
@@ -114,6 +117,7 @@ const theme = createTheme({
             padding: '20px',
             width: '600px',
             gap: '20px',
+            background: 'transparent',
             '& > div': {
               display: 'flex',
               flexDirection: 'column',
