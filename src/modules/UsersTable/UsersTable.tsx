@@ -16,11 +16,21 @@ import {
 import { Bounce, toast } from 'react-toastify';
 import { Avatar } from '@mui/material';
 import theme from '../../theme/theme';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 type Order = 'asc' | 'desc';
 
-const UsersTable = () => {
+interface UserTableProps {
+  onClick: (user: UserData) => void;
+  searchValue?: string;
+}
+
+const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
   const { t } = useTranslation('users');
+
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  const userId = user.id;
 
   const [loadUsers, { data, loading, error }] = useLazyUsers();
 
@@ -44,19 +54,25 @@ const UsersTable = () => {
     }
   }, [error]);
 
-  const handleSort = (property: keyof UserData | keyof UserProfile) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  const filteredUsers = useMemo(() => {
+    if (!data?.users) return [];
+    if (!searchValue) return data.users;
+
+    const lowerSearch = searchValue.toLowerCase();
+    return data.users.filter((user) => {
+      // const fullName = user.profile.full_name?.toLowerCase() || '';
+      const fullName = user.email?.toLowerCase() || '';
+      return fullName.includes(lowerSearch);
+    });
+  }, [data, searchValue]);
 
   const sortedUsers = useMemo(() => {
-    if (!data?.users) return [];
-    if (!orderBy) return data.users;
+    if (!filteredUsers) return [];
+    if (!orderBy) return filteredUsers;
 
-    return [...data.users].sort((a, b) => {
-      let aValue: string | undefined;
-      let bValue: string | undefined;
+    return [...filteredUsers].sort((a, b) => {
+      let aValue = '';
+      let bValue = '';
 
       switch (orderBy) {
         case 'email':
@@ -75,27 +91,49 @@ const UsersTable = () => {
           aValue = a.profile?.last_name ?? '';
           bValue = b.profile?.last_name ?? '';
           break;
-        default:
+        case 'first_name':
           aValue = a.profile?.first_name ?? '';
-          bValue = b.profile?.first_name;
+          bValue = b.profile?.first_name ?? '';
+          break;
+        default:
+          aValue = '';
+          bValue = '';
       }
 
       return order === 'asc'
         ? aValue.localeCompare(bValue)
         : bValue.localeCompare(aValue);
     });
-  }, [data, order, orderBy]);
+  }, [filteredUsers, order, orderBy]);
+
+  const handleSort = (property: keyof UserData | keyof UserProfile) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
 
   if (loading) return <p>Loading...</p>;
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{ background: 'transparent' }}
+      elevation={0}
+    >
       <Table sx={{ minWidth: 650 }} aria-label="sortable table">
-        <TableHead>
+        <TableHead
+          sx={{
+            height: 60,
+            textTransform: 'capitalize',
+          }}
+        >
           <TableRow>
             <TableCell></TableCell>
-            <TableCell align="right">
+            <TableCell align="left">
               <TableSortLabel
+                sx={{
+                  fontWeight: 600,
+                }}
                 active={orderBy === 'first_name'}
                 direction={orderBy === 'first_name' ? order : 'asc'}
                 onClick={() => handleSort('first_name')}
@@ -103,17 +141,23 @@ const UsersTable = () => {
                 {t('firstName')}
               </TableSortLabel>
             </TableCell>
-            <TableCell align="right">
+            <TableCell align="left">
               <TableSortLabel
-                active={orderBy === `last_name`}
+                sx={{
+                  fontWeight: 600,
+                }}
+                active={orderBy === 'last_name'}
                 direction={orderBy === 'last_name' ? order : 'asc'}
                 onClick={() => handleSort('last_name')}
               >
                 {t('lastName')}
               </TableSortLabel>
             </TableCell>
-            <TableCell align="right">
+            <TableCell align="left">
               <TableSortLabel
+                sx={{
+                  fontWeight: 600,
+                }}
                 active={orderBy === 'email'}
                 direction={orderBy === 'email' ? order : 'asc'}
                 onClick={() => handleSort('email')}
@@ -121,8 +165,11 @@ const UsersTable = () => {
                 {t('email')}
               </TableSortLabel>
             </TableCell>
-            <TableCell align="right">
+            <TableCell align="left">
               <TableSortLabel
+                sx={{
+                  fontWeight: 600,
+                }}
                 active={orderBy === 'department_name'}
                 direction={orderBy === 'department_name' ? order : 'asc'}
                 onClick={() => handleSort('department_name')}
@@ -130,8 +177,11 @@ const UsersTable = () => {
                 {t('department')}
               </TableSortLabel>
             </TableCell>
-            <TableCell align="right">
+            <TableCell align="left">
               <TableSortLabel
+                sx={{
+                  fontWeight: 600,
+                }}
                 active={orderBy === 'position_name'}
                 direction={orderBy === 'position_name' ? order : 'asc'}
                 onClick={() => handleSort('position_name')}
@@ -139,7 +189,7 @@ const UsersTable = () => {
                 {t('position')}
               </TableSortLabel>
             </TableCell>
-            <TableCell align="right">{'>'}</TableCell>
+            <TableCell align="left"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -157,16 +207,22 @@ const UsersTable = () => {
                   </Avatar>
                 )}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 {user.profile?.first_name || '-'}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 {user.profile?.last_name || '-'}
               </TableCell>
-              <TableCell align="right">{user.email}</TableCell>
-              <TableCell align="right">{user.department_name || '-'}</TableCell>
-              <TableCell align="right">{user.position_name || '-'}</TableCell>
-              <TableCell align="right">{'>'}</TableCell>
+              <TableCell align="left">{user.email}</TableCell>
+              <TableCell align="left">{user.department_name || '-'}</TableCell>
+              <TableCell align="left">{user.position_name || '-'}</TableCell>
+              <TableCell align="left">
+                {user.id === userId ? (
+                  <MoreVertIcon onClick={() => onClick(user)} />
+                ) : (
+                  <ArrowForwardIosIcon />
+                )}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
