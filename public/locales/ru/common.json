@@ -6,5 +6,7 @@
   "employees": "Сотрудники",
   "skills": "Навыки",
   "language": "Языки",
-  "cv": "CVs"
+  "cv": "CVs",
+  "cancel": "отмена",
+  "update": "обновить"
 }

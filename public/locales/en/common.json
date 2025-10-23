@@ -6,5 +6,7 @@
   "employees": "Employees",
   "skills": "Skills",
   "language": "Languages",
-  "cv": "CVs"
+  "cv": "CVs",
+  "cancel": "cancel",
+  "update": "update"
 }

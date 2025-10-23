@@ -3,5 +3,8 @@
   "lastName": "last name",
   "email": "email",
   "department": "department",
-  "position": "position"
+  "position": "position",
+  "updateUser": "update user",
+  "role": "role",
+  "password": "password"
 }

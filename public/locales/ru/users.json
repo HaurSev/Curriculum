@@ -3,5 +3,8 @@
   "lastName": "фамилия",
   "email": "почта",
   "department": "отдел",
-  "position": "позиция"
+  "position": "позиция",
+  "updateUser": "обновить пользователя",
+  "role": "роль",
+  "password": "пароль"
 }
