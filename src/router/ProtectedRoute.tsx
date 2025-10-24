@@ -18,10 +18,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={AppRoutes.LOGIN} state={{ from: location }} replace />;
   }
 
-  if (!requireAuth && token) {
-    return <Navigate to={AppRoutes.HOME} replace />;
-  }
-
   return <>{children}</>;
 };
 
