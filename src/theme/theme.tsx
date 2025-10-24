@@ -12,7 +12,10 @@ const theme = createTheme({
       light: 'rgba(210, 2, 2, 1)',
       dark: 'rgba(168, 0, 0, 1)',
     },
-    background: { default: 'rgb(59, 61, 65)', paper: 'rgba(59, 61, 65, 0.7)' },
+    background: {
+      default: 'rgba(52, 52, 52, 1)',
+      paper: 'rgba(59, 61, 65, 0.7)',
+    },
     error: { main: 'rgba(168, 0, 0, 1)' },
     text: {
       primary: '#fff',
@@ -82,7 +85,7 @@ const theme = createTheme({
           '& .MuiOutlinedInput-root': {
             borderRadius: 8,
             background: 'transparent',
-            color: theme.palette.text.disabled,
+            color: theme.palette.text.primary,
             border: `1px solid ${theme.palette.text.disabled}`,
             transition: 'background 0.4s ease, border 0.4s ease',
             '&:hover': { background: 'rgba(75, 75, 75, 0.413)' },
@@ -96,6 +99,19 @@ const theme = createTheme({
             color: theme.palette.text.disabled,
             '&.Mui-focused': {
               color: theme.palette.text.primary,
+            },
+          },
+          '&.Mui-disabled': {
+            background: theme.palette.text.disabled,
+            border: `1px dashed ${theme.palette.text.disabled}`,
+            color: theme.palette.text.disabled,
+            cursor: 'not-allowed',
+            '& .MuiOutlinedInput-input': {
+              color: theme.palette.text.disabled,
+            },
+            '&hover': {
+              background: 'transparent',
+              cursor: 'not-allowed',
             },
           },
           '& input::placeholder': {
@@ -114,6 +130,7 @@ const theme = createTheme({
             padding: '20px',
             width: '600px',
             gap: '20px',
+            background: 'transparent',
             '& > div': {
               display: 'flex',
               flexDirection: 'column',
@@ -153,6 +170,43 @@ const theme = createTheme({
                 background: 'rgba(91, 91, 91, 0.144)',
                 transition: '0.4s ease',
               },
+            },
+          },
+        }),
+      },
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.text.disabled,
+          width: '220px',
+          border: 'none',
+          background: 'transparent',
+          fontSize: '18px',
+          padding: '15px 10px 15px 20px',
+          borderTopRightRadius: 35,
+          borderBottomRightRadius: 35,
+          textTransform: 'capitalize',
+          '&:hover': {
+            background: 'rgba(44, 43, 43, 0.45)',
+            transition: '0.4s ease',
+            cursor: 'pointer',
+          },
+          '&:active': {
+            background: 'rgba(91, 91, 91, 0.144)',
+            transition: '0.4s ease',
+          },
+          '&.active': {
+            color: theme.palette.text.primary,
+            background: theme.palette.primary.main,
+            '&:hover': {
+              background: 'rgba(107, 36, 36, 0.31)',
+              transition: '0.4s ease',
+              cursor: 'pointer',
+            },
+            '&:active': {
+              background: 'rgba(163, 161, 161, 0.14)',
+              transition: '0.4s ease',
             },
           },
         }),

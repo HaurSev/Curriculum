@@ -1,0 +1,11 @@
+{
+  "firstName": "first name",
+  "lastName": "last name",
+  "email": "email",
+  "department": "department",
+  "position": "position",
+  "updateUser": "update user",
+  "updateProfile": "update profile",
+  "role": "role",
+  "password": "password"
+}
