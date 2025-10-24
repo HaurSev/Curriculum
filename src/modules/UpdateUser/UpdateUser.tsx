@@ -11,6 +11,7 @@ import { useLazyUpdateUser } from '../../graphql/mutations/updateUser';
 import type { UserData } from '../../graphql/queries/users';
 import { useLazyDepartments } from '../../graphql/queries/departments';
 import { useLazyPositions } from '../../graphql/queries/position';
+import theme from '../../theme/theme';
 
 const UpdateUserContainer = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -31,8 +32,8 @@ const UpdateUserForm = styled(Paper)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  maxWidth: 600,
-  width: '70%',
+  maxWidth: 800,
+  width: '80%',
   padding: theme.spacing(5),
 }));
 
@@ -159,78 +160,102 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
             mb: 2,
           }}
         >
-          <Typography variant="h6">{t('updateUser')}</Typography>
+          <Typography variant="h6" textTransform="capitalize">
+            {t('updateUser')}
+          </Typography>
           <CloseIcon onClick={onClick} sx={{ cursor: 'pointer' }} />
         </Box>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing={2}>
-            <TextField label={t('firstName')} fullWidth />
-            <TextField label={t('lastName')} fullWidth />
-            <TextField
-              select
-              label={t('department')}
-              fullWidth
-              {...register('departmentId')}
-            >
-              {departments.map((d) => (
-                <MenuItem key={d.id} value={d.id}>
-                  {d.name}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              select
-              label={t('position')}
-              fullWidth
-              {...register('positionId')}
-            >
-              {positions.map((p) => (
-                <MenuItem key={p.id} value={p.id}>
-                  {p.name}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              select
-              label={t('role')}
-              fullWidth
-              {...register('role')}
-              defaultValue={user.role}
-            >
-              <MenuItem key="admin" value="admin">
-                admin
-              </MenuItem>
-              <MenuItem key="employee" value="employee">
-                employee
-              </MenuItem>
-            </TextField>
-            <TextField label={t('password')} type="password" fullWidth />
-          </Stack>
+        <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: theme.spacing(5),
 
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            spacing={2}
-            mt={3}
+              marginBottom: theme.spacing(5),
+            }}
           >
-            <Button
-              variant="contained"
-              size="large"
-              onClick={onClick}
-              sx={{ width: '45%' }}
-            >
-              {t('common:cancel')}
-            </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              type="submit"
-              sx={{ width: '45%' }}
-            >
-              {t('common:update')}
-            </Button>
-          </Stack>
+            <Stack spacing={5} width="50%">
+              <TextField
+                select
+                label={t('email')}
+                fullWidth
+                disabled
+                defaultValue={user.email}
+              />
+
+              <TextField
+                label={t('lastName')}
+                fullWidth
+                defaultValue={user.profile.last_name || ''}
+              />
+
+              <TextField
+                select
+                label={t('department')}
+                fullWidth
+                {...register('departmentId')}
+              >
+                {departments.map((d) => (
+                  <MenuItem key={d.id} value={d.id}>
+                    {d.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <TextField
+                select
+                label={t('role')}
+                fullWidth
+                {...register('role')}
+                defaultValue={user.role}
+              >
+                <MenuItem key="admin" value="admin">
+                  admin
+                </MenuItem>
+                <MenuItem key="employee" value="employee">
+                  employee
+                </MenuItem>
+              </TextField>
+            </Stack>
+            <Stack spacing={5} width="50%">
+              <TextField label={t('password')} type="password" fullWidth />
+              <TextField
+                label={t('firstName')}
+                fullWidth
+                defaultValue={user.profile.first_name || ''}
+              />
+              <TextField
+                select
+                label={t('position')}
+                fullWidth
+                {...register('positionId')}
+              >
+                {positions.map((p) => (
+                  <MenuItem key={p.id} value={p.id}>
+                    {p.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Stack>
+          </Box>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={onClick}
+            sx={{ width: '45%' }}
+          >
+            {t('common:cancel')}
+          </Button>
+          <Button
+            variant="outlined"
+            size="large"
+            type="submit"
+            sx={{ width: '45%' }}
+          >
+            {t('common:update')}
+          </Button>
         </form>
       </UpdateUserForm>
     </UpdateUserContainer>

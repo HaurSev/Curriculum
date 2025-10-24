@@ -6,8 +6,11 @@ import theme from '../../theme/theme';
 import SearchIcon from '@mui/icons-material/Search';
 import { lazy, Suspense, useState } from 'react';
 import type { UserData } from '../../graphql/queries/users';
+// import UpdateProfile from '../../modules/UpdateProfile/UpdateProfile';
 
-const UpdateUser = lazy(() => import('../../modules/UpdateUser/UpdateUser'));
+const UpdateProfile = lazy(
+  () => import('../../modules/UpdateProfile/UpdateProfile'),
+);
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -91,7 +94,7 @@ const Users = () => {
     <Container>
       {isOpen === true && user !== null ? (
         <Suspense>
-          <UpdateUser onClick={() => setOpen(false)} user={user} />
+          <UpdateProfile onClick={() => setOpen(false)} user={user} />
         </Suspense>
       ) : (
         ''
