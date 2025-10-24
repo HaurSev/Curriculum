@@ -85,7 +85,7 @@ const theme = createTheme({
           '& .MuiOutlinedInput-root': {
             borderRadius: 8,
             background: 'transparent',
-            color: theme.palette.text.disabled,
+            color: theme.palette.text.primary,
             border: `1px solid ${theme.palette.text.disabled}`,
             transition: 'background 0.4s ease, border 0.4s ease',
             '&:hover': { background: 'rgba(75, 75, 75, 0.413)' },
@@ -99,6 +99,19 @@ const theme = createTheme({
             color: theme.palette.text.disabled,
             '&.Mui-focused': {
               color: theme.palette.text.primary,
+            },
+          },
+          '&.Mui-disabled': {
+            background: theme.palette.text.disabled,
+            border: `1px dashed ${theme.palette.text.disabled}`,
+            color: theme.palette.text.disabled,
+            cursor: 'not-allowed',
+            '& .MuiOutlinedInput-input': {
+              color: theme.palette.text.disabled,
+            },
+            '&hover': {
+              background: 'transparent',
+              cursor: 'not-allowed',
             },
           },
           '& input::placeholder': {
