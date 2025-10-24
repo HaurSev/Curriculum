@@ -14,10 +14,7 @@ type LoginFormData = {
 };
 
 const LoginUserSchema = z.object({
-  email: z
-    .string()
-    .nonempty('Email is required')
-    .email('Invalid email address'),
+  email: z.email('Invalid email address').nonempty('Email is required'),
   password: z.string().nonempty('Password is required'),
 });
 
@@ -48,13 +45,13 @@ const LoginForm = () => {
 
       if (!response.data) return;
 
-      const { email, id } = response.data.login.user;
+      const { email, id, role } = response.data.login.user;
       sessionStorage.setItem('access_token', response.data.login.access_token);
       sessionStorage.setItem(
         'refresh_token',
         response.data.login.refresh_token,
       );
-      sessionStorage.setItem('user', JSON.stringify({ id, email }));
+      sessionStorage.setItem('user', JSON.stringify({ id, email, role }));
 
       navigate(AppRoutes.USERS);
     } catch (error) {
