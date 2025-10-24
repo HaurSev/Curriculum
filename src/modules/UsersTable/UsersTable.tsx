@@ -60,8 +60,7 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
 
     const lowerSearch = searchValue.toLowerCase();
     return data.users.filter((user) => {
-      // const fullName = user.profile.full_name?.toLowerCase() || '';
-      const fullName = user.email?.toLowerCase() || '';
+      const fullName = user.profile.full_name?.toLowerCase() || '';
       return fullName.includes(lowerSearch);
     });
   }, [data, searchValue]);
