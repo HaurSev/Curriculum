@@ -4,9 +4,10 @@ import UsersTable from '../../modules/UsersTable/UsersTable';
 import { Box, InputBase, styled, Typography } from '@mui/material';
 import theme from '../../theme/theme';
 import SearchIcon from '@mui/icons-material/Search';
-import UpdateUser from '../../modules/UpdateUser/UpdateUser';
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import type { UserData } from '../../graphql/queries/users';
+
+const UpdateUser = lazy(() => import('../../modules/UpdateUser/UpdateUser'));
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -89,10 +90,13 @@ const Users = () => {
   return (
     <Container>
       {isOpen === true && user !== null ? (
-        <UpdateUser onClick={() => setOpen(false)} user={user} />
+        <Suspense>
+          <UpdateUser onClick={() => setOpen(false)} user={user} />
+        </Suspense>
       ) : (
         ''
       )}
+
       <SideBar active="employees" />
       <MainPart>
         <HeaderPart>
