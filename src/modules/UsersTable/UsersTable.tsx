@@ -18,6 +18,8 @@ import { Avatar } from '@mui/material';
 import theme from '../../theme/theme';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { AppRoutes } from '../../router/router';
+import { useNavigate } from 'react-router-dom';
 
 type Order = 'asc' | 'desc';
 
@@ -28,6 +30,7 @@ interface UserTableProps {
 
 const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
   const { t } = useTranslation('users');
+  const navigate = useNavigate();
 
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
   const userId = user.id;
@@ -194,14 +197,28 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
         <TableBody>
           {sortedUsers.map((user, index) => (
             <TableRow key={user.id || index}>
-              <TableCell component="th" scope="row">
+              <TableCell
+                component="th"
+                scope="row"
+                onClick={() => navigate(AppRoutes.PROFILE.create(user.id))}
+              >
                 {user.profile.avatar ? (
                   <Avatar
                     src={user.profile.avatar}
-                    sx={{ bgcolor: theme.palette.primary.main }}
+                    sx={{
+                      bgcolor: theme.palette.primary.main,
+                      width: '50px',
+                      height: '50px',
+                    }}
                   />
                 ) : (
-                  <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
+                  <Avatar
+                    sx={{
+                      bgcolor: theme.palette.primary.main,
+                      width: '50px',
+                      height: '50px',
+                    }}
+                  >
                     {user.profile.first_name?.[0] ?? ''}
                   </Avatar>
                 )}
@@ -212,14 +229,18 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
               <TableCell align="left">
                 {user.profile?.last_name || '-'}
               </TableCell>
-              <TableCell align="left">{user.email}</TableCell>
+              <TableCell sx={{ textTransform: 'lowercase' }} align="left">
+                {user.email}
+              </TableCell>
               <TableCell align="left">{user.department_name || '-'}</TableCell>
               <TableCell align="left">{user.position_name || '-'}</TableCell>
               <TableCell align="left">
                 {user.id === userId ? (
                   <MoreVertIcon onClick={() => onClick(user)} />
                 ) : (
-                  <ArrowForwardIosIcon />
+                  <ArrowForwardIosIcon
+                    onClick={() => navigate(AppRoutes.PROFILE.create(user.id))}
+                  />
                 )}
               </TableCell>
             </TableRow>
