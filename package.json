@@ -18,7 +18,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@mui/icons-material": "^7.3.4",
     "@mui/material": "^7.3.4",
-    "@mui/system": "^7.3.3",
+    "@mui/icons-material": "^7.3.4",
     "apollo-server-errors": "^3.3.1",
     "cv-graphql": "^2.13.2",
     "graphql": "^16.11.0",

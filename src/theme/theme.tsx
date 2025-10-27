@@ -30,9 +30,12 @@ const theme = createTheme({
       textTransform: 'capitalize',
       fontWeight: 300,
     },
-    h2: { fontSize: '2rem', fontWeight: 600 },
-    h3: { fontSize: '1.75rem', fontWeight: 500 },
-    body1: { fontSize: '1rem', lineHeight: 1.5 },
+    h2: { fontSize: '2rem', fontWeight: 600, textTransform: 'capitalize' },
+    h3: { fontSize: '1.75rem', fontWeight: 500, textTransform: 'capitalize' },
+    h4: { fontSize: '1.5rem', fontWeight: 500, textTransform: 'capitalize' },
+    h5: { fontSize: '1.25rem', fontWeight: 500, textTransform: 'capitalize' },
+    h6: { fontSize: '1rem', fontWeight: 500, textTransform: 'capitalize' },
+    body1: { fontSize: '1rem', lineHeight: 1.5, textTransform: 'capitalize' },
     button: {
       textTransform: 'uppercase',
       fontWeight: 500,
@@ -94,6 +97,15 @@ const theme = createTheme({
               color: theme.palette.text.primary,
             },
             '& .MuiOutlinedInput-input': { padding: '10px', color: 'inherit' },
+          },
+          '& .MuiOutlinedInput-input[type="file"]': {
+            background: 'transparent',
+            fontSize: 25,
+            border: 'none',
+            width: 40,
+            '&:hover': {
+              cursor: 'pointer',
+            },
           },
           '& .MuiInputLabel-root': {
             color: theme.palette.text.disabled,
@@ -209,6 +221,16 @@ const theme = createTheme({
               transition: '0.4s ease',
             },
           },
+        }),
+      },
+    },
+    MuiAvatar: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          background: theme.palette.primary.main,
+          color: theme.palette.text.disabled,
+          width: '140px',
+          height: '140px',
         }),
       },
     },

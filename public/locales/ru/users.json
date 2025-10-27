@@ -7,5 +7,8 @@
   "updateUser": "обновить пользователя",
   "role": "роль",
   "updateProfile": "обновить профиль",
-  "password": "пароль"
+  "password": "пароль",
+  "uploadRules": "png, jpg или gif не более чем  0.5MB",
+  "uploadAvatarImg": "загрузить и изображение",
+   "aMemberSince": "зарегистрирован"
 }

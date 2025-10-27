@@ -8,5 +8,18 @@
   "language": "Языки",
   "cv": "CVs",
   "cancel": "отмена",
-  "update": "обновить"
+  "update": "обновить",
+  "profile": "профиль",
+  "languages": "языки",
+  "notFound": "не найдено",
+  "firstName": "имя",
+  "lastName": "фамилия",
+  "email": "почта",
+  "department": "отдел",
+  "position": "позиция",
+  "role": "роль",
+  "updateProfile": "обновить профиль",
+  "password": "пароль",
+  "employee": "сотрудники",
+  "successfully": "успешно"
 }

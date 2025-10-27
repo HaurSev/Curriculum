@@ -7,5 +7,8 @@
   "updateUser": "update user",
   "updateProfile": "update profile",
   "role": "role",
-  "password": "password"
+  "password": "password",
+  "uploadRules": "png, jpg or gif no more than 0.5MB",
+  "uploadAvatarImg": "upload avatar image",
+  "aMemberSince": "a member since"
 }
