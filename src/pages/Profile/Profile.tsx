@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
-import ProfileAvatar from '../../modules/ProfileAvatar/ProfileAvatar';
 import { useLazyUser } from '../../graphql/queries/user';
 import { Bounce, toast } from 'react-toastify';
 import { Box, Button, styled, Typography } from '@mui/material';
@@ -13,7 +12,14 @@ import SideBar from '../../components/SideBar/SideBar';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import UserInfo from '../../components/UserInfo/UserInfo';
-import UpdateUserProfile from '../../modules/UpdateUserProfile/UpdateUserProfile';
+
+const UserUpdateProfile = lazy(
+  () => import('../../modules/UserUpdateProfile/UserUpdateProfile'),
+);
+
+const ProfileAvatar = lazy(
+  () => import('../../modules/ProfileAvatar/ProfileAvatar'),
+);
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -46,8 +52,6 @@ const HeaderPart = styled(Box)(() => ({
 const Profile = () => {
   const { userId } = useParams<{ userId: string }>();
   const [t] = useTranslation(['common', 'users']);
-  const userJson = sessionStorage.getItem('user') || '';
-  const userDate = JSON.parse(userJson);
 
   const [user, { loading, data }] = useLazyUser();
 
@@ -119,11 +123,13 @@ const Profile = () => {
           <ProfileHeader active="profile" />
         </HeaderPart>
 
-        <ProfileAvatar
-          first_name={data?.user.profile.first_name || t('firstName')}
-          avatar={data?.user.profile.avatar || ''}
-          userId={userId || ''}
-        />
+        <Suspense>
+          <ProfileAvatar
+            first_name={data?.user.profile.first_name || t('firstName')}
+            avatar={data?.user.profile.avatar || ''}
+            userId={userId || ''}
+          />
+        </Suspense>
 
         <UserInfo
           full_name={data?.user.profile.full_name || ''}
@@ -131,14 +137,15 @@ const Profile = () => {
           created_at={data?.user.created_at || ''}
         />
 
-        {userId === userDate.id && (
-          <UpdateUserProfile
+        <Suspense>
+          <UserUpdateProfile
+            userId={userId || ''}
             first_name={data?.user.profile.first_name || ''}
             last_name={data?.user.profile.last_name || ''}
-            position={data?.user.position?.name || ''}
-            department={data?.user.department?.name || ''}
-          ></UpdateUserProfile>
-        )}
+            position_name={data?.user.position?.name || ''}
+            department_name={data?.user.department?.name || ''}
+          ></UserUpdateProfile>
+        </Suspense>
       </MainPart>
     </Container>
   );
