@@ -99,6 +99,13 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
 
   const [updateUser] = useLazyUpdateUser();
 
+  const [initialValues, setInitialValues] =
+    useState<UpdatePositionDepartmentDate>({
+      userId,
+      departmentId: '',
+      positionId: '',
+    });
+
   const {
     register,
     handleSubmit,
@@ -123,15 +130,30 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
       const selectedPosition =
         positions.find((p) => p.name === position_name)?.id || positions[0].id;
 
-      reset({
+      const newValues = {
         userId,
         departmentId: selectedDepartment,
         positionId: selectedPosition,
-      });
+      };
+
+      reset(newValues);
+      setInitialValues(newValues);
     }
   }, [departments, positions, department_name, position_name, userId, reset]);
 
   const onSubmit = async (data: UpdatePositionDepartmentDate) => {
+    if (
+      data.departmentId === initialValues.departmentId &&
+      data.positionId === initialValues.positionId
+    ) {
+      toast.info('No changes detected', {
+        position: 'top-center',
+        autoClose: 3000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+      return;
+    }
     try {
       const response = await updateUser({
         variables: {
