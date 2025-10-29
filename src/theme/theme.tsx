@@ -71,11 +71,12 @@ const theme = createTheme({
           ...(ownerState.variant === 'outlined' && {
             background: 'transparent',
             color: theme.palette.text.disabled,
-            border: 'none',
+            border: `1px solid ${theme.palette.text.disabled}`,
             '&:hover': {
               background: 'rgba(128, 128, 128, 0.144)',
               transition: '0.6s ease',
               cursor: 'pointer',
+              border: `1px solid ${theme.palette.text.primary}`,
             },
           }),
         }),
@@ -241,16 +242,16 @@ const theme = createTheme({
           width: '100px',
           backgroundColor: theme.palette.grey[800],
           '&.novice .MuiLinearProgress-bar': {
-            backgroundColor: '#2E7D32',
+            backgroundColor: '#2127a5ff',
           },
           '&.advanced .MuiLinearProgress-bar': {
-            backgroundColor: '#4CAF50',
+            backgroundColor: '#3893c1ff',
           },
           '&.competent .MuiLinearProgress-bar': {
-            backgroundColor: '#FFEB3B',
+            backgroundColor: '#88d926ff',
           },
           '&.proficient .MuiLinearProgress-bar': {
-            backgroundColor: '#FF9800',
+            backgroundColor: '#d6a124ff',
           },
           '&.expert .MuiLinearProgress-bar': {
             backgroundColor: '#F44336',
