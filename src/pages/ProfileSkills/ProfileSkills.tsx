@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
 import { Box, styled, Typography } from '@mui/material';
 import theme from '../../theme/theme';
@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import { useLazyProfile } from '../../graphql/queries/profile';
 import { Bounce, toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import SkillsBlock from '../../modules/SkillsBlock/SkillsBlock';
+const SkillsBlock = lazy(() => import('../../modules/SkillsBlock/SkillsBlock'));
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -80,7 +80,9 @@ const ProfileSkills = () => {
           <Header full_name={data?.profile.full_name || ''}></Header>
           <ProfileHeader active="skills" />
         </HeaderPart>
-        <SkillsBlock skills={data?.profile.skills || []}></SkillsBlock>
+        <Suspense>
+          <SkillsBlock skills={data?.profile.skills || []}></SkillsBlock>
+        </Suspense>
       </MainPart>
     </Container>
   );
