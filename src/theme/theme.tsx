@@ -234,6 +234,30 @@ const theme = createTheme({
         }),
       },
     },
+    MuiLinearProgress: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          height: 5,
+          width: '100px',
+          backgroundColor: theme.palette.grey[800],
+          '&.novice .MuiLinearProgress-bar': {
+            backgroundColor: '#2E7D32',
+          },
+          '&.advanced .MuiLinearProgress-bar': {
+            backgroundColor: '#4CAF50',
+          },
+          '&.competent .MuiLinearProgress-bar': {
+            backgroundColor: '#FFEB3B',
+          },
+          '&.proficient .MuiLinearProgress-bar': {
+            backgroundColor: '#FF9800',
+          },
+          '&.expert .MuiLinearProgress-bar': {
+            backgroundColor: '#F44336',
+          },
+        }),
+      },
+    },
   },
 });
 
