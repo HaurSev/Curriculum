@@ -7,11 +7,11 @@ import {
 import GroupIcon from '@mui/icons-material/Group';
 import MovingIcon from '@mui/icons-material/Moving';
 import PortraitIcon from '@mui/icons-material/Portrait';
-import TranslateIcon from '@mui/icons-material/Translate';
 import theme from '../../theme/theme';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import { useTranslation } from 'react-i18next';
+import GTranslateIcon from '@mui/icons-material/GTranslate';
 
 interface SideBarProps {
   active: 'employees' | 'skills' | 'language' | 'cv';
@@ -64,7 +64,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton className={active === 'language' ? 'active' : ''}>
         <ListItemIcon>
-          <TranslateIcon
+          <GTranslateIcon
             sx={{
               color:
                 active === 'language'
