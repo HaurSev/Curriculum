@@ -1,0 +1,14 @@
+{
+  "firstName": "имя",
+  "lastName": "фамилия",
+  "email": "почта",
+  "department": "отдел",
+  "position": "позиция",
+  "updateUser": "обновить пользователя",
+  "role": "роль",
+  "updateProfile": "обновить профиль",
+  "password": "пароль",
+  "uploadRules": "png, jpg или gif не более чем  0.5MB",
+  "uploadAvatarImg": "загрузить и изображение",
+   "aMemberSince": "зарегистрирован"
+}
