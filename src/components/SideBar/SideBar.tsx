@@ -20,6 +20,10 @@ interface SideBarProps {
 const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('common');
+  const user = sessionStorage.getItem('user') || '';
+
+  const userData = JSON.parse(user);
+
   return (
     <List
       sx={{
@@ -42,7 +46,10 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
         </ListItemIcon>
         <ListItemText primary={t('employees')} />
       </ListItemButton>
-      <ListItemButton className={active === 'skills' ? 'active' : ''}>
+      <ListItemButton
+        className={active === 'skills' ? 'active' : ''}
+        onClick={() => navigate(AppRoutes.SKILLS.create(userData.id))}
+      >
         <ListItemIcon>
           <MovingIcon
             sx={{
