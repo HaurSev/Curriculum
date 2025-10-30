@@ -7,13 +7,16 @@ export const SKILLS = gql`
     skills {
       id
       name
-      category{}}
+      category {
+        id
+        name
+      }
     }
   }
 `;
 
 export interface SkillsQueryData {
-  users: Skill[];
+  skills: Skill[];
 }
 
 export const useLazySkills = () => {

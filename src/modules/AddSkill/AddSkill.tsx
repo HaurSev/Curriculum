@@ -1,8 +1,18 @@
-import { Button, Paper, TextField, Typography } from '@mui/material';
+import { Button, MenuItem, Paper, TextField, Typography } from '@mui/material';
 import { Box, Stack, styled } from '@mui/system';
 import { useTranslation } from 'react-i18next';
 import ClearIcon from '@mui/icons-material/Clear';
 import theme from '../../theme/theme';
+import { useForm } from 'react-hook-form';
+import { type Skill } from 'cv-graphql';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useLazyAddProfileSkill } from '../../graphql/mutations/addProfileSkill';
+import { Bounce, toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+// import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
+import { useLazySkills } from '../../graphql/queries/skills';
 
 const AddSkillContainer = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -49,8 +59,103 @@ interface AddSkillProps {
   onClick: () => void;
 }
 
+interface AddSkillData {
+  userId: string;
+  skill?: Skill;
+  categoryId?: string;
+  name: string;
+  mastery: 'Novice' | 'Advanced' | 'Competent' | 'Proficient' | 'Expert';
+}
+
+//  skills {
+//   id -> skillId
+//   name -> JavaScript
+//   category {
+//     id -> categoryId
+//     name -> Programming Language
+//   }
+// }
+
+const AddSkillSchema = z.object({
+  userId: z.string(),
+  name: z.string(),
+  mastery: z.enum(['Novice', 'Advanced', 'Competent', 'Proficient', 'Expert']),
+  categoryId: z.string().optional(),
+});
+
 const AddSkill: React.FC<AddSkillProps> = ({ onClick }) => {
   const [t] = useTranslation(['skills', 'common']);
+  const { userId } = useParams<{ userId: string }>();
+
+  const masteryKeys = [
+    'Novice',
+    'Advanced',
+    'Competent',
+    'Proficient',
+    'Expert',
+  ];
+
+  const [loadSkills] = useLazySkills();
+  const [skills, setSkills] = useState<Skill[]>([]);
+
+  const getSkills = async () => {
+    try {
+      const result = await loadSkills();
+      if (!result.data?.skills) return;
+
+      setSkills(result.data.skills);
+    } catch (error) {
+      toast.error(`${error}`, {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+    }
+  };
+
+  useEffect(() => {
+    getSkills();
+  }, []);
+
+  const { register, handleSubmit } = useForm<AddSkillData>({
+    resolver: zodResolver(AddSkillSchema),
+    defaultValues: {
+      userId: userId,
+      categoryId: '',
+      mastery: 'Novice',
+      name: '',
+    },
+  });
+
+  const [addProfileSkill] = useLazyAddProfileSkill();
+
+  const onSubmit = async (data: AddSkillData) => {
+    const selectedSkill = skills.find((s) => s.id === data.name);
+
+    try {
+      const response = await addProfileSkill({
+        variables: {
+          skill: {
+            userId: userId || '',
+            name: selectedSkill?.name || '',
+            categoryId: selectedSkill?.category?.id || '',
+            mastery: data.mastery,
+          },
+        },
+      });
+
+      if (!response.data) return;
+    } catch (error) {
+      toast.error(`${error}`, {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+    }
+  };
+
   return (
     <AddSkillContainer>
       <AddSkillForm>
@@ -59,14 +164,34 @@ const AddSkill: React.FC<AddSkillProps> = ({ onClick }) => {
           <ClearIcon onClick={onClick} />
         </FormHeader>
 
-        <form style={{ width: '100%' }}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
           <FormBody>
-            <TextField placeholder={t('skill')} label={t('skill')} />
+            <TextField
+              {...register('name')}
+              select
+              label={t('skill')}
+              fullWidth
+            >
+              {skills.map((s) => (
+                <MenuItem key={s.id} value={s.id}>
+                  {s.name}
+                </MenuItem>
+              ))}
+            </TextField>
 
             <TextField
+              {...register('mastery')}
               placeholder={t('skillMastery')}
+              select
               label={t('skillMastery')}
-            />
+              fullWidth
+            >
+              {masteryKeys.map((k) => (
+                <MenuItem key={k} value={k}>
+                  {k}
+                </MenuItem>
+              ))}
+            </TextField>
             <Stack
               sx={{
                 display: 'flex',
@@ -78,7 +203,9 @@ const AddSkill: React.FC<AddSkillProps> = ({ onClick }) => {
               <Button variant="outlined" onClick={onClick}>
                 {t('common:cancel')}
               </Button>
-              <Button variant="contained">{t('common:update')}</Button>
+              <Button type={'submit'} variant="contained">
+                {t('common:confirm')}
+              </Button>
             </Stack>
           </FormBody>
         </form>
