@@ -2,5 +2,6 @@
   "skill": "skill",
   "skillMastery": "skill mastery",
   "addSkill": "add skill",
-  "removeSkills": "remove skills"
+  "removeSkills": "remove skills",
+  "updateSkill": "update skill"
 }

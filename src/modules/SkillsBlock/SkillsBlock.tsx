@@ -46,6 +46,7 @@ const SkillsBlock: React.FC<SkilBlockProps> = ({ skills }) => {
   if (loading) {
     return <Typography>{t('loading')}</Typography>;
   }
+
   return (
     <Container>
       {data?.skillCategories.map((sc) => (
