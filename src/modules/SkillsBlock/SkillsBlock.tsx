@@ -33,7 +33,6 @@ const SkillsBlock: React.FC<SkilBlockProps> = ({ skills }) => {
 
       if (!response.data) return;
       if (!response.data.skillCategories) return;
-      console.log(data?.skillCategories);
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',

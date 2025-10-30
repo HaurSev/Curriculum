@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
 import { useLazyUser } from '../../graphql/queries/user';
 import { Bounce, toast } from 'react-toastify';

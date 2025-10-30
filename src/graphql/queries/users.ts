@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-// import type { User } from 'cv-graphql';
 import { useLazyQuery } from '@apollo/client/react';
 import type { UserRole } from 'cv-graphql';
 
