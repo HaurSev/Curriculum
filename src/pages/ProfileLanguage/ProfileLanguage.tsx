@@ -12,6 +12,7 @@ import { Bounce, toast } from 'react-toastify';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import LanguageContent from '../../components/LanguagesContent/LanguageContent';
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -46,7 +47,7 @@ const ProfileLanguage = () => {
   const user = sessionStorage.getItem('user');
   const userData = JSON.parse(user || '');
 
-  const [t] = useTranslation(['skills', 'common']);
+  const [t] = useTranslation(['languages', 'common']);
 
   const [profile, { loading, data }] = useLazyProfile();
 
@@ -87,6 +88,8 @@ const ProfileLanguage = () => {
           <ProfileHeader active="languages" />
         </HeaderPart>
 
+        <LanguageContent languages={data?.profile.languages || []} />
+
         {(userId === userData.id || userData.role === 'Admin') && (
           <Suspense>
             <Stack
@@ -101,7 +104,7 @@ const ProfileLanguage = () => {
                 }}
               >
                 <AddIcon />
-                {t('skills:addSkill')}
+                {t('addLanguage')}
               </Button>
 
               <Button
@@ -111,7 +114,7 @@ const ProfileLanguage = () => {
                 }}
               >
                 <DeleteForeverIcon />
-                {t('skills:removeSkills')}
+                {t('removeSkills')}
               </Button>
             </Stack>
           </Suspense>
