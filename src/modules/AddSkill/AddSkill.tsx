@@ -11,7 +11,6 @@ import { useLazyAddProfileSkill } from '../../graphql/mutations/addProfileSkill'
 import { Bounce, toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-// import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
 import { useLazySkills } from '../../graphql/queries/skills';
 
 const AddSkillContainer = styled(Box)(({ theme }) => ({
@@ -37,6 +36,7 @@ const AddSkillForm = styled(Paper)(({ theme }) => ({
   width: '80%',
   padding: theme.spacing(10),
   paddingTop: theme.spacing(4),
+  opacity: 0.8,
 }));
 
 const FormHeader = styled(Stack)(({ theme }) => ({
@@ -66,15 +66,6 @@ interface AddSkillData {
   name: string;
   mastery: 'Novice' | 'Advanced' | 'Competent' | 'Proficient' | 'Expert';
 }
-
-//  skills {
-//   id -> skillId
-//   name -> JavaScript
-//   category {
-//     id -> categoryId
-//     name -> Programming Language
-//   }
-// }
 
 const AddSkillSchema = z.object({
   userId: z.string(),
@@ -146,6 +137,14 @@ const AddSkill: React.FC<AddSkillProps> = ({ onClick }) => {
       });
 
       if (!response.data) return;
+
+      toast.success(`${t('common:successfully')}`, {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+      onClick();
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',

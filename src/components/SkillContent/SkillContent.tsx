@@ -19,7 +19,7 @@ const Content = styled(Stack)(() => ({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  gap: theme.spacing(10),
+  gap: theme.spacing(7),
   padding: theme.spacing(5),
   cursor: 'pointer',
 }));
