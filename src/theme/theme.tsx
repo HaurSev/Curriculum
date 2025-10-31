@@ -136,7 +136,9 @@ const theme = createTheme({
     },
     MuiPaper: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.background.default,
+          opacity: 1,
           '&.authForm': {
             display: 'flex',
             flexDirection: 'column',
@@ -151,7 +153,7 @@ const theme = createTheme({
               gap: '25px',
             },
           },
-        },
+        }),
       },
     },
     MuiButtonGroup: {
