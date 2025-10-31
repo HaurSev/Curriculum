@@ -3,14 +3,12 @@ import { Box, Stack, styled } from '@mui/system';
 import { useTranslation } from 'react-i18next';
 import ClearIcon from '@mui/icons-material/Clear';
 import theme from '../../theme/theme';
-import { Controller, useForm } from 'react-hook-form';
-import { type Skill, type SkillMastery } from 'cv-graphql';
+import { useForm } from 'react-hook-form';
+import { type SkillMastery } from 'cv-graphql';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Bounce, toast } from 'react-toastify';
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useLazySkills } from '../../graphql/queries/skills';
 import { useLazyUpdateProfileSkill } from '../../graphql/mutations/updateProfileSkill';
 
 const UpdateSkillContainer = styled(Box)(({ theme }) => ({
@@ -38,6 +36,7 @@ const UpdateSkillForm = styled(Paper)(({ theme }) => ({
   width: '80%',
   padding: theme.spacing(10),
   paddingTop: theme.spacing(4),
+  opacity: 0.8,
 }));
 
 const FormHeader = styled(Stack)(({ theme }) => ({
@@ -85,73 +84,25 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, userSkill }) => {
     'Expert',
   ];
 
-  const [loadSkills] = useLazySkills();
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [selectedSkillId, setSelectedSkillId] = useState<string>('');
-
-  const getSkills = async () => {
-    try {
-      const result = await loadSkills();
-      if (!result.data?.skills) return;
-
-      setSkills(result.data.skills);
-
-      const skill = result.data.skills.find((s) => s.name === userSkill.name);
-      if (skill) {
-        setSelectedSkillId(skill.id);
-      }
-    } catch (error) {
-      toast.error(`${error}`, {
-        position: 'top-center',
-        autoClose: 5000,
-        theme: 'dark',
-        transition: Bounce,
-      });
-    }
-  };
-
-  useEffect(() => {
-    getSkills();
-  }, []);
-
-  const { control, handleSubmit, register, setValue } =
-    useForm<UpdateSkillData>({
-      resolver: zodResolver(UpdateSkillSchema),
-      defaultValues: {
-        userId: userId || '',
-        name: '',
-        mastery: userSkill.mastery,
-      },
-    });
-
-  useEffect(() => {
-    if (selectedSkillId) {
-      setValue('name', selectedSkillId);
-    }
-  }, [selectedSkillId, setValue]);
+  const { handleSubmit, register } = useForm<UpdateSkillData>({
+    resolver: zodResolver(UpdateSkillSchema),
+    defaultValues: {
+      userId: userId || '',
+      name: '',
+      mastery: userSkill.mastery,
+    },
+  });
 
   const [updateProfileSkill] = useLazyUpdateProfileSkill();
 
   const onSubmit = async (data: UpdateSkillData) => {
-    const selectedSkill = skills.find((s) => s.id === data.name);
-
-    if (!selectedSkill) {
-      toast.error('Skill not found', {
-        position: 'top-center',
-        autoClose: 5000,
-        theme: 'dark',
-        transition: Bounce,
-      });
-      return;
-    }
-
     try {
       const response = await updateProfileSkill({
         variables: {
           skill: {
             userId: userId || '',
-            name: selectedSkill?.name || '',
-            categoryId: selectedSkill?.category?.id || '',
+            name: userSkill?.name || '',
+            categoryId: userSkill?.categoryId || '',
             mastery: data.mastery,
           },
         },
@@ -196,25 +147,15 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, userSkill }) => {
 
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
           <FormBody>
-            <Controller
-              name="name"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  select
-                  fullWidth
-                  label={t('skill')}
-                  value={field.value || ''}
-                >
-                  {skills.map((s) => (
-                    <MenuItem key={s.id} value={s.id}>
-                      {s.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              )}
-            />
+            <TextField
+              select
+              fullWidth
+              label={t('skill')}
+              defaultValue={userSkill.name}
+              disabled
+            >
+              <MenuItem value={userSkill.name}>{userSkill.name}</MenuItem>
+            </TextField>
 
             <TextField
               {...register('mastery')}
