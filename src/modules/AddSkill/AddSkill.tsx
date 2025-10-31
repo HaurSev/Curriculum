@@ -12,6 +12,7 @@ import { Bounce, toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLazySkills } from '../../graphql/queries/skills';
+import { useLazyProfile } from '../../graphql/queries/profile';
 
 const AddSkillContainer = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -109,7 +110,11 @@ const AddSkill: React.FC<AddSkillProps> = ({ onClick }) => {
     getSkills();
   }, []);
 
-  const { register, handleSubmit } = useForm<AddSkillData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AddSkillData>({
     resolver: zodResolver(AddSkillSchema),
     defaultValues: {
       userId: userId,
@@ -119,10 +124,51 @@ const AddSkill: React.FC<AddSkillProps> = ({ onClick }) => {
     },
   });
 
+  const [profile, { data }] = useLazyProfile();
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  const loadUser = async () => {
+    try {
+      const response = await profile({
+        variables: {
+          userId: userId || '',
+        },
+      });
+
+      if (!response.data) return;
+      if (!response.data.profile.skills) return;
+    } catch (error) {
+      toast.error(`${error}`, {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+    }
+  };
+
   const [addProfileSkill] = useLazyAddProfileSkill();
 
-  const onSubmit = async (data: AddSkillData) => {
-    const selectedSkill = skills.find((s) => s.id === data.name);
+  const onSubmit = async (newSkillData: AddSkillData) => {
+    const hasSkill = data?.profile.skills.some(
+      (skill) =>
+        skill.name === skills.find((s) => s.id === newSkillData.name)?.name,
+    );
+
+    if (hasSkill) {
+      toast.error('You already have this skill', {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+      return;
+    }
+
+    const selectedSkill = skills.find((s) => s.id === newSkillData.name);
 
     try {
       const response = await addProfileSkill({
@@ -131,7 +177,7 @@ const AddSkill: React.FC<AddSkillProps> = ({ onClick }) => {
             userId: userId || '',
             name: selectedSkill?.name || '',
             categoryId: selectedSkill?.category?.id || '',
-            mastery: data.mastery,
+            mastery: newSkillData.mastery,
           },
         },
       });
@@ -160,7 +206,14 @@ const AddSkill: React.FC<AddSkillProps> = ({ onClick }) => {
       <AddSkillForm>
         <FormHeader>
           <Typography variant="h4">{t('skills:addSkill')}</Typography>
-          <ClearIcon onClick={onClick} />
+          <ClearIcon
+            onClick={onClick}
+            sx={{
+              ':hover': {
+                cursor: 'pointer',
+              },
+            }}
+          />
         </FormHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
@@ -170,6 +223,8 @@ const AddSkill: React.FC<AddSkillProps> = ({ onClick }) => {
               select
               label={t('skill')}
               fullWidth
+              error={!!errors.name}
+              helperText={errors.name?.message}
             >
               {skills.map((s) => (
                 <MenuItem key={s.id} value={s.id}>
@@ -184,6 +239,8 @@ const AddSkill: React.FC<AddSkillProps> = ({ onClick }) => {
               select
               label={t('skillMastery')}
               fullWidth
+              error={!!errors.mastery}
+              helperText={errors.mastery?.message}
             >
               {masteryKeys.map((k) => (
                 <MenuItem key={k} value={k}>

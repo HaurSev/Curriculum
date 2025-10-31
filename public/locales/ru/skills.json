@@ -3,5 +3,6 @@
   "skillMastery": "уровень",
   "addSkill": "Добавить навык",
   "removeSkills": "Удалить навык",
-  "UpdateSkill": "Обновить"
+  "UpdateSkill": "Обновить",
+  "haveSkill": "Этот навык уже добавлен"
 }
