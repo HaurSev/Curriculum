@@ -4,6 +4,7 @@ import type { SkillMastery } from 'cv-graphql';
 import React, { lazy, Suspense, useState } from 'react';
 import theme from '../../theme/theme';
 import checkedItemStore from '../../store/checkedItemStore';
+import { useParams } from 'react-router-dom';
 
 const UpdateSkill = lazy(() => import('../../modules/UpdateSkill/UpdateSkill'));
 
@@ -64,6 +65,10 @@ const getMasteryProgress = (mastery: string) => {
 };
 
 const SkillBody: React.FC<SkillBodyProps> = ({ skill, progress }) => {
+  const { userId } = useParams<{ userId: string }>();
+  const user = sessionStorage.getItem('user');
+  const userData = JSON.parse(user || '');
+
   const [isUpdateOpen, setUpdateOpen] = useState(false);
   const [isChecked, setCheck] = useState(false);
 
@@ -72,12 +77,14 @@ const SkillBody: React.FC<SkillBodyProps> = ({ skill, progress }) => {
 
   const handleCheckItem = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (isChecked) {
-      removeItem(skill.name);
-    } else {
-      addItem(skill);
+    if (userId === userData.id || userData.role === 'Admin') {
+      if (isChecked) {
+        removeItem(skill.name);
+      } else {
+        addItem(skill);
+      }
+      setCheck(!isChecked);
     }
-    setCheck(!isChecked);
   };
 
   const handlSetUpdateOpen = () => {
@@ -117,12 +124,12 @@ const SkillBody: React.FC<SkillBodyProps> = ({ skill, progress }) => {
       >
         {skill.name}
       </Typography>
-
-      {isUpdateOpen && (
-        <Suspense>
-          <UpdateSkill onClick={handlSetUpdateOpen} userSkill={skill} />
-        </Suspense>
-      )}
+      {(userId === userData.id || userData.role === 'Admin') &&
+        isUpdateOpen && (
+          <Suspense>
+            <UpdateSkill onClick={handlSetUpdateOpen} userSkill={skill} />
+          </Suspense>
+        )}
     </Content>
   );
 };
