@@ -54,18 +54,17 @@ const SkillsBlock: React.FC<SkilBlockProps> = ({ skills }) => {
 
   return (
     <Container>
-      {data?.skillCategories.map((sc) => (
-        <>
-          {skills.filter((s) => s.categoryId === sc.id).length > 0 && (
-            <Block>
+      {data?.skillCategories.map(
+        (sc) =>
+          skills.filter((s) => s.categoryId === sc.id).length > 0 && (
+            <Block key={sc.id}>
               <Typography variant="h5">{sc.name}</Typography>
               <SkillContent
                 skills={skills.filter((s) => s.categoryId === sc.id)}
               />
             </Block>
-          )}
-        </>
-      ))}
+          ),
+      )}
     </Container>
   );
 };

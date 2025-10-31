@@ -70,7 +70,7 @@ interface AddSkillData {
 
 const AddSkillSchema = z.object({
   userId: z.string(),
-  name: z.string(),
+  name: z.string().nonempty(),
   mastery: z.enum(['Novice', 'Advanced', 'Competent', 'Proficient', 'Expert']),
   categoryId: z.string().optional(),
 });

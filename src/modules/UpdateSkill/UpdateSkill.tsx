@@ -68,7 +68,7 @@ interface UpdateSkillData {
 
 const UpdateSkillSchema = z.object({
   userId: z.string(),
-  name: z.string(),
+  name: z.string().nonempty(),
   mastery: z.enum(['Novice', 'Advanced', 'Competent', 'Proficient', 'Expert']),
 });
 
@@ -88,7 +88,7 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, userSkill }) => {
     resolver: zodResolver(UpdateSkillSchema),
     defaultValues: {
       userId: userId || '',
-      name: '',
+      name: userSkill.name,
       mastery: userSkill.mastery,
     },
   });
@@ -96,6 +96,16 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, userSkill }) => {
   const [updateProfileSkill] = useLazyUpdateProfileSkill();
 
   const onSubmit = async (data: UpdateSkillData) => {
+    if (data.mastery === userSkill.mastery) {
+      toast.error('You have not changed anything.', {
+        position: 'top-center',
+        autoClose: 3000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+      return;
+    }
+
     try {
       const response = await updateProfileSkill({
         variables: {
