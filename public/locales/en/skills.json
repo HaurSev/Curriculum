@@ -4,5 +4,6 @@
   "addSkill": "add skill",
   "removeSkills": "remove skills",
   "updateSkill": "update skill",
-  "haveSkill": "you already have this skill"
+  "haveSkill": "you already have this skill",
+  "notChange": "You have not changed anything"
 }

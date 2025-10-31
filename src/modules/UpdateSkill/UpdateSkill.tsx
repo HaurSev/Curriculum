@@ -97,7 +97,7 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, userSkill }) => {
 
   const onSubmit = async (data: UpdateSkillData) => {
     if (data.mastery === userSkill.mastery) {
-      toast.error('You have not changed anything.', {
+      toast.error(t('notChange'), {
         position: 'top-center',
         autoClose: 3000,
         theme: 'dark',
