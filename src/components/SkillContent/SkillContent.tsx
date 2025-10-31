@@ -3,6 +3,7 @@ import { Stack } from '@mui/system';
 import type { SkillMastery } from 'cv-graphql';
 import React, { lazy, Suspense, useState } from 'react';
 import theme from '../../theme/theme';
+import checkedItemStore from '../../store/checkedItemStore';
 
 const UpdateSkill = lazy(() => import('../../modules/UpdateSkill/UpdateSkill'));
 
@@ -13,6 +14,7 @@ const Block = styled(Box)(() => ({
   justifyContent: 'flex-start',
   gap: '10%',
   flexWrap: 'wrap',
+  marginTop: theme.spacing(2),
 }));
 
 const Content = styled(Stack)(() => ({
@@ -22,6 +24,15 @@ const Content = styled(Stack)(() => ({
   gap: theme.spacing(7),
   padding: theme.spacing(5),
   cursor: 'pointer',
+  height: theme.spacing(4),
+  marginBottom: theme.spacing(5),
+  transition: '0.8s ease',
+}));
+
+const CheckedContent = styled(Content)(() => ({
+  background: 'rgba(107, 36, 36, 0.21)',
+  borderRadius: theme.spacing(10),
+  boxShadow: `5px 3px rgba(33, 29, 29, 0.32)`,
 }));
 
 interface SkillContentProps {
@@ -54,9 +65,44 @@ const getMasteryProgress = (mastery: string) => {
 
 const SkillBody: React.FC<SkillBodyProps> = ({ skill, progress }) => {
   const [isUpdateOpen, setUpdateOpen] = useState(false);
+  const [isChecked, setCheck] = useState(false);
 
-  return (
-    <Content onClick={() => setUpdateOpen(true)}>
+  const addItem = checkedItemStore((state) => state.addItem);
+  const removeItem = checkedItemStore((state) => state.removeItem);
+
+  const handleCheckItem = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (isChecked) {
+      removeItem(skill.name);
+    } else {
+      addItem(skill);
+    }
+    setCheck(!isChecked);
+  };
+
+  const handlSetUpdateOpen = () => {
+    setUpdateOpen(!isUpdateOpen);
+  };
+
+  return isChecked ? (
+    <CheckedContent onContextMenu={handleCheckItem}>
+      <LinearProgress
+        className={progress.className}
+        variant="determinate"
+        value={progress.value}
+      />
+      <Typography
+        variant="body1"
+        sx={{
+          color: theme.palette.text.disabled,
+          fontSize: 15,
+        }}
+      >
+        {skill.name}
+      </Typography>
+    </CheckedContent>
+  ) : (
+    <Content onClick={handlSetUpdateOpen} onContextMenu={handleCheckItem}>
       <LinearProgress
         className={progress.className}
         variant="determinate"
@@ -74,7 +120,7 @@ const SkillBody: React.FC<SkillBodyProps> = ({ skill, progress }) => {
 
       {isUpdateOpen && (
         <Suspense>
-          <UpdateSkill onClick={() => setUpdateOpen(false)} userSkill={skill} />
+          <UpdateSkill onClick={handlSetUpdateOpen} userSkill={skill} />
         </Suspense>
       )}
     </Content>

@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Stack } from '@mui/system';
+import useCheckedItemStore from '../../store/checkedItemStore';
+import { useLazyDeleteProfileSkill } from '../../graphql/mutations/deleteProfileSkill';
 
 const SkillsBlock = lazy(() => import('../../modules/SkillsBlock/SkillsBlock'));
 const AddSkill = lazy(() => import('../../modules/AddSkill/AddSkill'));
@@ -48,6 +50,8 @@ const ProfileSkills = () => {
   const user = sessionStorage.getItem('user');
   const userData = JSON.parse(user || '');
 
+  const checkedItems = useCheckedItemStore((state) => state.checkedItems);
+
   const [t] = useTranslation(['skills', 'common']);
   const [isAddOpen, setAddOpen] = useState(false);
 
@@ -77,6 +81,41 @@ const ProfileSkills = () => {
     }
   };
 
+  const [deleteProfileSkill] = useLazyDeleteProfileSkill();
+
+  const deleteSkill = async () => {
+    try {
+      const response = await deleteProfileSkill({
+        variables: {
+          skill: {
+            userId: userId || '',
+            name: checkedItems.map((item) => item.name),
+          },
+        },
+      });
+
+      if (!response.data || !response.data.deleteProfileSkill) return;
+
+      toast.success('Skill deleted successfully!', {
+        position: 'top-center',
+        autoClose: 3000,
+        theme: 'dark',
+      });
+
+      useCheckedItemStore.getState().clearItems();
+    } catch (error) {
+      toast.error(`${error}`, {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+      });
+    }
+  };
+
+  const handlSetAddOpen = () => {
+    setAddOpen(!isAddOpen);
+  };
+
   if (loading) {
     return <Typography>{t('common:loading')}</Typography>;
   }
@@ -92,40 +131,55 @@ const ProfileSkills = () => {
         <Suspense>
           <SkillsBlock skills={data?.profile.skills || []} />
         </Suspense>
-        <Stack
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-          }}
-        >
-          {(userId === userData.id || userData.role === 'Admin') && (
-            <Button
-              onClick={() => setAddOpen(true)}
+        {(userId === userData.id || userData.role === 'Admin') && (
+          <Suspense>
+            <Stack
               sx={{
-                gap: theme.spacing(3),
+                display: 'flex',
+                flexDirection: 'row',
               }}
             >
-              <AddIcon />
-              {t('skills:addSkill')}
-            </Button>
-          )}
-          {(userId === userData.id || userData.role === 'Admin') && (
-            <Button
-              onClick={() => setAddOpen(true)}
-              sx={{
-                color: theme.palette.text.secondary,
-                gap: theme.spacing(3),
-              }}
-            >
-              <DeleteForeverIcon />
-              {t('skills:removeSkills')}
-            </Button>
-          )}
-        </Stack>
+              <Button
+                onClick={handlSetAddOpen}
+                sx={{
+                  gap: theme.spacing(3),
+                }}
+              >
+                <AddIcon />
+                {t('skills:addSkill')}
+              </Button>
+
+              {checkedItems.length ? (
+                <Button
+                  onClick={deleteSkill}
+                  sx={{
+                    color: theme.palette.text.primary,
+                    gap: theme.spacing(3),
+                  }}
+                  variant="contained"
+                >
+                  <DeleteForeverIcon />
+                  {`${t('skills:removeSkills')} ${checkedItems.length}`}
+                </Button>
+              ) : (
+                <Button
+                  onClick={deleteSkill}
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    gap: theme.spacing(3),
+                  }}
+                >
+                  <DeleteForeverIcon />
+                  {t('skills:removeSkills')}
+                </Button>
+              )}
+            </Stack>
+          </Suspense>
+        )}
       </MainPart>
       {isAddOpen && (
         <Suspense>
-          <AddSkill onClick={() => setAddOpen(false)} />
+          <AddSkill onClick={handlSetAddOpen} />
         </Suspense>
       )}
     </Container>
