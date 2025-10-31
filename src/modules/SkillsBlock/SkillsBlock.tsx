@@ -13,6 +13,11 @@ const Container = styled(Box)(() => ({
   width: '80%',
 }));
 
+const Block = styled(Box)(({ theme }) => ({
+  width: '100%',
+  marginBottom: theme.spacing(1),
+}));
+
 interface SkilBlockProps {
   skills: SkillMastery[];
 }
@@ -52,12 +57,12 @@ const SkillsBlock: React.FC<SkilBlockProps> = ({ skills }) => {
       {data?.skillCategories.map((sc) => (
         <>
           {skills.filter((s) => s.categoryId === sc.id).length > 0 && (
-            <>
+            <Block>
               <Typography variant="h5">{sc.name}</Typography>
               <SkillContent
                 skills={skills.filter((s) => s.categoryId === sc.id)}
               />
-            </>
+            </Block>
           )}
         </>
       ))}
