@@ -71,11 +71,12 @@ const theme = createTheme({
           ...(ownerState.variant === 'outlined' && {
             background: 'transparent',
             color: theme.palette.text.disabled,
-            border: 'none',
+            border: `1px solid ${theme.palette.text.disabled}`,
             '&:hover': {
               background: 'rgba(128, 128, 128, 0.144)',
               transition: '0.6s ease',
               cursor: 'pointer',
+              border: `1px solid ${theme.palette.text.primary}`,
             },
           }),
         }),
@@ -135,7 +136,9 @@ const theme = createTheme({
     },
     MuiPaper: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.background.default,
+          opacity: 1,
           '&.authForm': {
             display: 'flex',
             flexDirection: 'column',
@@ -150,7 +153,7 @@ const theme = createTheme({
               gap: '25px',
             },
           },
-        },
+        }),
       },
     },
     MuiButtonGroup: {
@@ -231,6 +234,30 @@ const theme = createTheme({
           color: theme.palette.text.disabled,
           width: '140px',
           height: '140px',
+        }),
+      },
+    },
+    MuiLinearProgress: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          height: 5,
+          width: '100px',
+          backgroundColor: theme.palette.grey[800],
+          '&.novice .MuiLinearProgress-bar': {
+            backgroundColor: '#2127a5ff',
+          },
+          '&.advanced .MuiLinearProgress-bar': {
+            backgroundColor: '#3893c1ff',
+          },
+          '&.competent .MuiLinearProgress-bar': {
+            backgroundColor: '#88d926ff',
+          },
+          '&.proficient .MuiLinearProgress-bar': {
+            backgroundColor: '#d6a124ff',
+          },
+          '&.expert .MuiLinearProgress-bar': {
+            backgroundColor: '#F44336',
+          },
         }),
       },
     },

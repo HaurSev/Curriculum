@@ -7,4 +7,8 @@ export const AppRoutes = {
     path: '/users/:userId/profile',
     create: (userId: string) => `/users/${userId}/profile`,
   },
+  SKILLS: {
+    path: '/users/:userId/skills',
+    create: (userId: string) => `/users/${userId}/skills`,
+  },
 } as const;

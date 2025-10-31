@@ -31,7 +31,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
         }}
       >
         <Button
-          variant="outlined"
+          variant="text"
           onClick={() => navigate(AppRoutes.PROFILE.create(userId || ''))}
           sx={{
             color:
@@ -50,8 +50,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
         </Button>
 
         <Button
-          variant="outlined"
-          //   onClick={() => navigate(AppRoutes.REGISTRATION)}
+          variant="text"
+          onClick={() => navigate(AppRoutes.SKILLS.create(userId || ''))}
           sx={{
             color:
               active === 'skills'
@@ -67,7 +67,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
           {t('skills')}
         </Button>
         <Button
-          variant="outlined"
+          variant="text"
           //   onClick={() => navigate(AppRoutes.REGISTRATION)}
           sx={{
             color:

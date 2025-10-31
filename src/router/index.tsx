@@ -2,13 +2,16 @@ import { createBrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './router';
 import ProtectedRoute from './ProtectedRoute';
 import { lazy, Suspense } from 'react';
-import Users from '../pages/Users/Users';
-import Profile from '../pages/Profile/Profile';
 
 const Login = lazy(() => import('../pages/Login/Login'));
 const Signup = lazy(() => import('../pages/Signup/Signup'));
 const ForgotPassword = lazy(
   () => import('../pages/ForgotPassword/ForgotPassword'),
+);
+const Users = lazy(() => import('../pages/Users/Users'));
+const Profile = lazy(() => import('../pages/Profile/Profile'));
+const ProfileSkills = lazy(
+  () => import('../pages/ProfileSkills/ProfileSkills'),
 );
 
 const router = createBrowserRouter([
@@ -57,6 +60,14 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <Profile />
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.SKILLS.path,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProfileSkills />
       </Suspense>
     ),
   },

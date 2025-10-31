@@ -21,5 +21,6 @@
   "updateProfile": "обновить профиль",
   "password": "пароль",
   "employee": "сотрудники",
-  "successfully": "успешно"
+  "successfully": "успешно",
+  "confirm": "подтвердить"
 }

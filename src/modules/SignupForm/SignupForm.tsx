@@ -117,7 +117,7 @@ const SignupForm = () => {
             </Button>
 
             <Button
-              variant="outlined"
+              variant="text"
               fullWidth
               disabled={loading}
               onClick={handleNavigate}

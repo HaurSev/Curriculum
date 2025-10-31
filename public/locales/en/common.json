@@ -22,5 +22,6 @@
   "role": "role",
   "password": "password",
   "employee": "employees",
-  "successfully": "successfully"
+  "successfully": "successfully",
+  "confirm": "confirm"
 }

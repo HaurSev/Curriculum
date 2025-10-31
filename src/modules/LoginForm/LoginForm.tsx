@@ -121,7 +121,7 @@ const LoginForm = () => {
             </Button>
 
             <Button
-              variant="outlined"
+              variant="text"
               fullWidth
               disabled={loading}
               sx={{ height: 45, width: 210 }}

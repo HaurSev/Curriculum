@@ -7,11 +7,11 @@ import {
 import GroupIcon from '@mui/icons-material/Group';
 import MovingIcon from '@mui/icons-material/Moving';
 import PortraitIcon from '@mui/icons-material/Portrait';
-import TranslateIcon from '@mui/icons-material/Translate';
 import theme from '../../theme/theme';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import { useTranslation } from 'react-i18next';
+import GTranslateIcon from '@mui/icons-material/GTranslate';
 
 interface SideBarProps {
   active: 'employees' | 'skills' | 'language' | 'cv';
@@ -20,6 +20,10 @@ interface SideBarProps {
 const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('common');
+  const user = sessionStorage.getItem('user') || '';
+
+  const userData = JSON.parse(user);
+
   return (
     <List
       sx={{
@@ -42,7 +46,10 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
         </ListItemIcon>
         <ListItemText primary={t('employees')} />
       </ListItemButton>
-      <ListItemButton className={active === 'skills' ? 'active' : ''}>
+      <ListItemButton
+        className={active === 'skills' ? 'active' : ''}
+        onClick={() => navigate(AppRoutes.SKILLS.create(userData.id))}
+      >
         <ListItemIcon>
           <MovingIcon
             sx={{
@@ -57,7 +64,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton className={active === 'language' ? 'active' : ''}>
         <ListItemIcon>
-          <TranslateIcon
+          <GTranslateIcon
             sx={{
               color:
                 active === 'language'

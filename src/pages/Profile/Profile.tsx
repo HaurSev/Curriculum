@@ -1,17 +1,14 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
 import { useLazyUser } from '../../graphql/queries/user';
 import { Bounce, toast } from 'react-toastify';
-import { Box, Button, styled, Typography } from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import theme from '../../theme/theme';
-import { Stack } from '@mui/system';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import SideBar from '../../components/SideBar/SideBar';
-import { useNavigate, useParams } from 'react-router-dom';
-import { AppRoutes } from '../../router/router';
+import { useParams } from 'react-router-dom';
 import UserInfo from '../../components/UserInfo/UserInfo';
+import Header from '../../components/Header/Header';
 
 const UserUpdateProfile = lazy(
   () => import('../../modules/UserUpdateProfile/UserUpdateProfile'),
@@ -59,8 +56,6 @@ const Profile = () => {
     loadUser();
   }, []);
 
-  const navigate = useNavigate();
-
   const loadUser = async () => {
     try {
       const response = await user({
@@ -90,35 +85,7 @@ const Profile = () => {
       <SideBar active="employees" />
       <MainPart>
         <HeaderPart>
-          <Stack
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              fontWeight: 300,
-              color: theme.palette.text.disabled,
-            }}
-          >
-            <Button
-              sx={{
-                textTransform: 'capitalize',
-              }}
-              onClick={() => navigate(AppRoutes.USERS)}
-            >
-              {t('employee')}
-            </Button>
-            <KeyboardArrowRightIcon />
-            <Button
-              sx={{
-                textTransform: 'capitalize',
-                color: theme.palette.text.secondary,
-              }}
-            >
-              <PersonOutlineOutlinedIcon />
-              {data?.user.profile.full_name || t('username')}
-            </Button>
-          </Stack>
+          <Header full_name={data?.user.profile.full_name || ''}></Header>
 
           <ProfileHeader active="profile" />
         </HeaderPart>
