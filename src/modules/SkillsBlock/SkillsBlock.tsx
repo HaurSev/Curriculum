@@ -54,7 +54,9 @@ const SkillsBlock: React.FC<SkilBlockProps> = ({ skills }) => {
           {skills.filter((s) => s.categoryId === sc.id).length > 0 && (
             <>
               <Typography variant="h5">{sc.name}</Typography>
-              <SkillContent skills={skills}></SkillContent>
+              <SkillContent
+                skills={skills.filter((s) => s.categoryId === sc.id)}
+              />
             </>
           )}
         </>
