@@ -62,7 +62,10 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
         </ListItemIcon>
         <ListItemText primary={t('skills')} />
       </ListItemButton>
-      <ListItemButton className={active === 'language' ? 'active' : ''}>
+      <ListItemButton
+        className={active === 'language' ? 'active' : ''}
+        onClick={() => navigate(AppRoutes.LANGUAGES.create(userData.id))}
+      >
         <ListItemIcon>
           <GTranslateIcon
             sx={{

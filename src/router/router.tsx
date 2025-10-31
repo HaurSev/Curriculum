@@ -11,4 +11,8 @@ export const AppRoutes = {
     path: '/users/:userId/skills',
     create: (userId: string) => `/users/${userId}/skills`,
   },
+  LANGUAGES: {
+    path: '/users/:userId/languages',
+    create: (userId: string) => `/users/${userId}/languages`,
+  },
 } as const;

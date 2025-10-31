@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './router';
 import ProtectedRoute from './ProtectedRoute';
 import { lazy, Suspense } from 'react';
+import ProfileLanguage from '../pages/ProfileLanguage/ProfileLanguage';
 
 const Login = lazy(() => import('../pages/Login/Login'));
 const Signup = lazy(() => import('../pages/Signup/Signup'));
@@ -68,6 +69,14 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileSkills />
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.LANGUAGES.path,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProfileLanguage />
       </Suspense>
     ),
   },
