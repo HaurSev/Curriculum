@@ -1,7 +1,12 @@
 import { Box, styled, Typography } from '@mui/material';
 import type { LanguageProficiency } from 'cv-graphql';
-import React from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import theme from '../../theme/theme';
+import { useParams } from 'react-router-dom';
+
+const UpdateLanguage = lazy(
+  () => import('../../modules/UpdateLanguage/UpdateLanguage'),
+);
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -16,6 +21,7 @@ const Block = styled(Box)(() => ({
   display: 'flex',
   flexDirection: 'row',
   gap: theme.spacing(5),
+  cursor: 'pointer',
 }));
 
 interface LanguageContentProps {
@@ -23,10 +29,23 @@ interface LanguageContentProps {
 }
 
 const LanguageContent: React.FC<LanguageContentProps> = ({ languages }) => {
+  const { userId } = useParams<{ userId: string }>();
+  const user = sessionStorage.getItem('user');
+  const userData = JSON.parse(user || '');
+
+  const [isUpdateOpen, setUpdateOpen] = useState(false);
+
+  const handleOpen = () => {
+    setUpdateOpen(true);
+  };
+  const handleClose = () => {
+    setUpdateOpen(false);
+  };
+
   return (
     <Container>
       {languages.map((lang) => (
-        <Block>
+        <Block onClick={handleOpen}>
           <Typography variant="h6">{lang.proficiency}</Typography>
 
           <Typography
@@ -37,6 +56,15 @@ const LanguageContent: React.FC<LanguageContentProps> = ({ languages }) => {
           >
             {lang.name}
           </Typography>
+          {(userId === userData.id || userData.role === 'Admin') &&
+            isUpdateOpen && (
+              <Suspense>
+                <UpdateLanguage
+                  onClick={handleClose}
+                  userLanguage={lang}
+                ></UpdateLanguage>
+              </Suspense>
+            )}
         </Block>
       ))}
     </Container>
