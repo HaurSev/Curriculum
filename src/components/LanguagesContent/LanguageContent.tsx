@@ -7,7 +7,6 @@ const Container = styled(Box)(() => ({
   display: 'flex',
   flexDirection: 'row',
   width: '80%',
-  minHeight: '100vh',
   justifyContent: 'flex-start',
   padding: theme.spacing(5),
   gap: '25%',
