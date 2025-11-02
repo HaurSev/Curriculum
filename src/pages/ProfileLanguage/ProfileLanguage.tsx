@@ -11,6 +11,8 @@ import { useLazyProfile } from '../../graphql/queries/profile';
 import { Bounce, toast } from 'react-toastify';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { useLazyDeleteProfileLanguage } from '../../graphql/mutations/deleteProfileLanguages';
+import useCheckedLanguagesStore from '../../store/ckeckeLanguagesStore';
 
 const LanguageContent = lazy(
   () => import('../../components/LanguagesContent/LanguageContent'),
@@ -53,6 +55,9 @@ const ProfileLanguage = () => {
   const user = sessionStorage.getItem('user');
   const userData = JSON.parse(user || '');
 
+  const checkedItems = useCheckedLanguagesStore((state) => state.checkedItems);
+  const clearItems = useCheckedLanguagesStore((state) => state.clearItems);
+
   const [t] = useTranslation(['languages', 'common']);
   const [isAddOpen, setAddOpen] = useState(false);
 
@@ -82,6 +87,42 @@ const ProfileLanguage = () => {
     }
   };
 
+  const [deleteProfileLanguage] = useLazyDeleteProfileLanguage();
+
+  const deleteLanguage = async () => {
+    try {
+      const response = await deleteProfileLanguage({
+        variables: {
+          language: {
+            userId: userId || '',
+            name: checkedItems.map((item) => item.name),
+          },
+        },
+      });
+
+      if (!response.data) return;
+      if (!response.data.deleteProfileLanguage) return;
+
+      clearItems();
+
+      toast.success(t('common:successfully'), {
+        position: 'top-center',
+        autoClose: 3000,
+        theme: 'dark',
+      });
+    } catch (error) {
+      toast.error(`${error}`, {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+      });
+    }
+  };
+
+  const handlSetAddOpen = () => {
+    setAddOpen(!isAddOpen);
+  };
+
   if (loading) {
     return <Typography>{t('common:loading')}</Typography>;
   }
@@ -91,8 +132,8 @@ const ProfileLanguage = () => {
       <SideBar active="language" />
       <MainPart>
         <HeaderPart>
-          <Header full_name={data?.profile.full_name || ''} />
-          <ProfileHeader active="languages" />
+          <Header full_name={data?.profile.full_name || ''} />{' '}
+          <ProfileHeader active="languages" />{' '}
         </HeaderPart>
 
         {data?.profile.languages && (
@@ -102,7 +143,6 @@ const ProfileLanguage = () => {
             ></LanguageContent>
           </Suspense>
         )}
-
         {(userId === userData.id || userData.role === 'Admin') && (
           <Stack
             sx={{
@@ -114,29 +154,41 @@ const ProfileLanguage = () => {
               sx={{
                 gap: theme.spacing(3),
               }}
-              onClick={() => setAddOpen(true)}
+              onClick={handlSetAddOpen}
             >
               <AddIcon />
               {t('addLanguage')}
             </Button>
 
-            <Button
-              sx={{
-                color: theme.palette.text.secondary,
-                gap: theme.spacing(3),
-              }}
-            >
-              <DeleteForeverIcon />
-              {t('removeSkills')}
-            </Button>
+            {checkedItems.length ? (
+              <Button
+                onClick={deleteLanguage}
+                sx={{
+                  gap: theme.spacing(3),
+                }}
+                variant="contained"
+              >
+                <DeleteForeverIcon />
+                {`${t('removeSkills')}  ${checkedItems.length}`}
+              </Button>
+            ) : (
+              <Button
+                sx={{
+                  color: theme.palette.text.secondary,
+                  gap: theme.spacing(3),
+                }}
+              >
+                <DeleteForeverIcon />
+                {t('removeSkills')}
+              </Button>
+            )}
           </Stack>
         )}
       </MainPart>
-
       {isAddOpen && (
         <Suspense>
           <AddLanguages
-            onClick={() => setAddOpen(false)}
+            onClick={handlSetAddOpen}
             userLanguages={data?.profile.languages || []}
           ></AddLanguages>
         </Suspense>
