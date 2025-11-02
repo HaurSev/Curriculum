@@ -68,7 +68,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
         </Button>
         <Button
           variant="text"
-          //   onClick={() => navigate(AppRoutes.REGISTRATION)}
+          onClick={() => navigate(AppRoutes.LANGUAGES.create(userId || ''))}
           sx={{
             color:
               active === 'languages'
