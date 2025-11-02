@@ -1,6 +1,6 @@
 import { Button, styled, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import React, { Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import theme from '../../theme/theme';
 import SideBar from '../../components/SideBar/SideBar';
 import Header from '../../components/Header/Header';
@@ -9,10 +9,16 @@ import { useParams } from 'react-router-dom';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
 import { useLazyProfile } from '../../graphql/queries/profile';
 import { Bounce, toast } from 'react-toastify';
-
 import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import LanguageContent from '../../components/LanguagesContent/LanguageContent';
+
+const LanguageContent = lazy(
+  () => import('../../components/LanguagesContent/LanguageContent'),
+);
+
+const AddLanguages = lazy(
+  () => import('../../modules/AddLanguages/AddLanguages'),
+);
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -48,6 +54,7 @@ const ProfileLanguage = () => {
   const userData = JSON.parse(user || '');
 
   const [t] = useTranslation(['languages', 'common']);
+  const [isAddOpen, setAddOpen] = useState(false);
 
   const [profile, { loading, data }] = useLazyProfile();
 
@@ -88,43 +95,52 @@ const ProfileLanguage = () => {
           <ProfileHeader active="languages" />
         </HeaderPart>
 
-        <LanguageContent languages={data?.profile.languages || []} />
-
-        {(userId === userData.id || userData.role === 'Admin') && (
+        {data?.profile.languages && (
           <Suspense>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-              }}
-            >
-              <Button
-                sx={{
-                  gap: theme.spacing(3),
-                }}
-              >
-                <AddIcon />
-                {t('addLanguage')}
-              </Button>
-
-              <Button
-                sx={{
-                  color: theme.palette.text.secondary,
-                  gap: theme.spacing(3),
-                }}
-              >
-                <DeleteForeverIcon />
-                {t('removeSkills')}
-              </Button>
-            </Stack>
+            <LanguageContent
+              languages={data?.profile.languages || []}
+            ></LanguageContent>
           </Suspense>
         )}
+
+        {(userId === userData.id || userData.role === 'Admin') && (
+          <Stack
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+            }}
+          >
+            <Button
+              sx={{
+                gap: theme.spacing(3),
+              }}
+              onClick={() => setAddOpen(true)}
+            >
+              <AddIcon />
+              {t('addLanguage')}
+            </Button>
+
+            <Button
+              sx={{
+                color: theme.palette.text.secondary,
+                gap: theme.spacing(3),
+              }}
+            >
+              <DeleteForeverIcon />
+              {t('removeSkills')}
+            </Button>
+          </Stack>
+        )}
       </MainPart>
-      {/* {isAddOpen && (
+
+      {isAddOpen && (
         <Suspense>
-          <AddSkill onClick={handlSetAddOpen} />
+          <AddLanguages
+            onClick={() => setAddOpen(false)}
+            userLanguages={data?.profile.languages || []}
+          ></AddLanguages>
         </Suspense>
-      )} */}
+      )}
     </Container>
   );
 };
