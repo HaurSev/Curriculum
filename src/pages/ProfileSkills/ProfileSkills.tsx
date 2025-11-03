@@ -96,7 +96,7 @@ const ProfileSkills = () => {
 
       if (!response.data || !response.data.deleteProfileSkill) return;
 
-      toast.success('Skill deleted successfully!', {
+      toast.success(t('common:successfully'), {
         position: 'top-center',
         autoClose: 3000,
         theme: 'dark',

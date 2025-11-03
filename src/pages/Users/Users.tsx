@@ -57,7 +57,7 @@ const Search = styled(Box)(({ theme }) => ({
   },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled(Box)(({ theme }) => ({
   paddingRight: theme.spacing(2),
   paddingTop: theme.spacing(1),
   position: 'absolute',
