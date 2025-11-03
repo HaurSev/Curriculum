@@ -173,7 +173,7 @@ const UserCV = () => {
           ></UserCvTable>
         </Suspense>
       </MainPart>
-      {isAddOpen && <AddCV></AddCV>}
+      {isAddOpen && <AddCV onClick={handleSetAdd} />}
     </Container>
   );
 };
