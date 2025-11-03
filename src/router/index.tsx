@@ -3,6 +3,7 @@ import { AppRoutes } from './router';
 import ProtectedRoute from './ProtectedRoute';
 import { lazy, Suspense } from 'react';
 import ProfileLanguage from '../pages/ProfileLanguage/ProfileLanguage';
+import CVsPage from '../pages/CVsPage/CVsPage';
 
 const Login = lazy(() => import('../pages/Login/Login'));
 const Signup = lazy(() => import('../pages/Signup/Signup'));
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.USERS,
+    path: AppRoutes.USERS.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProtectedRoute requireAuth={false}>
@@ -58,7 +59,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.PROFILE.path,
+    path: AppRoutes.USERS.Children.PROFILE.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <Profile />
@@ -66,7 +67,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.SKILLS.path,
+    path: AppRoutes.USERS.Children.SKILLS.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileSkills />
@@ -74,7 +75,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.LANGUAGES.path,
+    path: AppRoutes.USERS.Children.LANGUAGES.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileLanguage />
@@ -82,10 +83,18 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.USER_CV.path,
+    path: AppRoutes.USERS.Children.USER_CV.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <UserCv />
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.CVS,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <CVsPage />
       </Suspense>
     ),
   },

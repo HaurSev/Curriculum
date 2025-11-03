@@ -1,8 +1,10 @@
 import {
+  Avatar,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from '@mui/material';
 import GroupIcon from '@mui/icons-material/Group';
 import MovingIcon from '@mui/icons-material/Moving';
@@ -12,10 +14,22 @@ import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import { useTranslation } from 'react-i18next';
 import GTranslateIcon from '@mui/icons-material/GTranslate';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { Box, Stack, styled } from '@mui/system';
 
 interface SideBarProps {
   active: 'employees' | 'skills' | 'language' | 'cv';
 }
+
+const Container = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  width: '100%',
+  padding: theme.spacing(3),
+  gap: theme.spacing(3),
+  marginBottom: '0',
+}));
 
 const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
   const navigate = useNavigate();
@@ -31,7 +45,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       }}
     >
       <ListItemButton
-        onClick={() => navigate(AppRoutes.USERS)}
+        onClick={() => navigate(AppRoutes.USERS.path)}
         className={active === 'employees' ? 'active' : ''}
       >
         <ListItemIcon>
@@ -48,7 +62,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'skills' ? 'active' : ''}
-        onClick={() => navigate(AppRoutes.SKILLS.create(userData.id))}
+        // onClick={() => navigate(AppRoutes.SKILLS.create(userData.id))}
       >
         <ListItemIcon>
           <MovingIcon
@@ -64,7 +78,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'language' ? 'active' : ''}
-        onClick={() => navigate(AppRoutes.LANGUAGES.create(userData.id))}
+        // onClick={() => navigate(AppRoutes.LANGUAGES.create(userData.id))}
       >
         <ListItemIcon>
           <GTranslateIcon
@@ -78,7 +92,10 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
         </ListItemIcon>
         <ListItemText primary={t('language')} />
       </ListItemButton>
-      <ListItemButton className={active === 'cv' ? 'active' : ''}>
+      <ListItemButton
+        className={active === 'cv' ? 'active' : ''}
+        onClick={() => navigate(AppRoutes.CVS)}
+      >
         <ListItemIcon>
           <PortraitIcon
             sx={{
@@ -91,6 +108,45 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
         </ListItemIcon>
         <ListItemText primary={t('cv')} />
       </ListItemButton>
+
+      <Container>
+        <Stack
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: theme.spacing(5),
+          }}
+        >
+          {userData.avatar ? (
+            <Avatar
+              src={userData.avatar}
+              sx={{
+                bgcolor: theme.palette.primary.main,
+                width: '50px',
+                height: '50px',
+              }}
+            />
+          ) : (
+            <Avatar
+              sx={{
+                bgcolor: theme.palette.primary.main,
+                width: '50px',
+                height: '50px',
+              }}
+            >
+              {userData.full_name?.[0] ?? ''}
+            </Avatar>
+          )}
+          <Typography>{userData.full_name}</Typography>
+        </Stack>
+
+        <ArrowBackIosNewIcon
+          onClick={() =>
+            navigate(AppRoutes.USERS.Children.PROFILE.create(userData.id))
+          }
+        />
+      </Container>
     </List>
   );
 };

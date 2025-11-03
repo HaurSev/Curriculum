@@ -46,14 +46,18 @@ const LoginForm = () => {
       if (!response.data) return;
 
       const { email, id, role } = response.data.login.user;
+      const { avatar, full_name } = response.data.login.user.profile;
       sessionStorage.setItem('access_token', response.data.login.access_token);
       sessionStorage.setItem(
         'refresh_token',
         response.data.login.refresh_token,
       );
-      sessionStorage.setItem('user', JSON.stringify({ id, email, role }));
+      sessionStorage.setItem(
+        'user',
+        JSON.stringify({ id, email, role, full_name, avatar }),
+      );
 
-      navigate(AppRoutes.USERS);
+      navigate(AppRoutes.USERS.path);
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',

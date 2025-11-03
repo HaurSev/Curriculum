@@ -200,7 +200,9 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
               <TableCell
                 component="th"
                 scope="row"
-                onClick={() => navigate(AppRoutes.PROFILE.create(user.id))}
+                onClick={() =>
+                  navigate(AppRoutes.USERS.Children.PROFILE.create(user.id))
+                }
               >
                 {user.profile.avatar ? (
                   <Avatar
@@ -239,7 +241,9 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
                   <MoreVertIcon onClick={() => onClick(user)} />
                 ) : (
                   <ArrowForwardIosIcon
-                    onClick={() => navigate(AppRoutes.PROFILE.create(user.id))}
+                    onClick={() =>
+                      navigate(AppRoutes.USERS.Children.PROFILE.create(user.id))
+                    }
                   />
                 )}
               </TableCell>
