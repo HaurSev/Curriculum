@@ -14,6 +14,7 @@ const Profile = lazy(() => import('../pages/Profile/Profile'));
 const ProfileSkills = lazy(
   () => import('../pages/ProfileSkills/ProfileSkills'),
 );
+const UserCv = lazy(() => import('../pages/UserCV/UserCV'));
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,14 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileLanguage />
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.USER_CV.path,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <UserCv />
       </Suspense>
     ),
   },

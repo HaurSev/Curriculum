@@ -15,4 +15,8 @@ export const AppRoutes = {
     path: '/users/:userId/languages',
     create: (userId: string) => `/users/${userId}/languages`,
   },
+  USER_CV: {
+    path: '/users/:userId/cvs',
+    create: (userId: string) => `/users/${userId}/cvs`,
+  },
 } as const;
