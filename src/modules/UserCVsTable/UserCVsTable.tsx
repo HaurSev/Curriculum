@@ -30,6 +30,9 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
 }) => {
   const { t } = useTranslation(['common', 'CVs']);
 
+  const userData = sessionStorage.getItem('user');
+  const user = JSON.parse(userData || '');
+
   const [isDeleteOpen, setDelete] = useState(false);
 
   const handleSetDelete = () => {
@@ -99,47 +102,52 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortedCVs.map((cv, index) => (
-            <React.Fragment key={cv.id || index}>
-              {isDeleteOpen && (
-                <DeleteCV cv={cv} onClick={handleSetDelete}></DeleteCV>
-              )}
-              <TableRow
-                sx={{
-                  '& td, & th': {
-                    borderBottom: 'none',
-                  },
-                  '&:hover': {
-                    backgroundColor: 'rgba(107,36,36,0.08)',
-                    cursor: 'pointer',
-                  },
-                }}
-              >
-                <TableCell align="left">{cv.name}</TableCell>
-                <TableCell align="left">{cv.education}</TableCell>
-                <TableCell align="left">
-                  {cv.user?.email ||
-                    cv.user?.profile?.first_name ||
-                    t('notFound')}
-                </TableCell>
-                <TableCell align="left">
-                  <MoreVertIcon onClick={handleSetDelete} />
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell
-                  colSpan={4}
+          {sortedCVs.map((cv, index) => {
+            return (
+              <React.Fragment key={cv.id || index}>
+                {isDeleteOpen && (
+                  <DeleteCV cv={cv} onClick={handleSetDelete}></DeleteCV>
+                )}
+                <TableRow
                   sx={{
-                    color: theme.palette.text.disabled,
-                    textAlign: 'justify',
+                    '& td, & th': {
+                      borderBottom: 'none',
+                    },
+                    '&:hover': {
+                      backgroundColor: 'rgba(107,36,36,0.08)',
+                      cursor: 'pointer',
+                    },
                   }}
                 >
-                  {cv.description}
-                </TableCell>
-              </TableRow>
-            </React.Fragment>
-          ))}
+                  <TableCell align="left">{cv.name}</TableCell>
+                  <TableCell align="left">{cv.education}</TableCell>
+                  <TableCell align="left">
+                    {cv.user?.email || t('notFound')}
+                  </TableCell>
+                  <TableCell align="left">
+                    <MoreVertIcon
+                      onClick={
+                        (cv.user?.id === user.id || user.role === 'Admin') &&
+                        handleSetDelete
+                      }
+                    />
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell
+                    colSpan={4}
+                    sx={{
+                      color: theme.palette.text.disabled,
+                      textAlign: 'justify',
+                    }}
+                  >
+                    {cv.description}
+                  </TableCell>
+                </TableRow>
+              </React.Fragment>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>

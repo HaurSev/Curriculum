@@ -6,10 +6,10 @@ import SideBar from '../../components/SideBar/SideBar';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import { useParams } from 'react-router-dom';
-import { useLazyUser } from '../../graphql/queries/user';
 import { Bounce, toast } from 'react-toastify';
 import AddIcon from '@mui/icons-material/Add';
 import AddCV from '../../modules/AddCV/AddCV';
+import { useLazyCvs } from '../../graphql/queries/cvs';
 
 const UserCvTable = lazy(
   () => import('../../modules/UserCVsTable/UserCVsTable'),
@@ -100,7 +100,7 @@ const UserCV = () => {
     setAddOpen(!isAddOpen);
   };
 
-  const [loadUser, { data, loading, error }] = useLazyUser();
+  const [loadUser, { data, loading, error }] = useLazyCvs();
 
   useEffect(() => {
     loadUser({ variables: { userId: userId || '' } });
@@ -168,7 +168,7 @@ const UserCV = () => {
         <Suspense>
           <UserCvTable
             searchValue={searchValue}
-            cvs={data?.user.cvs || []}
+            cvs={data?.cvs || []}
           ></UserCvTable>
         </Suspense>
       </MainPart>
