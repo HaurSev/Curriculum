@@ -13,9 +13,10 @@ import {
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import theme from '../../theme/theme';
 import type { Cv } from 'cv-graphql';
+import DeleteCV from '../DeleteCV/DeleteCV';
 
 interface UserCVsTableProps {
-  //   onClick: () => void;
+  // onClick: () => void;
   searchValue?: string;
   cvs: Cv[];
 }
@@ -28,6 +29,12 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
   cvs,
 }) => {
   const { t } = useTranslation(['common', 'CVs']);
+
+  const [isDeleteOpen, setDelete] = useState(false);
+
+  const handleSetDelete = () => {
+    setDelete(!isDeleteOpen);
+  };
 
   const [order, setOrder] = useState<Order>('asc');
 
@@ -94,6 +101,9 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
         <TableBody>
           {sortedCVs.map((cv, index) => (
             <React.Fragment key={cv.id || index}>
+              {isDeleteOpen && (
+                <DeleteCV cv={cv} onClick={handleSetDelete}></DeleteCV>
+              )}
               <TableRow
                 sx={{
                   '& td, & th': {
@@ -108,10 +118,12 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
                 <TableCell align="left">{cv.name}</TableCell>
                 <TableCell align="left">{cv.education}</TableCell>
                 <TableCell align="left">
-                  {cv.user?.email || t('notFound')}
+                  {cv.user?.email ||
+                    cv.user?.profile?.first_name ||
+                    t('notFound')}
                 </TableCell>
                 <TableCell align="left">
-                  <MoreVertIcon />
+                  <MoreVertIcon onClick={handleSetDelete} />
                 </TableCell>
               </TableRow>
 
