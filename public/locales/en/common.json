@@ -23,5 +23,6 @@
   "password": "password",
   "employee": "employees",
   "successfully": "successfully",
-  "confirm": "confirm"
+  "confirm": "confirm",
+  "youDontHaveRights": "You don't have appropriate right"
 }

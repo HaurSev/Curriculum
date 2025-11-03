@@ -4,5 +4,7 @@
   "description": "description",
   "education": "education",
   "employee": "employee",
-  "createCV": "create cv"
+  "createCV": "create cv",
+  "deleteCV": "Delete CV",
+  "AreYouShure": "Are ypu sure you want to delete CV "
 }
