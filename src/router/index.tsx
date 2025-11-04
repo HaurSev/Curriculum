@@ -17,6 +17,8 @@ const ProfileSkills = lazy(
 
 const Languages = lazy(() => import('../pages/Languages/Languages'));
 
+const Skills = lazy(() => import('../pages/Skills/Skills'));
+
 const router = createBrowserRouter([
   {
     path: AppRoutes.LOGIN,
@@ -87,6 +89,14 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <Languages />
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.SKILLS,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <Skills />
       </Suspense>
     ),
   },

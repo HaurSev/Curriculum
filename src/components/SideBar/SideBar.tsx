@@ -45,7 +45,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'skills' ? 'active' : ''}
-        // onClick={() => navigate(AppRoutes.SKILLS.create(userData.id))}
+        onClick={() => navigate(AppRoutes.SKILLS)}
       >
         <ListItemIcon>
           <MovingIcon
