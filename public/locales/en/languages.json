@@ -4,5 +4,9 @@
   "removeSkills": "remove language",
   "updateLanguage": "update language",
   "haveLanguage": "you already have this language",
-  "notChange": "You have not changed anything"
+  "notChange": "You have not changed anything",
+  "name": "name",
+  "nativeName": "native name",
+  "iso": "ISO2",
+  "sure": "Are you sure you want to remove"
 }

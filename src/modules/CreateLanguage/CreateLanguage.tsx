@@ -1,24 +1,16 @@
-import {
-  Box,
-  Button,
-  Paper,
-  Stack,
-  styled,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, Paper, TextField, Typography } from '@mui/material';
+import { Box, Stack, styled } from '@mui/system';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ClearIcon from '@mui/icons-material/Clear';
-import type { Language } from 'cv-graphql';
-import { Bounce, toast } from 'react-toastify';
 import theme from '../../theme/theme';
-import * as z from 'zod';
+import { Bounce, toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLazyUpdateLanguage } from '../../graphql/mutations/updateLanguage';
+import * as z from 'zod';
+import { useLazyCreateLanguage } from '../../graphql/mutations/createLanguage';
 
-const Container = styled(Box)(({ theme }) => ({
+const AddLanguageContainer = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
   display: 'flex',
   flexDirection: 'column',
@@ -26,14 +18,12 @@ const Container = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   width: '100%',
   minHeight: '100vh',
-  zIndex: 9999,
+  zIndex: 100,
   background: 'rgba(0,0,0,0.8)',
-  position: 'fixed', // чтобы не перекрывалась модалка
-  left: 0,
-  top: 0,
+  position: 'absolute',
 }));
 
-const Form = styled(Paper)(({ theme }) => ({
+const AddLanguageForm = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.primary,
   display: 'flex',
   flexDirection: 'column',
@@ -43,7 +33,7 @@ const Form = styled(Paper)(({ theme }) => ({
   width: '80%',
   padding: theme.spacing(10),
   paddingTop: theme.spacing(4),
-  opacity: 0.9,
+  opacity: 0.8,
 }));
 
 const FormHeader = styled(Stack)(({ theme }) => ({
@@ -62,12 +52,11 @@ const FormBody = styled(Stack)(({ theme }) => ({
   paddingTop: theme.spacing(2),
 }));
 
-interface UpdateLanguageProps {
+interface CreateLanguageProps {
   onClick: () => void;
-  language: Language;
 }
 
-interface CreateLanguageForm {
+interface CreateLangugeForm {
   name: string;
   native_name: string;
   iso: string;
@@ -79,45 +68,22 @@ const CreateLanguageSchema = z.object({
   iso: z.string().nonempty(),
 });
 
-const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
-  onClick,
-  language,
-}) => {
+const CreateLanguages: React.FC<CreateLanguageProps> = ({ onClick }) => {
   const [t] = useTranslation(['languages', 'common']);
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+
+  const [createLanguage] = useLazyCreateLanguage();
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<CreateLanguageForm>({
+  } = useForm<CreateLangugeForm>({
     resolver: zodResolver(CreateLanguageSchema),
-    defaultValues: {
-      name: language.name,
-      native_name: language.native_name || '',
-      iso: language.iso2,
-    },
+    defaultValues: {},
   });
 
-  const [updateLanguage] = useLazyUpdateLanguage();
-
-  const onSubmit = async (newLanguageData: CreateLanguageForm) => {
-    const hasChanges =
-      newLanguageData.name !== language.name ||
-      newLanguageData.native_name !== (language.native_name || '') ||
-      newLanguageData.iso !== language.iso2;
-
-    if (!hasChanges) {
-      toast.info(t('common:cancel'), {
-        position: 'top-center',
-        autoClose: 4000,
-        theme: 'dark',
-        transition: Bounce,
-      });
-      return;
-    }
-
+  const onSubmit = async (newLanguageData: CreateLangugeForm) => {
     if (user.role !== 'Admin') {
       toast.error(t('common:youDontHavePermission'), {
         position: 'top-center',
@@ -129,13 +95,12 @@ const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
     }
 
     try {
-      const response = await updateLanguage({
+      const response = await createLanguage({
         variables: {
           language: {
-            languageId: language.id,
-            name: newLanguageData.name.trim(),
-            native_name: newLanguageData.native_name.trim(),
-            iso2: newLanguageData.iso.trim(),
+            name: newLanguageData?.name || '',
+            native_name: newLanguageData.native_name || '',
+            iso2: newLanguageData.iso || '',
           },
         },
       });
@@ -144,7 +109,7 @@ const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
 
       toast.success(`${t('common:successfully')}`, {
         position: 'top-center',
-        autoClose: 4000,
+        autoClose: 5000,
         theme: 'dark',
         transition: Bounce,
       });
@@ -159,28 +124,22 @@ const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
     }
   };
 
-  const currentValues = watch();
-  const isChanged =
-    currentValues.name !== language.name ||
-    currentValues.native_name !== (language.native_name || '') ||
-    currentValues.iso !== language.iso2;
-
   return (
-    <Container>
-      <Form>
+    <AddLanguageContainer>
+      <AddLanguageForm>
         <FormHeader>
-          <Typography>{t('updateLanguage')}</Typography>
+          <Typography variant="h4">{t('addLanguage')}</Typography>
           <ClearIcon
             onClick={onClick}
             sx={{
-              cursor: 'pointer',
               ':hover': {
-                color: theme.palette.error.main,
+                cursor: 'pointer',
               },
             }}
           />
         </FormHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
+
+        <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
           <FormBody>
             <TextField
               {...register('name')}
@@ -189,7 +148,7 @@ const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
               fullWidth
               error={!!errors.name}
               helperText={errors.name?.message}
-            />
+            ></TextField>
 
             <TextField
               {...register('native_name')}
@@ -198,7 +157,7 @@ const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
               fullWidth
               error={!!errors.native_name}
               helperText={errors.native_name?.message}
-            />
+            ></TextField>
 
             <TextField
               {...register('iso')}
@@ -207,26 +166,27 @@ const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
               fullWidth
               error={!!errors.iso}
               helperText={errors.iso?.message}
-            />
-
+            ></TextField>
             <Stack
-              direction="row"
-              justifyContent="flex-end"
-              gap={5}
-              sx={{ width: '100%' }}
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                gap: theme.spacing(5),
+              }}
             >
               <Button onClick={onClick} variant="outlined">
                 {t('common:cancel')}
               </Button>
-              <Button type="submit" variant="contained" disabled={!isChanged}>
+              <Button type={'submit'} variant="contained">
                 {t('common:confirm')}
               </Button>
             </Stack>
           </FormBody>
         </form>
-      </Form>
-    </Container>
+      </AddLanguageForm>
+    </AddLanguageContainer>
   );
 };
 
-export default UpdateLanguage;
+export default CreateLanguages;

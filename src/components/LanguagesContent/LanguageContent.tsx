@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import checkedLanguagesStore from '../../store/ckeckeLanguagesStore';
 
 const UpdateLanguage = lazy(
-  () => import('../../modules/UpdateLanguage/UpdateLanguage'),
+  () => import('../../modules/UpdateProfileLanguage/UpdateProfileLanguage'),
 );
 
 const Container = styled(Box)(() => ({

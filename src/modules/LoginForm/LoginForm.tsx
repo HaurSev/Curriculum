@@ -53,7 +53,7 @@ const LoginForm = () => {
       );
       sessionStorage.setItem('user', JSON.stringify({ id, email, role }));
 
-      navigate(AppRoutes.USERS);
+      navigate(AppRoutes.USERS.path);
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',

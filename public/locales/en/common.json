@@ -23,5 +23,6 @@
   "password": "password",
   "employee": "employees",
   "successfully": "successfully",
-  "confirm": "confirm"
+  "confirm": "confirm",
+  "youDontHavePermission": "You don't have permission for this action"
 }
