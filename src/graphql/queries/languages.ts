@@ -8,6 +8,7 @@ export const LANGUAGES = gql`
       id
       name
       native_name
+      iso2
     }
   }
 `;
