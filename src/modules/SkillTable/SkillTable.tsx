@@ -8,7 +8,7 @@ import {
   TableRow,
   TableSortLabel,
 } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bounce, toast } from 'react-toastify';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -16,6 +16,10 @@ import theme from '../../theme/theme';
 // import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
 import { useLazySkills } from '../../graphql/queries/skills';
 import type { Skill } from 'cv-graphql';
+
+const DeleteSkill = lazy(
+  () => import('../../components/DeleteSkill/DeleteSkill'),
+);
 
 type Order = 'asc' | 'desc';
 
@@ -25,6 +29,12 @@ interface SkillTableProps {
 
 const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
   const { t } = useTranslation(['skills', 'common']);
+
+  const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
+
+  const handleOpenDelete = (id: string) => {
+    setOpenDeleteId((prev) => (prev === id ? null : id));
+  };
 
   //   const [skillCategory, { data }] = useLazySkillCategories();
 
@@ -167,17 +177,17 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
             <TableRow key={skill.id || index}>
               <TableCell>{skill.name}</TableCell>
               <TableCell>{skill.category?.name}</TableCell>
-              <TableCell>
+              <TableCell onClick={() => handleOpenDelete(skill.id)}>
                 <MoreVertIcon />
               </TableCell>
-              {/* {openDeleteId === lang.id && (
+              {openDeleteId === skill.id && (
                 <Suspense>
-                  <DeleteLanguage
-                    language={lang}
+                  <DeleteSkill
+                    skill={skill}
                     onClick={() => setOpenDeleteId(null)}
                   />
                 </Suspense>
-              )} */}
+              )}
               {/* {openUpdateId === lang.id && (
                 <Suspense>
                   <UpdateLanguage

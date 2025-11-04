@@ -24,5 +24,6 @@
   "employee": "employees",
   "successfully": "successfully",
   "confirm": "confirm",
-  "youDontHavePermission": "You don't have permission for this action"
+  "youDontHavePermission": "You don't have permission for this action",
+  "sure": "Are you sure you want to remove"
 }
