@@ -15,6 +15,8 @@ const ProfileSkills = lazy(
   () => import('../pages/ProfileSkills/ProfileSkills'),
 );
 
+const Languages = lazy(() => import('../pages/Languages/Languages'));
+
 const router = createBrowserRouter([
   {
     path: AppRoutes.LOGIN,
@@ -47,7 +49,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.USERS,
+    path: AppRoutes.USERS.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProtectedRoute requireAuth={false}>
@@ -57,7 +59,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.PROFILE.path,
+    path: AppRoutes.USERS.Children.PROFILE.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <Profile />
@@ -65,7 +67,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.SKILLS.path,
+    path: AppRoutes.USERS.Children.SKILLS.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileSkills />
@@ -73,10 +75,18 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.LANGUAGES.path,
+    path: AppRoutes.USERS.Children.USER_LANGUAGES.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileLanguage />
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.LANGUAGES,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <Languages />
       </Suspense>
     ),
   },
