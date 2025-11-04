@@ -22,5 +22,6 @@
   "password": "пароль",
   "employee": "сотрудники",
   "successfully": "успешно",
-  "confirm": "подтвердить"
+  "confirm": "подтвердить",
+  "youDontHavePermission": "У вас нет необходимых прав"
 }

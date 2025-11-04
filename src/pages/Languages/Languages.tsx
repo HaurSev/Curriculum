@@ -1,13 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import SideBar from '../../components/SideBar/SideBar';
-// import UsersTable from '../../modules/UsersTable/UsersTable';
-import { Box, InputBase, styled, Typography } from '@mui/material';
+import { Box, Button, InputBase, styled, Typography } from '@mui/material';
 import theme from '../../theme/theme';
 import SearchIcon from '@mui/icons-material/Search';
-// import { lazy, Suspense, useState } from 'react';
-// import type { UserData } from '../../graphql/queries/users';
+import { lazy, Suspense, useState } from 'react';
+import AddIcon from '@mui/icons-material/Add';
 import LanguagesTable from '../../modules/LanguagesTable/LanguagesTable';
-import { useState } from 'react';
+
+const CreateLanguge = lazy(
+  () => import('../../modules/CreateLanguage/CreateLanguage'),
+);
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -84,10 +86,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Languages = () => {
   const { t } = useTranslation(['languages', 'common']);
   const [searchValue, setSearchValue] = useState('');
+
+  const [isAddOpen, setAddOpen] = useState(false);
+  const handlSetAddOpen = () => {
+    setAddOpen(!isAddOpen);
+  };
   //   const navigate = useNavigate();
 
   //   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-  //   const userId = user.id;
 
   return (
     <Container>
@@ -100,20 +106,45 @@ const Languages = () => {
           >
             {t('common:languages')}
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-          </Search>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingRight: theme.spacing(5),
+            }}
+          >
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+            </Search>
+            <Button
+              sx={{
+                gap: theme.spacing(3),
+                color: theme.palette.text.secondary,
+              }}
+              onClick={handlSetAddOpen}
+            >
+              <AddIcon />
+              {t('addLanguage')}
+            </Button>
+          </Box>
         </HeaderPart>
         <LanguagesTable searchValue={searchValue}></LanguagesTable>
       </MainPart>
+      {isAddOpen && (
+        <Suspense>
+          <CreateLanguge onClick={handlSetAddOpen}></CreateLanguge>
+        </Suspense>
+      )}
     </Container>
   );
 };
