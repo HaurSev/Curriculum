@@ -36,6 +36,12 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
     setOpenDeleteId((prev) => (prev === id ? null : id));
   };
 
+  //   const [openUpdateId, setOpenUpdateId] = useState<string | null>(null);
+
+  //   const handleOpenUpdate = (id: string) => {
+  //     setOpenUpdateId((prev) => (prev === id ? null : id));
+  //   };
+
   //   const [skillCategory, { data }] = useLazySkillCategories();
 
   //   const loadSkillCategory = async () => {
@@ -90,6 +96,7 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
 
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<'name' | 'category'>('name');
+
   const sortedSkills = useMemo(() => {
     if (!filteredSkills) return [];
     if (!orderBy) return filteredSkills;
@@ -188,7 +195,7 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
                   />
                 </Suspense>
               )}
-              {/* {openUpdateId === lang.id && (
+              {/* {openUpdateId === skill.id && (
                 <Suspense>
                   <UpdateLanguage
                     language={lang}
