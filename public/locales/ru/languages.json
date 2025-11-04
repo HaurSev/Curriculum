@@ -4,5 +4,8 @@
   "removeSkills": "Удалить язык",
   "updateLanguage": "Обновить язык",
   "haveLanguage": "Этот язык уже добавлен",
-  "notChange": "Внесите изменения"
+  "notChange": "Внесите изменения",
+  "name": "Название",
+  "nativeName": "Родное название",
+  "iso": "ISO2"
 }

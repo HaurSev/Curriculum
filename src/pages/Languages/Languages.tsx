@@ -1,0 +1,121 @@
+import { useTranslation } from 'react-i18next';
+import SideBar from '../../components/SideBar/SideBar';
+// import UsersTable from '../../modules/UsersTable/UsersTable';
+import { Box, InputBase, styled, Typography } from '@mui/material';
+import theme from '../../theme/theme';
+import SearchIcon from '@mui/icons-material/Search';
+// import { lazy, Suspense, useState } from 'react';
+// import type { UserData } from '../../graphql/queries/users';
+import LanguagesTable from '../../modules/LanguagesTable/LanguagesTable';
+import { useState } from 'react';
+
+const Container = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%',
+  minHeight: '100vh',
+}));
+
+const MainPart = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '100%',
+  padding: theme.spacing(3),
+  elevation: 0,
+  gap: theme.spacing(2),
+}));
+
+const HeaderPart = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'start',
+  gap: theme.spacing(3),
+  width: '100%',
+  paddingLeft: theme.spacing(5),
+  elevation: 0,
+}));
+
+const Search = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.spacing(5),
+  backgroundColor: 'transparent',
+  padding: theme.spacing(1, 2),
+  '&:hover': {
+    backgroundColor: theme.palette.primary.main,
+    transition: '0.4s ease',
+  },
+  marginLeft: 0,
+  width: '600px',
+  height: theme.spacing(10),
+  border: `1px solid ${theme.palette.text.disabled}`,
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  paddingRight: theme.spacing(2),
+  paddingTop: theme.spacing(1),
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  width: '400px',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
+
+const Languages = () => {
+  const { t } = useTranslation(['languages', 'common']);
+  const [searchValue, setSearchValue] = useState('');
+  //   const navigate = useNavigate();
+
+  //   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  //   const userId = user.id;
+
+  return (
+    <Container>
+      <SideBar active="language" />
+      <MainPart>
+        <HeaderPart>
+          <Typography
+            variant="body1"
+            sx={{ color: theme.palette.text.disabled }}
+          >
+            {t('common:languages')}
+          </Typography>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+          </Search>
+        </HeaderPart>
+        <LanguagesTable searchValue={searchValue}></LanguagesTable>
+      </MainPart>
+    </Container>
+  );
+};
+
+export default Languages;
