@@ -1,25 +1,24 @@
 import {
+  Box,
   Button,
-  MenuItem,
   Paper,
+  Stack,
   styled,
   TextField,
   Typography,
 } from '@mui/material';
-import { Box, Stack } from '@mui/system';
 import React from 'react';
-import ClearIcon from '@mui/icons-material/Clear';
 import { useTranslation } from 'react-i18next';
-import type { LanguageProficiency } from 'cv-graphql';
-import theme from '../../theme/theme';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { useLazyUpdateProfileLanguage } from '../../graphql/mutations/updateProfileLanguages';
-import { useParams } from 'react-router-dom';
+import ClearIcon from '@mui/icons-material/Clear';
+import type { Language } from 'cv-graphql';
 import { Bounce, toast } from 'react-toastify';
+import theme from '../../theme/theme';
+import * as z from 'zod';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useLazyUpdateLanguage } from '../../graphql/mutations/updateLanguage';
 
-const UpdateLanguageContainer = styled(Box)(({ theme }) => ({
+const Container = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
   display: 'flex',
   flexDirection: 'column',
@@ -27,14 +26,14 @@ const UpdateLanguageContainer = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   width: '100%',
   minHeight: '100vh',
-  zIndex: 100,
+  zIndex: 9999,
   background: 'rgba(0,0,0,0.8)',
-  position: 'absolute',
-  top: 0,
+  position: 'fixed', // чтобы не перекрывалась модалка
   left: 0,
+  top: 0,
 }));
 
-const UpdateLanguageForm = styled(Paper)(({ theme }) => ({
+const Form = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.primary,
   display: 'flex',
   flexDirection: 'column',
@@ -44,7 +43,7 @@ const UpdateLanguageForm = styled(Paper)(({ theme }) => ({
   width: '80%',
   padding: theme.spacing(10),
   paddingTop: theme.spacing(4),
-  opacity: 0.8,
+  opacity: 0.9,
 }));
 
 const FormHeader = styled(Stack)(({ theme }) => ({
@@ -65,54 +64,64 @@ const FormBody = styled(Stack)(({ theme }) => ({
 
 interface UpdateLanguageProps {
   onClick: () => void;
-  userLanguage: LanguageProficiency;
+  language: Language;
 }
-const proficiencyKeys = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Native'];
 
-interface UpdateLangugeForm {
-  userId: string;
+interface CreateLanguageForm {
   name: string;
-  proficiency: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | 'Native';
+  native_name: string;
+  iso: string;
 }
 
-const UpdateLanguageSchema = z.object({
-  userId: z.string(),
+const CreateLanguageSchema = z.object({
   name: z.string().nonempty(),
-  proficiency: z.enum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Native']),
+  native_name: z.string().nonempty(),
+  iso: z.string().nonempty(),
 });
 
 const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
   onClick,
-  userLanguage,
+  language,
 }) => {
-  const [t] = useTranslation(['common', 'languages']);
-  const { userId } = useParams<{ userId: string }>();
+  const [t] = useTranslation(['languages', 'common']);
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
 
-  const handleCloseClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onClick();
-  };
-
-  const handleFormClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
-  const { handleSubmit, register } = useForm<UpdateLangugeForm>({
-    resolver: zodResolver(UpdateLanguageSchema),
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<CreateLanguageForm>({
+    resolver: zodResolver(CreateLanguageSchema),
     defaultValues: {
-      userId: userId || '',
-      name: userLanguage.name || '',
-      proficiency: userLanguage.proficiency || 'Native',
+      name: language.name,
+      native_name: language.native_name || '',
+      iso: language.iso2,
     },
   });
 
-  const [updateProfileLanguage] = useLazyUpdateProfileLanguage();
+  const [updateLanguage] = useLazyUpdateLanguage();
 
-  const onSubmit = async (data: UpdateLangugeForm) => {
-    if (data.proficiency === userLanguage.proficiency) {
-      toast.error(t('languages:notChange'), {
+  const onSubmit = async (newLanguageData: CreateLanguageForm) => {
+    const hasChanges =
+      newLanguageData.name !== language.name ||
+      newLanguageData.native_name !== (language.native_name || '') ||
+      newLanguageData.iso !== language.iso2;
+
+    if (!hasChanges) {
+      toast.info(t('common:cancel'), {
         position: 'top-center',
-        autoClose: 3000,
+        autoClose: 4000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+      return;
+    }
+
+    if (user.role !== 'Admin') {
+      toast.error(t('common:youDontHavePermission'), {
+        position: 'top-center',
+        autoClose: 5000,
         theme: 'dark',
         transition: Bounce,
       });
@@ -120,25 +129,25 @@ const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
     }
 
     try {
-      const response = await updateProfileLanguage({
+      const response = await updateLanguage({
         variables: {
           language: {
-            userId: userId || '',
-            name: userLanguage?.name || '',
-            proficiency: data.proficiency || 'Native',
+            languageId: language.id,
+            name: newLanguageData.name.trim(),
+            native_name: newLanguageData.native_name.trim(),
+            iso2: newLanguageData.iso.trim(),
           },
         },
       });
 
       if (!response.data) return;
 
-      toast.success('Skill updated successfully!', {
+      toast.success(`${t('common:successfully')}`, {
         position: 'top-center',
-        autoClose: 3000,
+        autoClose: 4000,
         theme: 'dark',
         transition: Bounce,
       });
-
       onClick();
     } catch (error) {
       toast.error(`${error}`, {
@@ -150,58 +159,73 @@ const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
     }
   };
 
+  const currentValues = watch();
+  const isChanged =
+    currentValues.name !== language.name ||
+    currentValues.native_name !== (language.native_name || '') ||
+    currentValues.iso !== language.iso2;
+
   return (
-    <UpdateLanguageContainer>
-      <UpdateLanguageForm onClick={handleFormClick}>
+    <Container>
+      <Form>
         <FormHeader>
-          <Typography variant="h4">{t('languages:updateLanguage')}</Typography>
-          <ClearIcon onClick={handleCloseClick} sx={{ cursor: 'pointer' }} />
+          <Typography>{t('updateLanguage')}</Typography>
+          <ClearIcon
+            onClick={onClick}
+            sx={{
+              cursor: 'pointer',
+              ':hover': {
+                color: theme.palette.error.main,
+              },
+            }}
+          />
         </FormHeader>
-        <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <FormBody>
             <TextField
-              select
+              {...register('name')}
+              label={t('common:language')}
+              placeholder={t('common:language')}
               fullWidth
-              label={t('language')}
-              defaultValue={userLanguage.name}
-              disabled
-            >
-              <MenuItem value={userLanguage.name}>{userLanguage.name}</MenuItem>
-            </TextField>
+              error={!!errors.name}
+              helperText={errors.name?.message}
+            />
 
             <TextField
-              {...register('proficiency')}
-              placeholder={t('languages:languageProficiency')}
-              select
-              label={t('languages:languageProficiency')}
+              {...register('native_name')}
+              label={t('languages:nativeName')}
+              placeholder={t('languages:nativeName')}
               fullWidth
-              defaultValue={userLanguage.proficiency}
-            >
-              {proficiencyKeys.map((k) => (
-                <MenuItem key={k} value={k}>
-                  {k}
-                </MenuItem>
-              ))}
-            </TextField>
+              error={!!errors.native_name}
+              helperText={errors.native_name?.message}
+            />
+
+            <TextField
+              {...register('iso')}
+              label={t('languages:iso')}
+              placeholder={t('languages:iso')}
+              fullWidth
+              error={!!errors.iso}
+              helperText={errors.iso?.message}
+            />
+
             <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: theme.spacing(5),
-              }}
+              direction="row"
+              justifyContent="flex-end"
+              gap={5}
+              sx={{ width: '100%' }}
             >
-              <Button variant="outlined" onClick={handleCloseClick}>
+              <Button onClick={onClick} variant="outlined">
                 {t('common:cancel')}
               </Button>
-              <Button type={'submit'} variant="contained">
-                {t('common:update')}
+              <Button type="submit" variant="contained" disabled={!isChanged}>
+                {t('common:confirm')}
               </Button>
             </Stack>
           </FormBody>
         </form>
-      </UpdateLanguageForm>
-    </UpdateLanguageContainer>
+      </Form>
+    </Container>
   );
 };
 

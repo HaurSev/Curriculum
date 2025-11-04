@@ -8,30 +8,41 @@ import {
   TableRow,
   TableSortLabel,
 } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLazyLanguages } from '../../graphql/queries/languages';
 import { Bounce, toast } from 'react-toastify';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-// import { useNavigate } from 'react-router-dom';
+import theme from '../../theme/theme';
+
+const DeleteLanguage = lazy(
+  () => import('../../components/DeleteLanguage/DeleteLanguage'),
+);
+
+const UpdateLanguage = lazy(
+  () => import('../../modules/UpdateLanguage/UpdateLanguage'),
+);
 
 type Order = 'asc' | 'desc';
 
 interface LanguagesTableProps {
-  //   onClick: () => void;
   searchValue?: string;
 }
 
-const LanguagesTable: React.FC<LanguagesTableProps> = ({
-  searchValue,
-  //   onClick,
-}) => {
+const LanguagesTable: React.FC<LanguagesTableProps> = ({ searchValue }) => {
   const { t } = useTranslation(['languages', 'common']);
 
-  //   const navigate = useNavigate();
+  const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
 
-  //   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-  //   const userId = user.id;
+  const handleOpenDelete = (id: string) => {
+    setOpenDeleteId((prev) => (prev === id ? null : id));
+  };
+
+  const [openUpdateId, setOpenUpdateId] = useState<string | null>(null);
+
+  const handleOpenUpdate = (id: string) => {
+    setOpenUpdateId((prev) => (prev === id ? null : id));
+  };
 
   const [loadLanguages, { data, loading, error }] = useLazyLanguages();
 
@@ -84,7 +95,11 @@ const LanguagesTable: React.FC<LanguagesTableProps> = ({
 
   if (loading) return <Button variant="text" loading={loading}></Button>;
   return (
-    <TableContainer>
+    <TableContainer
+      sx={{
+        padding: theme.spacing(5),
+      }}
+    >
       <Table>
         <TableHead
           sx={{
@@ -93,7 +108,14 @@ const LanguagesTable: React.FC<LanguagesTableProps> = ({
           }}
         >
           <TableRow>
-            <TableCell>
+            <TableCell
+              sx={{
+                cursor: 'pointer !important',
+                '&:hover': {
+                  textDecoration: 'underline',
+                },
+              }}
+            >
               <TableSortLabel onClick={handleSort}>{t('name')}</TableSortLabel>
             </TableCell>
             <TableCell>{t('nativeName')}</TableCell>
@@ -104,12 +126,30 @@ const LanguagesTable: React.FC<LanguagesTableProps> = ({
         <TableBody>
           {sortedUsers.map((lang, index) => (
             <TableRow key={lang.id || index}>
-              <TableCell>{lang.name}</TableCell>
+              <TableCell onClick={() => handleOpenUpdate(lang.id)}>
+                {lang.name}
+              </TableCell>
               <TableCell>{lang.native_name}</TableCell>
               <TableCell>{lang.iso2}</TableCell>
-              <TableCell>
+              <TableCell onClick={() => handleOpenDelete(lang.id)}>
                 <MoreVertIcon />
-              </TableCell>
+              </TableCell>{' '}
+              {openDeleteId === lang.id && (
+                <Suspense>
+                  <DeleteLanguage
+                    language={lang}
+                    onClick={() => setOpenDeleteId(null)}
+                  />
+                </Suspense>
+              )}
+              {openUpdateId === lang.id && (
+                <Suspense>
+                  <UpdateLanguage
+                    language={lang}
+                    onClick={() => setOpenUpdateId(null)}
+                  />
+                </Suspense>
+              )}
             </TableRow>
           ))}
         </TableBody>
