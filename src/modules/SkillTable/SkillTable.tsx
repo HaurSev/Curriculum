@@ -21,6 +21,8 @@ const DeleteSkill = lazy(
   () => import('../../components/DeleteSkill/DeleteSkill'),
 );
 
+const UpdateSkill = lazy(() => import('../../modules/UpdateSkill/UpdateSkill'));
+
 type Order = 'asc' | 'desc';
 
 interface SkillTableProps {
@@ -36,31 +38,11 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
     setOpenDeleteId((prev) => (prev === id ? null : id));
   };
 
-  //   const [openUpdateId, setOpenUpdateId] = useState<string | null>(null);
+  const [openUpdateId, setOpenUpdateId] = useState<string | null>(null);
 
-  //   const handleOpenUpdate = (id: string) => {
-  //     setOpenUpdateId((prev) => (prev === id ? null : id));
-  //   };
-
-  //   const [skillCategory, { data }] = useLazySkillCategories();
-
-  //   const loadSkillCategory = async () => {
-  //     try {
-  //       const response = await skillCategory({
-  //         variables: {},
-  //       });
-
-  //       if (!response.data) return;
-  //       if (!response.data.skillCategories) return;
-  //     } catch (error) {
-  //       toast.error(`${error}`, {
-  //         position: 'top-center',
-  //         autoClose: 5000,
-  //         theme: 'dark',
-  //         transition: Bounce,
-  //       });
-  //     }
-  //   };
+  const handleOpenUpdate = (id: string) => {
+    setOpenUpdateId((prev) => (prev === id ? null : id));
+  };
 
   const [getSkills, { loading, data: skillsData }] = useLazySkills();
 
@@ -182,7 +164,9 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
         <TableBody>
           {sortedSkills.map((skill, index) => (
             <TableRow key={skill.id || index}>
-              <TableCell>{skill.name}</TableCell>
+              <TableCell onClick={() => handleOpenUpdate(skill.id)}>
+                {skill.name}
+              </TableCell>
               <TableCell>{skill.category?.name}</TableCell>
               <TableCell onClick={() => handleOpenDelete(skill.id)}>
                 <MoreVertIcon />
@@ -195,14 +179,14 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
                   />
                 </Suspense>
               )}
-              {/* {openUpdateId === skill.id && (
+              {openUpdateId === skill.id && (
                 <Suspense>
-                  <UpdateLanguage
-                    language={lang}
+                  <UpdateSkill
+                    skill={skill}
                     onClick={() => setOpenUpdateId(null)}
-                  />
+                  ></UpdateSkill>
                 </Suspense>
-              )} */}
+              )}
             </TableRow>
           ))}
         </TableBody>

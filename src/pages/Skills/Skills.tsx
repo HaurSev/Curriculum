@@ -3,10 +3,11 @@ import SideBar from '../../components/SideBar/SideBar';
 import { Box, Button, InputBase, styled, Typography } from '@mui/material';
 import theme from '../../theme/theme';
 import SearchIcon from '@mui/icons-material/Search';
-// import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from 'react';
 import SkillTable from '../../modules/SkillTable/SkillTable';
+
+const CreateSkill = lazy(() => import('../../modules/CreateSkill/CreateSkill'));
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -83,6 +84,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Skills = () => {
   const { t } = useTranslation(['skills', 'common']);
   const [searchValue, setSearchValue] = useState('');
+
+  const [isAddOpen, setAddOpen] = useState(false);
+  const handlSetAddOpen = () => {
+    setAddOpen(!isAddOpen);
+  };
+
   return (
     <Container>
       <SideBar active="skills" />
@@ -119,7 +126,7 @@ const Skills = () => {
                 gap: theme.spacing(3),
                 color: theme.palette.text.secondary,
               }}
-              //   onClick={handlSetAddOpen}
+              onClick={handlSetAddOpen}
             >
               <AddIcon />
               {t('addSkill')}
@@ -128,11 +135,11 @@ const Skills = () => {
         </HeaderPart>
         <SkillTable searchValue={searchValue}></SkillTable>
       </MainPart>
-      {/* {isAddOpen && (
+      {isAddOpen && (
         <Suspense>
-          <CreateLanguge onClick={handlSetAddOpen}></CreateLanguge>
+          <CreateSkill onClick={handlSetAddOpen} />
         </Suspense>
-      )} */}
+      )}
     </Container>
   );
 };
