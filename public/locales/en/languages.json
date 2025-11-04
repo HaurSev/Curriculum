@@ -7,5 +7,6 @@
   "notChange": "You have not changed anything",
   "name": "name",
   "nativeName": "native name",
-  "iso": "ISO2"
+  "iso": "ISO2",
+  "sure": "Are you sure you want to remove"
 }

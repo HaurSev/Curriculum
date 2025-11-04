@@ -14,7 +14,7 @@ import {
   type UserProfile,
 } from '../../graphql/queries/users';
 import { Bounce, toast } from 'react-toastify';
-import { Avatar } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
 import theme from '../../theme/theme';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -114,7 +114,7 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
     setOrderBy(property);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Button variant="text" loading={loading}></Button>;
 
   return (
     <TableContainer
@@ -200,7 +200,9 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
               <TableCell
                 component="th"
                 scope="row"
-                onClick={() => navigate(AppRoutes.PROFILE.create(user.id))}
+                onClick={() =>
+                  navigate(AppRoutes.USERS.Children.PROFILE.create(user.id))
+                }
               >
                 {user.profile.avatar ? (
                   <Avatar
@@ -239,7 +241,9 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
                   <MoreVertIcon onClick={() => onClick(user)} />
                 ) : (
                   <ArrowForwardIosIcon
-                    onClick={() => navigate(AppRoutes.PROFILE.create(user.id))}
+                    onClick={() =>
+                      navigate(AppRoutes.USERS.Children.PROFILE.create(user.id))
+                    }
                   />
                 )}
               </TableCell>
