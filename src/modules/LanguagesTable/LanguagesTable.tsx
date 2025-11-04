@@ -133,7 +133,7 @@ const LanguagesTable: React.FC<LanguagesTableProps> = ({ searchValue }) => {
               <TableCell>{lang.iso2}</TableCell>
               <TableCell onClick={() => handleOpenDelete(lang.id)}>
                 <MoreVertIcon />
-              </TableCell>{' '}
+              </TableCell>
               {openDeleteId === lang.id && (
                 <Suspense>
                   <DeleteLanguage

@@ -125,7 +125,7 @@ const DeleteLanguage: React.FC<DeleteLanguageProps> = ({
 
         <form onSubmit={onSubmit}>
           <FormBody>
-            <Typography>{`${t('languages:sure')} ${language.name} ${t('language')}?`}</Typography>
+            <Typography>{`${t('common:sure')} ${language.name} ${t('language')}?`}</Typography>
 
             <Stack
               sx={{
