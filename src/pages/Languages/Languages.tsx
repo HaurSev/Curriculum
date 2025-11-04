@@ -91,9 +91,6 @@ const Languages = () => {
   const handlSetAddOpen = () => {
     setAddOpen(!isAddOpen);
   };
-  //   const navigate = useNavigate();
-
-  //   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
 
   return (
     <Container>
