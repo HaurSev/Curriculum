@@ -20,9 +20,6 @@ interface SideBarProps {
 const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('common');
-  const user = sessionStorage.getItem('user') || '';
-
-  const userData = JSON.parse(user);
 
   return (
     <List
@@ -31,7 +28,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       }}
     >
       <ListItemButton
-        onClick={() => navigate(AppRoutes.USERS)}
+        onClick={() => navigate(AppRoutes.USERS.path)}
         className={active === 'employees' ? 'active' : ''}
       >
         <ListItemIcon>
@@ -48,7 +45,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'skills' ? 'active' : ''}
-        onClick={() => navigate(AppRoutes.SKILLS.create(userData.id))}
+        // onClick={() => navigate(AppRoutes.SKILLS.create(userData.id))}
       >
         <ListItemIcon>
           <MovingIcon
@@ -64,7 +61,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'language' ? 'active' : ''}
-        onClick={() => navigate(AppRoutes.LANGUAGES.create(userData.id))}
+        onClick={() => navigate(AppRoutes.LANGUAGES)}
       >
         <ListItemIcon>
           <GTranslateIcon
@@ -78,7 +75,10 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
         </ListItemIcon>
         <ListItemText primary={t('language')} />
       </ListItemButton>
-      <ListItemButton className={active === 'cv' ? 'active' : ''}>
+      <ListItemButton
+        className={active === 'cv' ? 'active' : ''}
+        onClick={() => navigate(AppRoutes.CVS)}
+      >
         <ListItemIcon>
           <PortraitIcon
             sx={{
