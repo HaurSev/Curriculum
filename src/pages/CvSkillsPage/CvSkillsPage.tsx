@@ -14,7 +14,9 @@ import { useTranslation } from 'react-i18next';
 import { useLazyDeleteCvSkill } from '../../graphql/mutations/deleteCvSkill';
 
 const AddCvSkill = lazy(() => import('../../modules/AddCvSkill/AddCvSkill'));
-
+const CvSkillsBlock = lazy(
+  () => import('../../modules/CvSkillsBlock/CvSkillsBlock'),
+);
 const Container = styled(Box)(() => ({
   display: 'flex',
   flexDirection: 'row',
@@ -119,7 +121,9 @@ const CvSkillsPage = () => {
           <CvsHeader cv={data?.cv.name || ''}></CvsHeader>
           <CvsNavigation active="skills"></CvsNavigation>
         </HeaderPart>
-        <Suspense></Suspense>
+        <Suspense>
+          <CvSkillsBlock cv={data?.cv}></CvSkillsBlock>
+        </Suspense>
 
         {(data?.cv.user?.id === userData.id || userData.role === 'Admin') && (
           <Suspense>
