@@ -90,7 +90,7 @@ const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
     register,
     handleSubmit,
     formState: { errors },
-    // watch,
+    watch,
   } = useForm<CreateCVData>({
     resolver: zodResolver(CreateCVSchema),
     defaultValues: {
@@ -143,6 +143,13 @@ const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
       });
     }
   };
+  const currentValues = watch();
+  const isChanged =
+    currentValues.description !== cv.description ||
+    currentValues.education !== cv.education ||
+    currentValues.name !== cv.name;
+
+  if (loading) return <Button loading={loading} variant="text"></Button>;
 
   return (
     <Container>
@@ -203,7 +210,7 @@ const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
                 type={'submit'}
                 variant="contained"
                 loading={loading}
-                // disabled={isChanged}
+                disabled={!isChanged}
               >
                 {t('update')}
               </Button>

@@ -105,7 +105,7 @@ const UserCV = () => {
 
   useEffect(() => {
     loadUser({ variables: { userId: userId || '' } });
-  }, [loadUser]);
+  }, [loadUser, userId]);
 
   useEffect(() => {
     if (error) {
