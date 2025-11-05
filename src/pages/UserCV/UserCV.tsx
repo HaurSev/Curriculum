@@ -8,12 +8,13 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useParams } from 'react-router-dom';
 import { Bounce, toast } from 'react-toastify';
 import AddIcon from '@mui/icons-material/Add';
-import AddCV from '../../modules/AddCV/AddCV';
 import { useLazyCvs } from '../../graphql/queries/cvs';
 
 const UserCvTable = lazy(
   () => import('../../modules/UserCVsTable/UserCVsTable'),
 );
+
+const AddCV = lazy(() => import('../../modules/AddCV/AddCV'));
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -117,7 +118,7 @@ const UserCV = () => {
     }
   }, [error]);
 
-  if (loading) return <Typography>Loading</Typography>;
+  if (loading) return <Button variant="text" loading={loading}></Button>;
 
   return (
     <Container>
@@ -172,7 +173,12 @@ const UserCV = () => {
           ></UserCvTable>
         </Suspense>
       </MainPart>
-      {isAddOpen && <AddCV onClick={handleSetAdd} />}
+
+      {isAddOpen && (
+        <Suspense>
+          <AddCV onClick={handleSetAdd} />
+        </Suspense>
+      )}
     </Container>
   );
 };

@@ -3,7 +3,6 @@ import { styled } from '@mui/system';
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import theme from '../../theme/theme';
 import { useTranslation } from 'react-i18next';
-import AddCV from '../../modules/AddCV/AddCV';
 import AddIcon from '@mui/icons-material/Add';
 import SideBar from '../../components/SideBar/SideBar';
 import SearchIcon from '@mui/icons-material/Search';
@@ -14,6 +13,8 @@ import { Bounce, toast } from 'react-toastify';
 const UserCvTable = lazy(
   () => import('../../modules/UserCVsTable/UserCVsTable'),
 );
+
+const AddCV = lazy(() => import('../../modules/AddCV/AddCV'));
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -96,7 +97,7 @@ const CVsPage = () => {
     setAddOpen(!isAddOpen);
   };
 
-  const [loadCvs] = useLazyCvs();
+  const [loadCvs, { loading }] = useLazyCvs();
   const [cvs, setCvs] = useState<Cv[]>([]);
 
   const getCvs = async () => {
@@ -118,6 +119,8 @@ const CVsPage = () => {
   useEffect(() => {
     getCvs();
   }, [loadCvs]);
+
+  if (loading) return <Button variant="text" loading={loading}></Button>;
 
   return (
     <Container>
@@ -167,7 +170,11 @@ const CVsPage = () => {
           <UserCvTable searchValue={searchValue} cvs={cvs || []}></UserCvTable>
         </Suspense>
       </MainPart>
-      {isAddOpen && <AddCV onClick={handleSetAdd} />}
+      {isAddOpen && (
+        <Suspense>
+          <AddCV onClick={handleSetAdd} />
+        </Suspense>
+      )}
     </Container>
   );
 };
