@@ -75,9 +75,11 @@ const CvDetailsPage = () => {
           <CvsHeader cv={data?.cv.name || ''}></CvsHeader>
           <CvsNavigation active="details"></CvsNavigation>
         </HeaderPart>
-        <Suspense>
-          <CvDetailsForm cv={data?.cv}></CvDetailsForm>
-        </Suspense>
+        {data?.cv && (
+          <Suspense>
+            <CvDetailsForm cv={data.cv}></CvDetailsForm>
+          </Suspense>
+        )}
       </MainPart>
     </Container>
   );
