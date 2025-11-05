@@ -96,7 +96,7 @@ const DeleteCV: React.FC<DeleteCVProps> = ({ onClick, cv }) => {
         });
       }
     } else {
-      return toast.error(t('youDontHaveRights'), {
+      return toast.error(t('common:youDontHavePermission'), {
         position: 'top-center',
         autoClose: 5000,
         theme: 'dark',
