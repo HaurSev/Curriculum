@@ -6,5 +6,6 @@
   "employee": "employee",
   "createCV": "create cv",
   "deleteCV": "Delete CV",
-  "AreYouShure": "Are ypu sure you want to delete CV "
+  "AreYouShure": "Are ypu sure you want to delete CV ",
+  "update": "update CV"
 }

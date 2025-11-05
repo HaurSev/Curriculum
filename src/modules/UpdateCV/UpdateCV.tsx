@@ -29,6 +29,8 @@ const Container = styled(Box)(({ theme }) => ({
   zIndex: 100,
   background: 'rgba(0,0,0,0.8)',
   position: 'absolute',
+  top: 0,
+  left: 0,
 }));
 
 const Form = styled(Paper)(({ theme }) => ({
@@ -82,23 +84,35 @@ interface UpdateCvProps {
 const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
   const [t] = useTranslation(['common', 'CVs']);
 
+  const user = JSON.parse(sessionStorage.getItem('user') || '');
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    // watch,
   } = useForm<CreateCVData>({
     resolver: zodResolver(CreateCVSchema),
     defaultValues: {
       cvId: cv.id,
-      education: '',
-      description: '',
-      name: '',
+      education: cv.education || '',
+      description: cv.description || '',
+      name: cv.name || '',
     },
   });
 
-  const [createCv] = useLazyUpdateCv();
+  const [createCv, { loading }] = useLazyUpdateCv();
 
   const onSubmit = async (newCV: CreateCVData) => {
+    if (!(cv.user?.id === user.id || user.role === 'Admin')) {
+      return toast.error(t('common:youDontHavePermission'), {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+    }
+
     try {
       const response = await createCv({
         variables: {
@@ -134,7 +148,7 @@ const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
     <Container>
       <Form>
         <FormHeader>
-          <Typography variant="h4"> {t('CVs:createCV')}</Typography>
+          <Typography variant="h4"> {t('CVs:update')}</Typography>
 
           <ClearIcon
             onClick={onClick}
@@ -185,7 +199,12 @@ const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
               <Button variant="outlined" onClick={onClick}>
                 {t('common:cancel')}
               </Button>
-              <Button type={'submit'} variant="contained">
+              <Button
+                type={'submit'}
+                variant="contained"
+                loading={loading}
+                // disabled={isChanged}
+              >
                 {t('update')}
               </Button>
             </Stack>

@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { lazy, Suspense, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-// import { useLazyUser } from '../../graphql/queries/user';
+
 import {
   Paper,
   Table,
@@ -9,34 +9,35 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
 } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import theme from '../../theme/theme';
 import type { Cv } from 'cv-graphql';
-import DeleteCV from '../DeleteCV/DeleteCV';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+
+const DeleteCV = lazy(() => import('../DeleteCV/DeleteCV'));
+const UpdateCV = lazy(() => import('../UpdateCV/UpdateCV'));
 
 interface UserCVsTableProps {
-  // onClick: () => void;
   searchValue?: string;
   cvs: Cv[];
 }
 
 type Order = 'asc' | 'desc';
 
-const UserCVsTable: React.FC<UserCVsTableProps> = ({
-  //   onClick,
-  searchValue,
-  cvs,
-}) => {
+const UserCVsTable: React.FC<UserCVsTableProps> = ({ searchValue, cvs }) => {
   const { t } = useTranslation(['common', 'CVs']);
 
-  const userData = sessionStorage.getItem('user');
-  const user = JSON.parse(userData || '');
+  const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
 
-  const [isDeleteOpen, setDelete] = useState(false);
+  const handleOpenDelete = (id: string) => {
+    setOpenDeleteId((prev) => (prev === id ? null : id));
+  };
 
-  const handleSetDelete = () => {
-    setDelete(!isDeleteOpen);
+  const [openUpdateId, setOpenUpdateId] = useState<string | null>(null);
+
+  const handleOpenUpdate = (id: string) => {
+    setOpenUpdateId((prev) => (prev === id ? null : id));
   };
 
   const [order, setOrder] = useState<Order>('asc');
@@ -93,8 +94,10 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
           }}
         >
           <TableRow>
-            <TableCell align="left" onClick={handleSort}>
-              {t('CVs:cvName')}
+            <TableCell align="left">
+              <TableSortLabel onClick={handleSort}>
+                {t('CVs:cvName')}
+              </TableSortLabel>
             </TableCell>
             <TableCell align="left">{t('CVs:education')}</TableCell>
             <TableCell align="left">{t('CVs:employee')}</TableCell>
@@ -105,8 +108,21 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
           {sortedCVs.map((cv, index) => {
             return (
               <React.Fragment key={cv.id || index}>
-                {isDeleteOpen && (
-                  <DeleteCV cv={cv} onClick={handleSetDelete}></DeleteCV>
+                {openDeleteId === cv.id && (
+                  <Suspense>
+                    <DeleteCV
+                      cv={cv}
+                      onClick={() => handleOpenDelete('')}
+                    ></DeleteCV>
+                  </Suspense>
+                )}
+                {openUpdateId === cv.id && (
+                  <Suspense>
+                    <UpdateCV
+                      cv={cv}
+                      onClick={() => handleOpenUpdate('')}
+                    ></UpdateCV>
+                  </Suspense>
                 )}
                 <TableRow
                   sx={{
@@ -119,18 +135,21 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
                     },
                   }}
                 >
-                  <TableCell align="left">{cv.name}</TableCell>
+                  <TableCell
+                    onClick={() => handleOpenUpdate(cv.id)}
+                    align="left"
+                  >
+                    {cv.name}
+                  </TableCell>
                   <TableCell align="left">{cv.education}</TableCell>
                   <TableCell align="left">
                     {cv.user?.email || t('notFound')}
                   </TableCell>
-                  <TableCell align="left">
-                    <MoreVertIcon
-                      onClick={
-                        (cv.user?.id === user.id || user.role === 'Admin') &&
-                        handleSetDelete
-                      }
-                    />
+                  <TableCell
+                    align="left"
+                    onClick={() => handleOpenDelete(cv.id)}
+                  >
+                    <MoreVertIcon />
                   </TableCell>
                 </TableRow>
 
@@ -141,6 +160,7 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
                       color: theme.palette.text.disabled,
                       textAlign: 'justify',
                     }}
+                    onClick={() => handleOpenUpdate(cv.id)}
                   >
                     {cv.description}
                   </TableCell>
