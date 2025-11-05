@@ -138,23 +138,25 @@ const CvDetailsForm: React.FC<UpdateCvProps> = ({ cv }) => {
           error={!!errors.description}
           helperText={errors.description?.message}
         ></TextField>
-        <Stack
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            gap: theme.spacing(5),
-          }}
-        >
-          <Button
-            type={'submit'}
-            variant="contained"
-            loading={loading}
-            disabled={!isChanged}
+        {(cv.user?.id === user.id || user.role === 'Admin') && (
+          <Stack
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              gap: theme.spacing(5),
+            }}
           >
-            {t('update')}
-          </Button>
-        </Stack>
+            <Button
+              type={'submit'}
+              variant="contained"
+              loading={loading}
+              disabled={!isChanged}
+            >
+              {t('update')}
+            </Button>
+          </Stack>
+        )}
       </FormBody>
     </form>
   );
