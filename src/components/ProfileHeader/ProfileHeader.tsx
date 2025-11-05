@@ -73,7 +73,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
         <Button
           variant="text"
           onClick={() =>
-            navigate(AppRoutes.USERS.Children.LANGUAGES.create(userId || ''))
+            navigate(
+              AppRoutes.USERS.Children.USER_LANGUAGES.create(userId || ''),
+            )
           }
           sx={{
             color:
