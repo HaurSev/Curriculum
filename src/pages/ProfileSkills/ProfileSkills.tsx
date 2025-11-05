@@ -47,8 +47,7 @@ const HeaderPart = styled(Box)(() => ({
 
 const ProfileSkills = () => {
   const { userId } = useParams<{ userId: string }>();
-  const user = sessionStorage.getItem('user');
-  const userData = JSON.parse(user || '');
+  const userData = JSON.parse(sessionStorage.getItem('user') || '');
 
   const checkedItems = useCheckedItemStore((state) => state.checkedItems);
 
@@ -129,7 +128,10 @@ const ProfileSkills = () => {
           <ProfileHeader active="skills" />
         </HeaderPart>
         <Suspense>
-          <SkillsBlock skills={data?.profile.skills || []} />
+          <SkillsBlock
+            userId={data?.profile.id || ''}
+            skills={data?.profile.skills || []}
+          />
         </Suspense>
         {(userId === userData.id || userData.role === 'Admin') && (
           <Suspense>
