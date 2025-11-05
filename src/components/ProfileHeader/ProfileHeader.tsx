@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { Button, ButtonGroup } from '@mui/material';
-// import { AppRoutes } from '../../router/router';
 import theme from '../../theme/theme';
 import type React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
