@@ -41,6 +41,7 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({ searchValue, cvs }) => {
   };
 
   const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<'name' | 'employee'>('name');
 
   const filteredCVs = useMemo(() => {
     if (!cvs) return [];
@@ -61,18 +62,33 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({ searchValue, cvs }) => {
     if (!filteredCVs) return [];
 
     return [...filteredCVs].sort((a, b) => {
-      const aValue = a.name;
-      const bValue = b.name;
+      let aValue = '';
+      let bValue = '';
+
+      switch (orderBy) {
+        case 'name':
+          aValue = a.name;
+          bValue = b.name;
+          break;
+        case 'employee':
+          aValue = a.user?.email ?? '';
+          bValue = b.user?.email ?? '';
+          break;
+        default:
+          aValue = '';
+          bValue = '';
+      }
 
       return order === 'asc'
         ? aValue.localeCompare(bValue)
         : bValue.localeCompare(aValue);
     });
-  }, [filteredCVs, order]);
+  }, [filteredCVs, order, orderBy]);
 
-  const handleSort = () => {
+  const handleSort = (property: 'name' | 'employee') => {
     const isAsc = order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
   };
 
   return (
@@ -95,12 +111,23 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({ searchValue, cvs }) => {
         >
           <TableRow>
             <TableCell align="left">
-              <TableSortLabel onClick={handleSort}>
+              <TableSortLabel
+                active={orderBy === 'name'}
+                direction={orderBy === 'name' ? order : 'asc'}
+                onClick={() => handleSort('name')}
+              >
                 {t('CVs:cvName')}
               </TableSortLabel>
             </TableCell>
             <TableCell align="left">{t('CVs:education')}</TableCell>
-            <TableCell align="left">{t('CVs:employee')}</TableCell>
+            <TableCell align="left">
+              <TableSortLabel
+                active={orderBy === 'employee'}
+                direction={orderBy === 'employee' ? order : 'asc'}
+                onClick={() => handleSort('employee')}
+              ></TableSortLabel>
+              {t('CVs:employee')}
+            </TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
