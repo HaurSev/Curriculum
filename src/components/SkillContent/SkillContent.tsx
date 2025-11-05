@@ -6,7 +6,9 @@ import theme from '../../theme/theme';
 import checkedItemStore from '../../store/checkedItemStore';
 import { useParams } from 'react-router-dom';
 
-const UpdateSkill = lazy(() => import('../../modules/UpdateSkill/UpdateSkill'));
+const UpdateSkill = lazy(
+  () => import('../../modules/UpdateProfileSkill/UpdateProfileSkill'),
+);
 
 const Block = styled(Box)(() => ({
   display: 'flex',

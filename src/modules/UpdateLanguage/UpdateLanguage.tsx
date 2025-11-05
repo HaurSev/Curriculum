@@ -26,9 +26,9 @@ const Container = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   width: '100%',
   minHeight: '100vh',
-  zIndex: 9999,
+  zIndex: 100,
   background: 'rgba(0,0,0,0.8)',
-  position: 'fixed', // чтобы не перекрывалась модалка
+  position: 'fixed',
   left: 0,
   top: 0,
 }));

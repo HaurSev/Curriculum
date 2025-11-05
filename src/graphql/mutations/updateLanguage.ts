@@ -7,7 +7,7 @@ export const UPDATE_LANGUAGE = gql`
     updateLanguage(language: $language) {
       id
       name
-+      native_name\
+      native_name
       iso2
     }
   }

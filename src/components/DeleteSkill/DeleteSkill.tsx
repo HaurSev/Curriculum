@@ -2,10 +2,10 @@ import { Box, Button, Paper, Stack, styled, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useLazyDeleteLanguage } from '../../graphql/mutations/deleteLanguage';
-import type { Language } from 'cv-graphql';
+import type { Skill } from 'cv-graphql';
 import { Bounce, toast } from 'react-toastify';
 import theme from '../../theme/theme';
+import { useLazyDeleteSkill } from '../../graphql/mutations/deleteSkill';
 
 const Container = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -51,20 +51,16 @@ const FormBody = styled(Stack)(({ theme }) => ({
   paddingTop: theme.spacing(2),
 }));
 
-interface DeleteLanguageProps {
+interface DeleteSkillProps {
   onClick: () => void;
-  language: Language;
+  skill: Skill;
 }
-
-const DeleteLanguage: React.FC<DeleteLanguageProps> = ({
-  onClick,
-  language,
-}) => {
-  const [t] = useTranslation(['common', 'languages']);
+const DeleteSkill: React.FC<DeleteSkillProps> = ({ onClick, skill }) => {
+  const [t] = useTranslation(['common', 'skills']);
 
   const user = JSON.parse(sessionStorage.getItem('user') || '');
 
-  const [deleteLanguage, { loading }] = useLazyDeleteLanguage();
+  const [deleteSkill, { loading }] = useLazyDeleteSkill();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,10 +76,10 @@ const DeleteLanguage: React.FC<DeleteLanguageProps> = ({
     }
 
     try {
-      const response = await deleteLanguage({
+      const response = await deleteSkill({
         variables: {
-          language: {
-            languageId: language.id || '',
+          skill: {
+            skillId: skill.id || '',
           },
         },
       });
@@ -112,7 +108,7 @@ const DeleteLanguage: React.FC<DeleteLanguageProps> = ({
     <Container>
       <Form>
         <FormHeader>
-          <Typography variant="h5">{t('languages:removeSkills')} </Typography>
+          <Typography variant="h5">{t('skills:removeSkills')} </Typography>
           <ClearIcon
             onClick={onClick}
             sx={{
@@ -125,7 +121,7 @@ const DeleteLanguage: React.FC<DeleteLanguageProps> = ({
 
         <form onSubmit={onSubmit}>
           <FormBody>
-            <Typography>{`${t('common:sure')} ${language.name} ${t('language')}?`}</Typography>
+            <Typography>{`${t('common:sure')} ${skill.name} ${t('skills')}?`}</Typography>
 
             <Stack
               sx={{
@@ -148,4 +144,4 @@ const DeleteLanguage: React.FC<DeleteLanguageProps> = ({
   );
 };
 
-export default DeleteLanguage;
+export default DeleteSkill;

@@ -5,11 +5,9 @@ import theme from '../../theme/theme';
 import SearchIcon from '@mui/icons-material/Search';
 import { lazy, Suspense, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import LanguagesTable from '../../modules/LanguagesTable/LanguagesTable';
+import SkillTable from '../../modules/SkillTable/SkillTable';
 
-const CreateLanguge = lazy(
-  () => import('../../modules/CreateLanguage/CreateLanguage'),
-);
+const CreateSkill = lazy(() => import('../../modules/CreateSkill/CreateSkill'));
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -83,8 +81,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Languages = () => {
-  const { t } = useTranslation(['languages', 'common']);
+const Skills = () => {
+  const { t } = useTranslation(['skills', 'common']);
   const [searchValue, setSearchValue] = useState('');
 
   const [isAddOpen, setAddOpen] = useState(false);
@@ -94,14 +92,14 @@ const Languages = () => {
 
   return (
     <Container>
-      <SideBar active="language" />
+      <SideBar active="skills" />
       <MainPart>
         <HeaderPart>
           <Typography
             variant="body1"
             sx={{ color: theme.palette.text.disabled }}
           >
-            {t('common:languages')}
+            {t('skills:skill')}
           </Typography>
           <Box
             sx={{
@@ -131,19 +129,19 @@ const Languages = () => {
               onClick={handlSetAddOpen}
             >
               <AddIcon />
-              {t('addLanguage')}
+              {t('addSkill')}
             </Button>
           </Box>
         </HeaderPart>
-        <LanguagesTable searchValue={searchValue}></LanguagesTable>
+        <SkillTable searchValue={searchValue}></SkillTable>
       </MainPart>
       {isAddOpen && (
         <Suspense>
-          <CreateLanguge onClick={handlSetAddOpen}></CreateLanguge>
+          <CreateSkill onClick={handlSetAddOpen} />
         </Suspense>
       )}
     </Container>
   );
 };
 
-export default Languages;
+export default Skills;

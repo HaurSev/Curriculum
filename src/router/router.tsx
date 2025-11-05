@@ -25,4 +25,5 @@ export const AppRoutes = {
   },
   CVS: '/cvs',
   LANGUAGES: '/languages',
+  SKILLS: '/skills',
 } as const;
