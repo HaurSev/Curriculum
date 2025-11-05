@@ -27,6 +27,8 @@ const CvDetailsPage = lazy(
   () => import('../pages/CvDetailsPage/CvDetailsPage'),
 );
 
+const CvSkillsPage = lazy(() => import('../pages/CvSkillsPage/CvSkillsPage'));
+
 const router = createBrowserRouter([
   {
     path: AppRoutes.LOGIN,
@@ -113,6 +115,14 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <CvDetailsPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.CVS.Children.SKILLS.path,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <CvSkillsPage></CvSkillsPage>
       </Suspense>
     ),
   },

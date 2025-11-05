@@ -51,6 +51,9 @@ const CvsNavigation: React.FC<CvsHeaderProps> = ({ active }) => {
 
       <Button
         variant="text"
+        onClick={() =>
+          navigate(AppRoutes.CVS.Children.SKILLS.create(cvId || ''))
+        }
         sx={{
           color:
             active === 'skills'

@@ -30,6 +30,10 @@ export const AppRoutes = {
         path: '/cvs/:cvId/details',
         create: (cvId: string) => `/cvs/${cvId}/details`,
       },
+      SKILLS: {
+        path: '/cvs/:cvId/skills',
+        create: (cvId: string) => `/cvs/${cvId}/skills`,
+      },
     },
   },
   LANGUAGES: '/languages',
