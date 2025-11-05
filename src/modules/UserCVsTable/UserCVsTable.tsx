@@ -14,6 +14,8 @@ import {
 import theme from '../../theme/theme';
 import type { Cv } from 'cv-graphql';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from 'react-router-dom';
+import { AppRoutes } from '../../router/router';
 
 const DeleteCV = lazy(() => import('../DeleteCV/DeleteCV'));
 const UpdateCV = lazy(() => import('../UpdateCV/UpdateCV'));
@@ -27,6 +29,8 @@ type Order = 'asc' | 'desc';
 
 const UserCVsTable: React.FC<UserCVsTableProps> = ({ searchValue, cvs }) => {
   const { t } = useTranslation(['common', 'CVs']);
+
+  const navigate = useNavigate();
 
   const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
 
@@ -161,33 +165,43 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({ searchValue, cvs }) => {
                       cursor: 'pointer',
                     },
                   }}
+                  onContextMenu={(event) => {
+                    event.preventDefault();
+                    handleOpenDelete(cv.id);
+                  }}
+                  onClick={() => handleOpenUpdate(cv.id)}
                 >
-                  <TableCell
-                    onClick={() => handleOpenUpdate(cv.id)}
-                    align="left"
-                  >
-                    {cv.name}
-                  </TableCell>
+                  <TableCell align="left">{cv.name}</TableCell>
                   <TableCell align="left">{cv.education}</TableCell>
                   <TableCell align="left">
                     {cv.user?.email || t('notFound')}
                   </TableCell>
                   <TableCell
                     align="left"
-                    onClick={() => handleOpenDelete(cv.id)}
+                    onClick={() =>
+                      navigate(AppRoutes.CVS.Children.DETAILS.create(cv.id))
+                    }
                   >
                     <MoreVertIcon />
                   </TableCell>
                 </TableRow>
 
-                <TableRow>
+                <TableRow
+                  onClick={() => handleOpenUpdate(cv.id)}
+                  onContextMenu={(event) => {
+                    event.preventDefault();
+                    handleOpenDelete(cv.id);
+                  }}
+                >
                   <TableCell
                     colSpan={4}
                     sx={{
                       color: theme.palette.text.disabled,
                       textAlign: 'justify',
                     }}
-                    onClick={() => handleOpenUpdate(cv.id)}
+                    onClick={() =>
+                      navigate(AppRoutes.CVS.Children.DETAILS.create(cv.id))
+                    }
                   >
                     {cv.description}
                   </TableCell>
