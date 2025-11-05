@@ -7,5 +7,8 @@
   "createCV": "create cv",
   "deleteCV": "Delete CV",
   "AreYouShure": "Are ypu sure you want to delete CV ",
-  "update": "update CV"
+  "update": "update CV",
+  "details": "details",
+  "projects": "projects",
+  "preview": "preview"
 }
