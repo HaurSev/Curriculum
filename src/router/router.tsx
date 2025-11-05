@@ -23,7 +23,15 @@ export const AppRoutes = {
       },
     },
   },
-  CVS: '/cvs',
+  CVS: {
+    path: '/cvs',
+    Children: {
+      DETAILS: {
+        path: '/cvs/:cvId/details',
+        create: (cvId: string) => `/cvs/${cvId}/details`,
+      },
+    },
+  },
   LANGUAGES: '/languages',
   SKILLS: '/skills',
 } as const;

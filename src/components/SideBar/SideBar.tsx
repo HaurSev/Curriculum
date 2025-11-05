@@ -92,7 +92,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'cv' ? 'active' : ''}
-        onClick={() => navigate(AppRoutes.CVS)}
+        onClick={() => navigate(AppRoutes.CVS.path)}
       >
         <ListItemIcon>
           <PortraitIcon

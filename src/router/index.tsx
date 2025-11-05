@@ -2,9 +2,11 @@ import { createBrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './router';
 import ProtectedRoute from './ProtectedRoute';
 import { lazy, Suspense } from 'react';
-import ProfileLanguage from '../pages/ProfileLanguage/ProfileLanguage';
-import CVsPage from '../pages/CVsPage/CVsPage';
 
+const ProfileLanguage = lazy(
+  () => import('../pages/ProfileLanguage/ProfileLanguage'),
+);
+const CVsPage = lazy(() => import('../pages/CVsPage/CVsPage'));
 const Login = lazy(() => import('../pages/Login/Login'));
 const Signup = lazy(() => import('../pages/Signup/Signup'));
 const ForgotPassword = lazy(
@@ -20,6 +22,10 @@ const UserCv = lazy(() => import('../pages/UserCV/UserCV'));
 const Languages = lazy(() => import('../pages/Languages/Languages'));
 
 const Skills = lazy(() => import('../pages/Skills/Skills'));
+
+const CvDetailsPage = lazy(
+  () => import('../pages/CvDetailsPage/CvDetailsPage'),
+);
 
 const router = createBrowserRouter([
   {
@@ -95,10 +101,18 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.CVS,
+    path: AppRoutes.CVS.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <CVsPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.CVS.Children.DETAILS.path,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <CvDetailsPage />
       </Suspense>
     ),
   },
