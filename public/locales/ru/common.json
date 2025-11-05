@@ -23,5 +23,6 @@
   "employee": "сотрудники",
   "successfully": "успешно",
   "confirm": "подтвердить",
-  "youDontHaveRights": "У тебя нет соответствующих прав"
+  "youDontHavePermission": "У вас нет необходимых прав",
+  "sure": "Вы уверены что хотите удалить"
 }

@@ -34,9 +34,7 @@ const Container = styled(Box)(({ theme }) => ({
 const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('common');
-  const user = sessionStorage.getItem('user') || '';
-
-  const userData = JSON.parse(user);
+  const userData = JSON.parse(sessionStorage.getItem('user') || '');
 
   return (
     <List
@@ -62,7 +60,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'skills' ? 'active' : ''}
-        // onClick={() => navigate(AppRoutes.SKILLS.create(userData.id))}
+        onClick={() => navigate(AppRoutes.SKILLS)}
       >
         <ListItemIcon>
           <MovingIcon
@@ -78,7 +76,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'language' ? 'active' : ''}
-        // onClick={() => navigate(AppRoutes.LANGUAGES.create(userData.id))}
+        onClick={() => navigate(AppRoutes.LANGUAGES)}
       >
         <ListItemIcon>
           <GTranslateIcon

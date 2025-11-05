@@ -13,7 +13,7 @@ export const AppRoutes = {
         path: '/users/:userId/skills',
         create: (userId: string) => `/users/${userId}/skills`,
       },
-      LANGUAGES: {
+      USER_LANGUAGES: {
         path: '/users/:userId/languages',
         create: (userId: string) => `/users/${userId}/languages`,
       },
@@ -24,4 +24,6 @@ export const AppRoutes = {
     },
   },
   CVS: '/cvs',
+  LANGUAGES: '/languages',
+  SKILLS: '/skills',
 } as const;

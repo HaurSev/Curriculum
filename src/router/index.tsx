@@ -17,6 +17,10 @@ const ProfileSkills = lazy(
 );
 const UserCv = lazy(() => import('../pages/UserCV/UserCV'));
 
+const Languages = lazy(() => import('../pages/Languages/Languages'));
+
+const Skills = lazy(() => import('../pages/Skills/Skills'));
+
 const router = createBrowserRouter([
   {
     path: AppRoutes.LOGIN,
@@ -75,7 +79,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.USERS.Children.LANGUAGES.path,
+    path: AppRoutes.USERS.Children.USER_LANGUAGES.path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileLanguage />
@@ -95,6 +99,22 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <CVsPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.LANGUAGES,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <Languages />
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.SKILLS,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <Skills />
       </Suspense>
     ),
   },

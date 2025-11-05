@@ -1,24 +1,15 @@
-import {
-  Box,
-  Button,
-  MenuItem,
-  Paper,
-  Stack,
-  styled,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, MenuItem, Paper, TextField, Typography } from '@mui/material';
+import { Box, Stack, styled } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import ClearIcon from '@mui/icons-material/Clear';
-import type { Skill } from 'cv-graphql';
-import { Bounce, toast } from 'react-toastify';
 import theme from '../../theme/theme';
-import * as z from 'zod';
+import { Bounce, toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
-import { useLazyUpdateSkill } from '../../graphql/mutations/updateSkill';
+import { useLazyCreateSkill } from '../../graphql/mutations/createSkill';
 
 const Container = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -30,9 +21,7 @@ const Container = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   zIndex: 100,
   background: 'rgba(0,0,0,0.8)',
-  position: 'fixed',
-  left: 0,
-  top: 0,
+  position: 'absolute',
 }));
 
 const Form = styled(Paper)(({ theme }) => ({
@@ -45,7 +34,7 @@ const Form = styled(Paper)(({ theme }) => ({
   width: '80%',
   padding: theme.spacing(10),
   paddingTop: theme.spacing(4),
-  opacity: 0.9,
+  opacity: 0.8,
 }));
 
 const FormHeader = styled(Stack)(({ theme }) => ({
@@ -64,24 +53,21 @@ const FormBody = styled(Stack)(({ theme }) => ({
   paddingTop: theme.spacing(2),
 }));
 
-interface UpdateSkillProps {
+interface CreateSkillProps {
   onClick: () => void;
-  skill: Skill;
 }
 
-interface UpdateSkillForm {
-  skillId: string;
+interface CreateSkillForm {
   name: string;
   categoryId: string;
 }
 
-const UpdateSkillSchema = z.object({
+const CreateSkillSchema = z.object({
   name: z.string().nonempty(),
-  skillId: z.string().nonempty(),
   categoryId: z.string().nonempty(),
 });
 
-const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
+const CreateSkill: React.FC<CreateSkillProps> = ({ onClick }) => {
   const [t] = useTranslation(['skills', 'common']);
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
 
@@ -113,35 +99,13 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-  } = useForm<UpdateSkillForm>({
-    resolver: zodResolver(UpdateSkillSchema),
-    defaultValues: {
-      name: skill.name,
-      categoryId: skill.category?.id,
-      skillId: skill.id,
-    },
+  } = useForm<CreateSkillForm>({
+    resolver: zodResolver(CreateSkillSchema),
+    defaultValues: {},
   });
+  const [createSkill] = useLazyCreateSkill();
 
-  const [updateSkill] = useLazyUpdateSkill();
-
-  const onSubmit = async (newSkillData: UpdateSkillForm) => {
-    const hasChanges =
-      newSkillData.name !== skill.name ||
-      newSkillData.categoryId !== (skill.category?.id || '') ||
-      newSkillData.skillId !== skill.id ||
-      '';
-
-    if (!hasChanges) {
-      toast.info(t('common:cancel'), {
-        position: 'top-center',
-        autoClose: 4000,
-        theme: 'dark',
-        transition: Bounce,
-      });
-      return;
-    }
-
+  const onSubmit = async (newSkillData: CreateSkillForm) => {
     if (user.role !== 'Admin') {
       toast.error(t('common:youDontHavePermission'), {
         position: 'top-center',
@@ -153,12 +117,11 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
     }
 
     try {
-      const response = await updateSkill({
+      const response = await createSkill({
         variables: {
           skill: {
-            name: newSkillData.name.trim(),
-            skillId: newSkillData.skillId || '',
-            categoryId: newSkillData.categoryId,
+            name: newSkillData?.name || '',
+            categoryId: newSkillData?.categoryId || '',
           },
         },
       });
@@ -167,7 +130,7 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
 
       toast.success(`${t('common:successfully')}`, {
         position: 'top-center',
-        autoClose: 4000,
+        autoClose: 5000,
         theme: 'dark',
         transition: Bounce,
       });
@@ -181,11 +144,6 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
       });
     }
   };
-
-  const currentValues = watch();
-  const isChanged =
-    currentValues.name?.trim() !== skill.name?.trim() ||
-    currentValues.categoryId !== (skill.category?.id || '');
 
   return (
     <Container>
@@ -239,7 +197,7 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
               <Button onClick={onClick} variant="outlined">
                 {t('common:cancel')}
               </Button>
-              <Button type={'submit'} variant="contained" disabled={!isChanged}>
+              <Button type={'submit'} variant="contained">
                 {t('common:confirm')}
               </Button>
             </Stack>
@@ -250,4 +208,4 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
   );
 };
 
-export default UpdateSkill;
+export default CreateSkill;
