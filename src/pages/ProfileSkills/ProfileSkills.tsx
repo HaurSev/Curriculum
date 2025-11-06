@@ -83,6 +83,8 @@ const ProfileSkills = () => {
   const [deleteProfileSkill] = useLazyDeleteProfileSkill();
 
   const deleteSkill = async () => {
+    if (!checkedItems.length) return;
+
     try {
       const response = await deleteProfileSkill({
         variables: {
@@ -128,10 +130,7 @@ const ProfileSkills = () => {
           <ProfileHeader active="skills" />
         </HeaderPart>
         <Suspense>
-          <SkillsBlock
-            userId={data?.profile.id || ''}
-            skills={data?.profile.skills || []}
-          />
+          <SkillsBlock skills={data?.profile.skills || []} />
         </Suspense>
         {(userId === userData.id || userData.role === 'Admin') && (
           <Suspense>
@@ -139,6 +138,7 @@ const ProfileSkills = () => {
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
+                gap: theme.spacing(3),
               }}
             >
               <Button
