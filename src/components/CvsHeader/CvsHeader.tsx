@@ -1,17 +1,17 @@
-import { Button, Stack } from '@mui/material';
+import { Stack } from '@mui/system';
 import React from 'react';
 import theme from '../../theme/theme';
+import { Button } from '@mui/material';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import { useTranslation } from 'react-i18next';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-interface HeaderProps {
-  full_name: string;
+interface CvsHeader {
+  cv: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ full_name }) => {
+const CvsHeader: React.FC<CvsHeader> = ({ cv }) => {
   const navigate = useNavigate();
   const [t] = useTranslation();
   return (
@@ -29,9 +29,9 @@ const Header: React.FC<HeaderProps> = ({ full_name }) => {
         sx={{
           textTransform: 'capitalize',
         }}
-        onClick={() => navigate(AppRoutes.USERS.path)}
+        onClick={() => navigate(AppRoutes.CVS.path)}
       >
-        {t('employee')}
+        {t('cv')}
       </Button>
       <KeyboardArrowRightIcon />
       <Button
@@ -40,11 +40,10 @@ const Header: React.FC<HeaderProps> = ({ full_name }) => {
           color: theme.palette.text.secondary,
         }}
       >
-        <PersonOutlineOutlinedIcon />
-        {full_name || t('username')}
+        {cv || ''}
       </Button>
     </Stack>
   );
 };
 
-export default Header;
+export default CvsHeader;

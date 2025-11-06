@@ -21,6 +21,11 @@ export const USER = gql`
         full_name
         avatar
       }
+      cvs {
+        name
+        education
+        description
+      }
     }
   }
 `;

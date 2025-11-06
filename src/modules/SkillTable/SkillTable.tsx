@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next';
 import { Bounce, toast } from 'react-toastify';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import theme from '../../theme/theme';
-// import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
 import { useLazySkills } from '../../graphql/queries/skills';
 import type { Skill } from 'cv-graphql';
 

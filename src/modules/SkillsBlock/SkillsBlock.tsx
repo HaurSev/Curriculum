@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
 import { Bounce, toast } from 'react-toastify';
-import { Box, styled, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import { Box, Button, styled, Typography } from '@mui/material';
 import type { SkillMastery } from 'cv-graphql';
 import SkillContent from '../../components/SkillContent/SkillContent';
 
@@ -23,7 +22,6 @@ interface SkilBlockProps {
 }
 
 const SkillsBlock: React.FC<SkilBlockProps> = ({ skills }) => {
-  const [t] = useTranslation();
   const [skillCategory, { loading, data }] = useLazySkillCategories();
 
   useEffect(() => {
@@ -49,7 +47,7 @@ const SkillsBlock: React.FC<SkilBlockProps> = ({ skills }) => {
   };
 
   if (loading) {
-    return <Typography>{t('loading')}</Typography>;
+    return <Button variant="text" loading={loading}></Button>;
   }
 
   return (
