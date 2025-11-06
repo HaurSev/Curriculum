@@ -53,7 +53,12 @@ const CvSkillsPage = () => {
   const [isAddOpen, setAddOpen] = useState(false);
 
   const { cvId } = useParams<{ cvId: string }>();
+
   const [cvSkills, { loading, data }] = useLazyCvSkills();
+
+  useEffect(() => {
+    loadCvSkills();
+  }, []);
 
   const loadCvSkills = async () => {
     try {
@@ -72,13 +77,11 @@ const CvSkillsPage = () => {
     }
   };
 
-  useEffect(() => {
-    loadCvSkills();
-  }, []);
-
   const [deleteCvSkill] = useLazyDeleteCvSkill();
 
   const deleteSkill = async () => {
+    if (!checkedItems.length) return;
+
     try {
       const response = await deleteCvSkill({
         variables: {
@@ -89,15 +92,15 @@ const CvSkillsPage = () => {
         },
       });
 
-      if (!response.data || !response.data.cv) return;
+      if (!response.data || !response?.data?.deleteCvSkill) return;
+
+      useCheckedItemStore.getState().clearItems();
 
       toast.success(t('common:successfully'), {
         position: 'top-center',
         autoClose: 3000,
         theme: 'dark',
       });
-
-      useCheckedItemStore.getState().clearItems();
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',
@@ -131,6 +134,7 @@ const CvSkillsPage = () => {
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
+                gap: theme.spacing(3),
               }}
             >
               <Button

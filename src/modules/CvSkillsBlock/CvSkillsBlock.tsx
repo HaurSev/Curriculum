@@ -47,7 +47,7 @@ const Content = styled(Stack)(() => ({
   gap: theme.spacing(7),
   padding: theme.spacing(3),
   cursor: 'pointer',
-  height: theme.spacing(4),
+  height: theme.spacing(10),
   marginBottom: theme.spacing(3),
   transition: '0.3s ease',
 }));
@@ -90,8 +90,10 @@ const getMasteryProgress = (mastery: string) => {
 const SkillBody: React.FC<SkillBodyProps> = ({ skill, progress, userId }) => {
   const userData = JSON.parse(sessionStorage.getItem('user') || '');
 
+  const checkedItems = checkedItemStore((state) => state.checkedItems);
+
   const [isUpdateOpen, setUpdateOpen] = useState(false);
-  const [isChecked, setCheck] = useState(false);
+  let isChecked = checkedItems.some((item) => item.name === skill.name);
 
   const addItem = checkedItemStore((state) => state.addItem);
   const removeItem = checkedItemStore((state) => state.removeItem);
@@ -103,7 +105,7 @@ const SkillBody: React.FC<SkillBodyProps> = ({ skill, progress, userId }) => {
     if (userId === userData.id || userData.role === 'Admin') {
       if (isChecked) removeItem(skill.name);
       else addItem(skill);
-      setCheck(!isChecked);
+      isChecked = !isChecked;
     }
   };
 

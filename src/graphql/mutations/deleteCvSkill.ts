@@ -20,7 +20,7 @@ export type DeleteCvSkillArgs = {
 };
 
 export type DeleteCvSkillResult = {
-  cv: Cv;
+  deleteCvSkill: Cv;
 };
 
 export const useLazyDeleteCvSkill = () => {
