@@ -57,7 +57,7 @@ const LoginForm = () => {
         JSON.stringify({ id, email, role, full_name, avatar }),
       );
 
-      navigate(AppRoutes.USERS.path);
+      navigate(AppRoutes.Users.Path);
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',
@@ -129,7 +129,7 @@ const LoginForm = () => {
               fullWidth
               disabled={loading}
               sx={{ height: 45, width: 210 }}
-              onClick={() => navigate(AppRoutes.FORGOT_PASWORD)}
+              onClick={() => navigate(AppRoutes.ForgotPassword)}
             >
               {t('forgotPassword')}
             </Button>

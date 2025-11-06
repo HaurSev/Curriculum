@@ -29,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({ full_name }) => {
         sx={{
           textTransform: 'capitalize',
         }}
-        onClick={() => navigate(AppRoutes.USERS.path)}
+        onClick={() => navigate(AppRoutes.Users.Path)}
       >
         {t('employee')}
       </Button>

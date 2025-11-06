@@ -32,7 +32,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
         <Button
           variant="text"
           onClick={() =>
-            navigate(AppRoutes.USERS.Children.PROFILE.create(userId || ''))
+            navigate(AppRoutes.Users.Children.Profile.Create(userId || ''))
           }
           sx={{
             color:
@@ -53,7 +53,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
         <Button
           variant="text"
           onClick={() =>
-            navigate(AppRoutes.USERS.Children.SKILLS.create(userId || ''))
+            navigate(AppRoutes.Users.Children.Skills.Create(userId || ''))
           }
           sx={{
             color:
@@ -73,7 +73,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
           variant="text"
           onClick={() =>
             navigate(
-              AppRoutes.USERS.Children.USER_LANGUAGES.create(userId || ''),
+              AppRoutes.Users.Children.UserLanguages.Create(userId || ''),
             )
           }
           sx={{

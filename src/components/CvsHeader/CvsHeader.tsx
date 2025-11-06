@@ -29,7 +29,7 @@ const CvsHeader: React.FC<CvsHeader> = ({ cv }) => {
         sx={{
           textTransform: 'capitalize',
         }}
-        onClick={() => navigate(AppRoutes.CVS.path)}
+        onClick={() => navigate(AppRoutes.Cvs.Path)}
       >
         {t('cv')}
       </Button>

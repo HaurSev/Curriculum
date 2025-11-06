@@ -31,7 +31,7 @@ const CvsNavigation: React.FC<CvsHeaderProps> = ({ active }) => {
       <Button
         variant="text"
         onClick={() =>
-          navigate(AppRoutes.CVS.Children.DETAILS.create(cvId || ''))
+          navigate(AppRoutes.Cvs.Children.Details.Create(cvId || ''))
         }
         sx={{
           color:
@@ -52,7 +52,7 @@ const CvsNavigation: React.FC<CvsHeaderProps> = ({ active }) => {
       <Button
         variant="text"
         onClick={() =>
-          navigate(AppRoutes.CVS.Children.SKILLS.create(cvId || ''))
+          navigate(AppRoutes.Cvs.Children.Skills.Create(cvId || ''))
         }
         sx={{
           color:
@@ -70,6 +70,9 @@ const CvsNavigation: React.FC<CvsHeaderProps> = ({ active }) => {
       </Button>
       <Button
         variant="text"
+        onClick={() =>
+          navigate(AppRoutes.Cvs.Children.Projects.Create(cvId || ''))
+        }
         sx={{
           color:
             active === 'projects'

@@ -1,41 +1,45 @@
 export const AppRoutes = {
-  LOGIN: '/auth/login',
-  REGISTRATION: '/auth/signup',
-  FORGOT_PASWORD: '/auth/forgot_password',
-  USERS: {
-    path: '/users',
+  Login: '/auth/login',
+  Registration: '/auth/signup',
+  ForgotPassword: '/auth/forgot_password',
+  Users: {
+    Path: '/users',
     Children: {
-      PROFILE: {
-        path: '/users/:userId/profile',
-        create: (userId: string) => `/users/${userId}/profile`,
+      Profile: {
+        Path: '/users/:userId/profile',
+        Create: (userId: string) => `/users/${userId}/profile`,
       },
-      SKILLS: {
-        path: '/users/:userId/skills',
-        create: (userId: string) => `/users/${userId}/skills`,
+      Skills: {
+        Path: '/users/:userId/skills',
+        Create: (userId: string) => `/users/${userId}/skills`,
       },
-      USER_LANGUAGES: {
-        path: '/users/:userId/languages',
-        create: (userId: string) => `/users/${userId}/languages`,
+      UserLanguages: {
+        Path: '/users/:userId/languages',
+        Create: (userId: string) => `/users/${userId}/languages`,
       },
-      USER_CV: {
-        path: '/users/:userId/cvs',
-        create: (userId: string) => `/users/${userId}/cvs`,
+      UserCv: {
+        Path: '/users/:userId/cvs',
+        Create: (userId: string) => `/users/${userId}/cvs`,
       },
     },
   },
-  CVS: {
-    path: '/cvs',
+  Cvs: {
+    Path: '/cvs',
     Children: {
-      DETAILS: {
-        path: '/cvs/:cvId/details',
-        create: (cvId: string) => `/cvs/${cvId}/details`,
+      Details: {
+        Path: '/cvs/:cvId/details',
+        Create: (cvId: string) => `/cvs/${cvId}/details`,
       },
-      SKILLS: {
-        path: '/cvs/:cvId/skills',
-        create: (cvId: string) => `/cvs/${cvId}/skills`,
+      Skills: {
+        Path: '/cvs/:cvId/skills',
+        Create: (cvId: string) => `/cvs/${cvId}/skills`,
+      },
+      Projects: {
+        Path: '/cvs/:cvId/projects',
+        Create: (cvId: string) => `/cvs/${cvId}/projects`,
       },
     },
   },
-  LANGUAGES: '/languages',
-  SKILLS: '/skills',
+  Languages: '/languages',
+  Skills: '/skills',
 } as const;

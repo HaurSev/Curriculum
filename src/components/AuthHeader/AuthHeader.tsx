@@ -29,7 +29,7 @@ const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
     >
       <Button
         variant="outlined"
-        onClick={() => navigate(AppRoutes.LOGIN)}
+        onClick={() => navigate(AppRoutes.Login)}
         sx={{
           color:
             active === 'login'
@@ -48,7 +48,7 @@ const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
 
       <Button
         variant="outlined"
-        onClick={() => navigate(AppRoutes.REGISTRATION)}
+        onClick={() => navigate(AppRoutes.Registration)}
         sx={{
           color:
             active === 'signup'

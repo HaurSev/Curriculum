@@ -29,9 +29,13 @@ const CvDetailsPage = lazy(
 
 const CvSkillsPage = lazy(() => import('../pages/CvSkillsPage/CvSkillsPage'));
 
+const CvProjectsPage = lazy(
+  () => import('../pages/CvProjectsPage/CvProjectsPage'),
+);
+
 const router = createBrowserRouter([
   {
-    path: AppRoutes.LOGIN,
+    path: AppRoutes.Login,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProtectedRoute requireAuth={false}>
@@ -41,7 +45,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.REGISTRATION,
+    path: AppRoutes.Registration,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProtectedRoute requireAuth={false}>
@@ -51,7 +55,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.FORGOT_PASWORD,
+    path: AppRoutes.ForgotPassword,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProtectedRoute requireAuth={false}>
@@ -61,7 +65,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.USERS.path,
+    path: AppRoutes.Users.Path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProtectedRoute requireAuth={false}>
@@ -71,7 +75,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.USERS.Children.PROFILE.path,
+    path: AppRoutes.Users.Children.Profile.Path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <Profile />
@@ -79,7 +83,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.USERS.Children.SKILLS.path,
+    path: AppRoutes.Users.Children.Skills.Path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileSkills />
@@ -87,7 +91,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.USERS.Children.USER_LANGUAGES.path,
+    path: AppRoutes.Users.Children.UserLanguages.Path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ProfileLanguage />
@@ -95,7 +99,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.USERS.Children.USER_CV.path,
+    path: AppRoutes.Users.Children.UserCv.Path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <UserCv />
@@ -103,7 +107,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.CVS.path,
+    path: AppRoutes.Cvs.Path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <CVsPage />
@@ -111,7 +115,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.CVS.Children.DETAILS.path,
+    path: AppRoutes.Cvs.Children.Details.Path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <CvDetailsPage />
@@ -119,7 +123,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.CVS.Children.SKILLS.path,
+    path: AppRoutes.Cvs.Children.Skills.Path,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <CvSkillsPage></CvSkillsPage>
@@ -127,7 +131,23 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.LANGUAGES,
+    path: AppRoutes.Cvs.Children.Skills.Path,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <CvSkillsPage></CvSkillsPage>
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.Cvs.Children.Projects.Path,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <CvProjectsPage></CvProjectsPage>
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.Languages,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <Languages />
@@ -135,7 +155,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: AppRoutes.SKILLS,
+    path: AppRoutes.Skills,
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <Skills />

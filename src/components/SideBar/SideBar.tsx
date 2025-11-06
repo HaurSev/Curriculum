@@ -43,7 +43,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       }}
     >
       <ListItemButton
-        onClick={() => navigate(AppRoutes.USERS.path)}
+        onClick={() => navigate(AppRoutes.Users.Path)}
         className={active === 'employees' ? 'active' : ''}
       >
         <ListItemIcon>
@@ -60,7 +60,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'skills' ? 'active' : ''}
-        onClick={() => navigate(AppRoutes.SKILLS)}
+        onClick={() => navigate(AppRoutes.Skills)}
       >
         <ListItemIcon>
           <MovingIcon
@@ -76,7 +76,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'language' ? 'active' : ''}
-        onClick={() => navigate(AppRoutes.LANGUAGES)}
+        onClick={() => navigate(AppRoutes.Languages)}
       >
         <ListItemIcon>
           <GTranslateIcon
@@ -92,7 +92,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
       </ListItemButton>
       <ListItemButton
         className={active === 'cv' ? 'active' : ''}
-        onClick={() => navigate(AppRoutes.CVS.path)}
+        onClick={() => navigate(AppRoutes.Cvs.Path)}
       >
         <ListItemIcon>
           <PortraitIcon
@@ -141,7 +141,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
 
         <ArrowBackIosNewIcon
           onClick={() =>
-            navigate(AppRoutes.USERS.Children.PROFILE.create(userData.id))
+            navigate(AppRoutes.Users.Children.Profile.Create(userData.id))
           }
         />
       </Container>
