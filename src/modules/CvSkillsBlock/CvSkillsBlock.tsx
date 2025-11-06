@@ -2,61 +2,24 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
 import { Bounce, toast } from 'react-toastify';
 import {
-  Box,
   LinearProgress,
   Typography,
   CircularProgress,
-  styled,
+  Container,
 } from '@mui/material';
-import { Stack } from '@mui/system';
 import type { Cv, SkillMastery } from 'cv-graphql';
 import theme from '../../theme/theme';
 import checkedItemStore from '../../store/checkedItemStore';
+import {
+  CategoryBlock,
+  CheckedContent,
+  Content,
+  SkillsRow,
+} from './CvSkillBlock';
 
 const UpdateCvSkill = lazy(
   () => import('../../modules/UpdateCvSkill/UpdateCvSkill'),
 );
-
-const Container = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  width: '80%',
-  gap: theme.spacing(4),
-}));
-
-const CategoryBlock = styled(Box)(({ theme }) => ({
-  width: '100%',
-  marginBottom: theme.spacing(3),
-}));
-
-const SkillsRow = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  justifyContent: 'flex-start',
-  gap: '10%',
-  flexWrap: 'wrap',
-  marginTop: theme.spacing(2),
-}));
-
-const Content = styled(Stack)(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: theme.spacing(7),
-  padding: theme.spacing(3),
-  cursor: 'pointer',
-  height: theme.spacing(10),
-  marginBottom: theme.spacing(3),
-  transition: '0.3s ease',
-}));
-
-const CheckedContent = styled(Content)(() => ({
-  background: 'rgba(107, 36, 36, 0.21)',
-  borderRadius: theme.spacing(10),
-  boxShadow: `5px 3px rgba(33, 29, 29, 0.32)`,
-}));
 
 interface SkillBlockProps {
   cv: Cv;

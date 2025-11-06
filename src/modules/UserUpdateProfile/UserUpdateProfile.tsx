@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, MenuItem, Stack, styled, TextField } from '@mui/material';
+import { Button, MenuItem, Stack, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bounce, toast } from 'react-toastify';
@@ -10,13 +10,7 @@ import { useForm } from 'react-hook-form';
 import theme from '../../theme/theme';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLazyUpdateUser } from '../../graphql/mutations/updateUser';
-
-const FormContainer = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  maxWidth: 800,
-}));
+import { FormContainer } from './UserUpdateProfile';
 
 type DepartmentType = {
   id: string;

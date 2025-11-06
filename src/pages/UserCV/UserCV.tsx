@@ -1,14 +1,14 @@
-import { Box, Button, InputBase, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import theme from '../../theme/theme';
 import SideBar from '../../components/SideBar/SideBar';
 import { useTranslation } from 'react-i18next';
-import SearchIcon from '@mui/icons-material/Search';
 import { useParams } from 'react-router-dom';
 import { Bounce, toast } from 'react-toastify';
 import AddIcon from '@mui/icons-material/Add';
 import { useLazyCvs } from '../../graphql/queries/cvs';
+import Search from '../../components/Search/Search';
 
 const UserCvTable = lazy(
   () => import('../../modules/UserCVsTable/UserCVsTable'),
@@ -42,50 +42,6 @@ const HeaderPart = styled(Box)(() => ({
   width: '100%',
   paddingLeft: theme.spacing(5),
   elevation: 0,
-}));
-
-const Search = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.spacing(5),
-  backgroundColor: 'transparent',
-  padding: theme.spacing(1, 2),
-  '&:hover': {
-    backgroundColor: theme.palette.primary.main,
-    transition: '0.4s ease',
-  },
-  marginLeft: 0,
-  width: '600px',
-  height: theme.spacing(10),
-  border: `1px solid ${theme.palette.text.disabled}`,
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled(Box)(({ theme }) => ({
-  paddingRight: theme.spacing(2),
-  paddingTop: theme.spacing(1),
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  width: '400px',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
-  },
 }));
 
 const UserCV = () => {
@@ -140,17 +96,11 @@ const UserCV = () => {
               justifyContent: 'space-between',
             }}
           >
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-            </Search>
+            <Search
+              onClick={(e) => setSearchValue(e.target.value)}
+              searchValue={searchValue}
+            ></Search>
+
             {userId == user.id && (
               <Button
                 onClick={handleSetAdd}

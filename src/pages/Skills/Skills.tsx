@@ -6,35 +6,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import { lazy, Suspense, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import SkillTable from '../../modules/SkillTable/SkillTable';
+import { Container, HeaderPart, MainPart } from '../Components';
 
 const CreateSkill = lazy(() => import('../../modules/CreateSkill/CreateSkill'));
-
-const Container = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  minHeight: '100vh',
-}));
-
-const MainPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%',
-  padding: theme.spacing(3),
-  elevation: 0,
-  gap: theme.spacing(2),
-}));
-
-const HeaderPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'start',
-  gap: theme.spacing(3),
-  width: '100%',
-  paddingLeft: theme.spacing(5),
-  elevation: 0,
-}));
 
 const Search = styled(Box)(({ theme }) => ({
   position: 'relative',

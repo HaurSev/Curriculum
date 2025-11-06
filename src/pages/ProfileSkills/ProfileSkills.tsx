@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
-import { Box, Button, styled, Typography } from '@mui/material';
+import { Button, Container, Typography } from '@mui/material';
 import theme from '../../theme/theme';
 import SideBar from '../../components/SideBar/SideBar';
 import Header from '../../components/Header/Header';
@@ -13,37 +13,10 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Stack } from '@mui/system';
 import useCheckedItemStore from '../../store/checkedItemStore';
 import { useLazyDeleteProfileSkill } from '../../graphql/mutations/deleteProfileSkill';
+import { HeaderPart, MainPart } from '../Components';
 
 const SkillsBlock = lazy(() => import('../../modules/SkillsBlock/SkillsBlock'));
 const AddSkill = lazy(() => import('../../modules/AddSkill/AddSkill'));
-
-const Container = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  minHeight: '100vh',
-}));
-
-const MainPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%',
-  padding: theme.spacing(3),
-  paddingTop: theme.spacing(2),
-  elevation: 0,
-  gap: theme.spacing(5),
-}));
-
-const HeaderPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: theme.spacing(3),
-  width: '100%',
-  paddingLeft: theme.spacing(5),
-  elevation: 0,
-}));
 
 const ProfileSkills = () => {
   const { userId } = useParams<{ userId: string }>();

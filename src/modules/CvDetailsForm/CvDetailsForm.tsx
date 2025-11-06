@@ -1,6 +1,6 @@
 import React from 'react';
 import theme from '../../theme/theme';
-import { Button, Stack, styled, TextField } from '@mui/material';
+import { Button, Stack, TextField } from '@mui/material';
 import { Bounce, toast } from 'react-toastify';
 import { useLazyUpdateCv } from '../../graphql/mutations/updateCV';
 import type { Cv } from 'cv-graphql';
@@ -8,14 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-
-const FormBody = styled(Stack)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'flex-end',
-  width: '100%',
-  gap: theme.spacing(10),
-  paddingTop: theme.spacing(5),
-}));
+import { FormBody } from './CvDetailsForm';
 
 interface UpdateCvProps {
   cv: Cv;

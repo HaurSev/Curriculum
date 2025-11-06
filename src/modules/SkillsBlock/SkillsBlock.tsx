@@ -1,21 +1,10 @@
 import React, { useEffect } from 'react';
 import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
 import { Bounce, toast } from 'react-toastify';
-import { Box, Button, styled, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import type { SkillMastery } from 'cv-graphql';
 import SkillContent from '../../components/SkillContent/SkillContent';
-
-const Container = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  width: '80%',
-}));
-
-const Block = styled(Box)(({ theme }) => ({
-  width: '100%',
-  marginBottom: theme.spacing(1),
-}));
+import { Block, Container } from './SkillBlock';
 
 interface SkilBlockProps {
   skills: SkillMastery[];

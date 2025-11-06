@@ -1,64 +1,15 @@
-import {
-  Box,
-  Button,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { styled } from '@mui/system';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ClearIcon from '@mui/icons-material/Clear';
 import theme from '../../theme/theme';
 import * as z from 'zod';
-import { useParams } from 'react-router-dom';
+import { Form, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLazyCreateCv } from '../../graphql/mutations/createCV';
 import { Bounce, toast } from 'react-toastify';
-
-const Container = styled(Box)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-  minHeight: '100vh',
-  zIndex: 100,
-  background: 'rgba(0,0,0,0.8)',
-  position: 'absolute',
-}));
-
-const Form = styled(Paper)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  maxWidth: 800,
-  width: '80%',
-  padding: theme.spacing(10),
-  paddingTop: theme.spacing(4),
-  opacity: 0.8,
-}));
-
-const FormHeader = styled(Stack)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  padding: theme.spacing(2),
-  justifyContent: 'space-between',
-}));
-
-const FormBody = styled(Stack)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'flex-end',
-  width: '100%',
-  gap: theme.spacing(5),
-  paddingTop: theme.spacing(2),
-}));
+import { Container, FormBody, FormHeader } from './AddCV';
 
 interface AddCVProps {
   onClick: () => void;

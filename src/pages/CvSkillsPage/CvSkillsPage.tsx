@@ -1,4 +1,4 @@
-import { Box, Button, Stack, styled } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import theme from '../../theme/theme';
 import SideBar from '../../components/SideBar/SideBar';
@@ -12,38 +12,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import useCheckedItemStore from '../../store/checkedItemStore';
 import { useTranslation } from 'react-i18next';
 import { useLazyDeleteCvSkill } from '../../graphql/mutations/deleteCvSkill';
+import { Container, HeaderPart, MainPart } from '../Components';
 
 const AddCvSkill = lazy(() => import('../../modules/AddCvSkill/AddCvSkill'));
 const CvSkillsBlock = lazy(
   () => import('../../modules/CvSkillsBlock/CvSkillsBlock'),
 );
-const Container = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  minHeight: '100vh',
-}));
-
-const MainPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%',
-  padding: theme.spacing(3),
-  paddingTop: theme.spacing(2),
-  elevation: 0,
-  gap: theme.spacing(5),
-}));
-
-const HeaderPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: theme.spacing(3),
-  width: '100%',
-  paddingLeft: theme.spacing(5),
-  elevation: 0,
-}));
 
 const CvSkillsPage = () => {
   const userData = JSON.parse(sessionStorage.getItem('user') || '');

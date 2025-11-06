@@ -1,5 +1,5 @@
-import { Button, MenuItem, Paper, TextField, Typography } from '@mui/material';
-import { Box, Stack, styled } from '@mui/system';
+import { Button, MenuItem, TextField, Typography } from '@mui/material';
+import { Stack } from '@mui/system';
 import { useTranslation } from 'react-i18next';
 import ClearIcon from '@mui/icons-material/Clear';
 import theme from '../../theme/theme';
@@ -13,48 +13,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLazySkills } from '../../graphql/queries/skills';
 import { useLazyProfile } from '../../graphql/queries/profile';
-
-const AddSkillContainer = styled(Box)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-  minHeight: '100vh',
-  zIndex: 100,
-  background: 'rgba(0,0,0,0.8)',
-  position: 'absolute',
-}));
-
-const AddSkillForm = styled(Paper)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  maxWidth: 800,
-  width: '80%',
-  padding: theme.spacing(10),
-  paddingTop: theme.spacing(4),
-  opacity: 0.8,
-}));
-
-const FormHeader = styled(Stack)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  padding: theme.spacing(2),
-  justifyContent: 'space-between',
-}));
-
-const FormBody = styled(Stack)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'flex-end',
-  width: '100%',
-  gap: theme.spacing(5),
-  paddingTop: theme.spacing(2),
-}));
+import {
+  AddSkillContainer,
+  AddSkillForm,
+  FormBody,
+  FormHeader,
+} from './AddSkill';
 
 interface AddSkillProps {
   onClick: () => void;

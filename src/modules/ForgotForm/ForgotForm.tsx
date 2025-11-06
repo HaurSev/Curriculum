@@ -37,7 +37,7 @@ const ForgotForm = () => {
   const [forgotPassword, { loading }] = useForgotPassword();
 
   const handleNavigate = () => {
-    navigate(AppRoutes.LOGIN);
+    navigate(AppRoutes.Login);
   };
 
   const onSubmit = async (data: ForgotPasswordData) => {
@@ -57,7 +57,7 @@ const ForgotForm = () => {
         transition: Bounce,
       });
       console.log(response);
-      navigate(AppRoutes.LOGIN);
+      navigate(AppRoutes.Login);
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',

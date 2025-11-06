@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { styled } from '@mui/system';
+import { Button, Container, Stack, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -17,50 +9,7 @@ import { useLazyUpdateCv } from '../../graphql/mutations/updateCV';
 import type { Cv } from 'cv-graphql';
 import { Bounce, toast } from 'react-toastify';
 import theme from '../../theme/theme';
-
-const Container = styled(Box)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-  minHeight: '100vh',
-  zIndex: 100,
-  background: 'rgba(0,0,0,0.8)',
-  position: 'absolute',
-  top: 0,
-  left: 0,
-}));
-
-const Form = styled(Paper)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  maxWidth: 800,
-  width: '80%',
-  padding: theme.spacing(10),
-  paddingTop: theme.spacing(4),
-  opacity: 0.8,
-}));
-
-const FormHeader = styled(Stack)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  padding: theme.spacing(2),
-  justifyContent: 'space-between',
-}));
-
-const FormBody = styled(Stack)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'flex-end',
-  width: '100%',
-  gap: theme.spacing(5),
-  paddingTop: theme.spacing(2),
-}));
+import { Form, FormBody, FormHeader } from './UpdateCV';
 
 const CreateCVSchema = z.object({
   name: z.string(),

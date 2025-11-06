@@ -1,5 +1,5 @@
-import { Button, styled, Typography } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import { Button, Typography } from '@mui/material';
+import { Stack } from '@mui/system';
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import theme from '../../theme/theme';
 import SideBar from '../../components/SideBar/SideBar';
@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useLazyDeleteProfileLanguage } from '../../graphql/mutations/deleteProfileLanguages';
 import useCheckedLanguagesStore from '../../store/ckeckeLanguagesStore';
+import { Container, HeaderPart, MainPart } from '../Components';
 
 const LanguageContent = lazy(
   () => import('../../components/LanguagesContent/LanguageContent'),
@@ -21,34 +22,6 @@ const LanguageContent = lazy(
 const AddLanguages = lazy(
   () => import('../../modules/AddLanguages/AddLanguages'),
 );
-
-const Container = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  minHeight: '100vh',
-}));
-
-const MainPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%',
-  padding: theme.spacing(3),
-  paddingTop: theme.spacing(2),
-  elevation: 0,
-  gap: theme.spacing(5),
-}));
-
-const HeaderPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: theme.spacing(3),
-  width: '100%',
-  paddingLeft: theme.spacing(5),
-  elevation: 0,
-}));
 
 const ProfileLanguage = () => {
   const { userId } = useParams<{ userId: string }>();

@@ -45,7 +45,7 @@ const SignupForm = () => {
       });
 
       console.log('Signup result:', response.data);
-      navigate(AppRoutes.LOGIN);
+      navigate(AppRoutes.Login);
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',
@@ -57,7 +57,7 @@ const SignupForm = () => {
   };
 
   const handleNavigate = () => {
-    navigate(AppRoutes.LOGIN);
+    navigate(AppRoutes.Login);
   };
 
   return (

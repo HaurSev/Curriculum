@@ -2,13 +2,13 @@ import { lazy, Suspense, useEffect } from 'react';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
 import { useLazyUser } from '../../graphql/queries/user';
 import { Bounce, toast } from 'react-toastify';
-import { Box, styled, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import theme from '../../theme/theme';
 import SideBar from '../../components/SideBar/SideBar';
 import { useParams } from 'react-router-dom';
 import UserInfo from '../../components/UserInfo/UserInfo';
 import Header from '../../components/Header/Header';
+import { Container, HeaderPart, MainPart } from '../Components';
 
 const UserUpdateProfile = lazy(
   () => import('../../modules/UserUpdateProfile/UserUpdateProfile'),
@@ -17,34 +17,6 @@ const UserUpdateProfile = lazy(
 const ProfileAvatar = lazy(
   () => import('../../modules/ProfileAvatar/ProfileAvatar'),
 );
-
-const Container = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  minHeight: '100vh',
-}));
-
-const MainPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%',
-  padding: theme.spacing(3),
-  paddingTop: theme.spacing(2),
-  elevation: 0,
-  gap: theme.spacing(5),
-}));
-
-const HeaderPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: theme.spacing(3),
-  width: '100%',
-  paddingLeft: theme.spacing(5),
-  elevation: 0,
-}));
 
 const Profile = () => {
   const { userId } = useParams<{ userId: string }>();

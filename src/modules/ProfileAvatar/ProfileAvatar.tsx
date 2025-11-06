@@ -1,36 +1,17 @@
-import { Avatar, Box, IconButton, styled, Typography } from '@mui/material';
+import { Avatar, IconButton, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import theme from '../../theme/theme';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { Bounce, toast } from 'react-toastify';
 import { useLazyUploadAvatar } from '../../graphql/mutations/uploadAvatar';
+import { AvatarContainer, HiddenInput, UploadBlock } from './ProfileAvatar';
 
 interface ProfileAvatarProps {
   userId: string;
   first_name: string | null;
   avatar: string | null;
 }
-
-const AvatarContainer = styled(Box)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-  gap: theme.spacing(20),
-  padding: theme.spacing(5),
-}));
-
-const UploadBlock = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-}));
-
-const HiddenInput = styled('input')({
-  display: 'none',
-});
 
 const ProfileAvatar: React.FC<ProfileAvatarProps> = ({
   first_name,

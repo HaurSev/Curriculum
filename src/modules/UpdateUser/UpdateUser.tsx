@@ -1,5 +1,5 @@
-import { Button, MenuItem, Paper, TextField, Typography } from '@mui/material';
-import { Box, Stack, styled } from '@mui/system';
+import { Button, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Stack } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
@@ -12,30 +12,7 @@ import type { UserData } from '../../graphql/queries/users';
 import { useLazyDepartments } from '../../graphql/queries/departments';
 import { useLazyPositions } from '../../graphql/queries/position';
 import theme from '../../theme/theme';
-
-const UpdateUserContainer = styled(Box)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-  minHeight: '100vh',
-  zIndex: 100,
-  background: 'rgba(0,0,0,0.8)',
-  position: 'absolute',
-}));
-
-const UpdateUserForm = styled(Paper)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  maxWidth: 800,
-  width: '80%',
-  padding: theme.spacing(5),
-}));
+import { Container, Form } from './UpdateUser';
 
 interface UpdateUserProps {
   onClick: () => void;
@@ -149,8 +126,8 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
   };
 
   return (
-    <UpdateUserContainer>
-      <UpdateUserForm>
+    <Container>
+      <Form>
         <Box
           sx={{
             display: 'flex',
@@ -257,8 +234,8 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
             {t('common:update')}
           </Button>
         </form>
-      </UpdateUserForm>
-    </UpdateUserContainer>
+      </Form>
+    </Container>
   );
 };
 

@@ -1,5 +1,12 @@
-import { Button, MenuItem, Paper, TextField, Typography } from '@mui/material';
-import { Box, Stack, styled } from '@mui/system';
+import {
+  Button,
+  Container,
+  MenuItem,
+  Box,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
@@ -7,36 +14,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Bounce, toast } from 'react-toastify';
-// import { useLazyUpdateUser } from '../../graphql/mutations/updateUser';
 import type { UserData } from '../../graphql/queries/users';
 import { useLazyDepartments } from '../../graphql/queries/departments';
 import { useLazyPositions } from '../../graphql/queries/position';
 import { useLazyUpdateProfile } from '../../graphql/mutations/updateProfile';
 import theme from '../../theme/theme';
-
-const UpdateProfileContainer = styled(Box)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-  minHeight: '100vh',
-  zIndex: 100,
-  background: 'rgba(0,0,0,0.8)',
-  position: 'absolute',
-}));
-
-const UpdateProfileForm = styled(Paper)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  maxWidth: 800,
-  width: '80%',
-  padding: theme.spacing(5),
-}));
+import { Form } from './UpdateProfile';
 
 interface UpdateProfileProps {
   onClick: () => void;
@@ -147,8 +130,8 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onClick, user }) => {
   };
 
   return (
-    <UpdateProfileContainer>
-      <UpdateProfileForm>
+    <Container>
+      <Form>
         <Box
           sx={{
             display: 'flex',
@@ -246,8 +229,8 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onClick, user }) => {
             {t('common:update')}
           </Button>
         </form>
-      </UpdateProfileForm>
-    </UpdateProfileContainer>
+      </Form>
+    </Container>
   );
 };
 

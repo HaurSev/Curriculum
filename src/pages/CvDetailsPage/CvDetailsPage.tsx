@@ -1,5 +1,4 @@
-import { Box, Button, styled } from '@mui/material';
-import theme from '../../theme/theme';
+import { Button } from '@mui/material';
 import SideBar from '../../components/SideBar/SideBar';
 import CvsNavigation from '../../components/CvsNavigation/CvsNavigation';
 import CvsHeader from '../../components/CvsHeader/CvsHeader';
@@ -7,38 +6,11 @@ import { useParams } from 'react-router-dom';
 import { useLazyCvDetails } from '../../graphql/queries/cvDetails';
 import { lazy, Suspense, useEffect } from 'react';
 import { Bounce, toast } from 'react-toastify';
+import { Container, HeaderPart, MainPart } from '../Components';
 
 const CvDetailsForm = lazy(
-  () => import('../../modules/CvDetailsForm/CvDetailsForm'),
+  () => import('../../modules/CvDetailsForm/CvDetailsForm.tsx'),
 );
-
-const Container = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  minHeight: '100vh',
-}));
-
-const MainPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%',
-  padding: theme.spacing(3),
-  paddingTop: theme.spacing(2),
-  elevation: 0,
-  gap: theme.spacing(5),
-}));
-
-const HeaderPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: theme.spacing(3),
-  width: '100%',
-  paddingLeft: theme.spacing(5),
-  elevation: 0,
-}));
 
 const CvDetailsPage = () => {
   const { cvId } = useParams<{ cvId: string }>();
