@@ -182,7 +182,7 @@ const AddCvSkill: React.FC<AddSkillProps> = ({ onClick }) => {
         },
       });
 
-      if (!response.data) return;
+      if (!response.data?.addCvSkill) return;
 
       toast.success(`${t('common:successfully')}`, {
         position: 'top-center',

@@ -24,7 +24,7 @@ export type createSkillArgs = {
 };
 
 export type CreateSkillResult = {
-  Cv: Cv;
+  addCvSkill: Cv;
 };
 
 export const useLazyAddCvSkill = () => {
