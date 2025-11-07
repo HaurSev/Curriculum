@@ -42,7 +42,7 @@ const Languages = () => {
           >
             <Search
               searchValue={searchValue}
-              onClick={(e) => setSearchValue(e.target.value)}
+              onChange={(e) => setSearchValue(e.target.value)}
             ></Search>
 
             <Button

@@ -14,7 +14,7 @@ const UserCvTable = lazy(
   () => import('../../modules/UserCVsTable/UserCVsTable'),
 );
 
-const AddCV = lazy(() => import('../../modules/AddCV/AddCV'));
+const AddCV = lazy(() => import('../../modules/AddCV/AddCV.tsx'));
 
 const Container = styled(Box)(() => ({
   display: 'flex',
@@ -97,7 +97,7 @@ const UserCV = () => {
             }}
           >
             <Search
-              onClick={(e) => setSearchValue(e.target.value)}
+              onChange={(e) => setSearchValue(e.target.value)}
               searchValue={searchValue}
             ></Search>
 

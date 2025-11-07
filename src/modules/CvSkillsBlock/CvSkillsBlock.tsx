@@ -18,7 +18,7 @@ import {
 } from './CvSkillBlock';
 
 const UpdateCvSkill = lazy(
-  () => import('../../modules/UpdateCvSkill/UpdateCvSkill'),
+  () => import('../../modules/UpdateCvSkill/UpdateCvSkill.tsx'),
 );
 
 interface SkillBlockProps {

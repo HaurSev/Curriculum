@@ -20,7 +20,7 @@ const LanguageContent = lazy(
 );
 
 const AddLanguages = lazy(
-  () => import('../../modules/AddLanguages/AddLanguages'),
+  () => import('../../modules/AddLanguages/AddLanguages.tsx'),
 );
 
 const ProfileLanguage = () => {

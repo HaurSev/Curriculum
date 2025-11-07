@@ -8,7 +8,9 @@ import AddIcon from '@mui/icons-material/Add';
 import SkillTable from '../../modules/SkillTable/SkillTable';
 import { Container, HeaderPart, MainPart } from '../Components';
 
-const CreateSkill = lazy(() => import('../../modules/CreateSkill/CreateSkill'));
+const CreateSkill = lazy(
+  () => import('../../modules/CreateSkill/CreateSkill.tsx'),
+);
 
 const Search = styled(Box)(({ theme }) => ({
   position: 'relative',

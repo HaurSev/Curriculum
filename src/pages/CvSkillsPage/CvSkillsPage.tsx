@@ -14,7 +14,9 @@ import { useTranslation } from 'react-i18next';
 import { useLazyDeleteCvSkill } from '../../graphql/mutations/deleteCvSkill';
 import { Container, HeaderPart, MainPart } from '../Components';
 
-const AddCvSkill = lazy(() => import('../../modules/AddCvSkill/AddCvSkill'));
+const AddCvSkill = lazy(
+  () => import('../../modules/AddCvSkill/AddCvSkill.tsx'),
+);
 const CvSkillsBlock = lazy(
   () => import('../../modules/CvSkillsBlock/CvSkillsBlock'),
 );

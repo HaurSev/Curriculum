@@ -20,7 +20,7 @@ const DeleteLanguage = lazy(
 );
 
 const UpdateLanguage = lazy(
-  () => import('../../modules/UpdateLanguage/UpdateLanguage'),
+  () => import('../../modules/UpdateLanguage/UpdateLanguage.tsx'),
 );
 
 type Order = 'asc' | 'desc';

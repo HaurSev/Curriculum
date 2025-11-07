@@ -11,11 +11,11 @@ import Header from '../../components/Header/Header';
 import { Container, HeaderPart, MainPart } from '../Components';
 
 const UserUpdateProfile = lazy(
-  () => import('../../modules/UserUpdateProfile/UserUpdateProfile'),
+  () => import('../../modules/UserUpdateProfile/UserUpdateProfile.tsx'),
 );
 
 const ProfileAvatar = lazy(
-  () => import('../../modules/ProfileAvatar/ProfileAvatar'),
+  () => import('../../modules/ProfileAvatar/ProfileAvatar.tsx'),
 );
 
 const Profile = () => {

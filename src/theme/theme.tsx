@@ -57,6 +57,7 @@ const theme = createTheme({
           fontSize: '15px',
           letterSpacing: '1px',
           border: 'none',
+          gap: theme.spacing(3),
           transition: 'background 0.4s ease',
           '&:hover': {
             ...(ownerState.variant === 'contained' && {
@@ -90,7 +91,7 @@ const theme = createTheme({
             borderRadius: 8,
             background: 'transparent',
             color: theme.palette.text.primary,
-            border: `1px solid ${theme.palette.text.disabled}`,
+            border: `1px solid ${theme.palette.text.primary}`,
             transition: 'background 0.4s ease, border 0.4s ease',
             '&:hover': { background: 'rgba(75, 75, 75, 0.413)' },
             '&.Mui-focused': {
@@ -112,6 +113,7 @@ const theme = createTheme({
             color: theme.palette.text.disabled,
             '&.Mui-focused': {
               color: theme.palette.text.primary,
+              background: theme.palette.background,
             },
           },
           '&.Mui-disabled': {
@@ -125,6 +127,8 @@ const theme = createTheme({
             '&hover': {
               background: 'transparent',
               cursor: 'not-allowed',
+              border: `1px dashed ${theme.palette.text.disabled}`,
+              color: theme.palette.text.disabled,
             },
           },
           '& input::placeholder': {

@@ -17,8 +17,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 
-const DeleteCV = lazy(() => import('../DeleteCV/DeleteCV'));
-const UpdateCV = lazy(() => import('../UpdateCV/UpdateCV'));
+const DeleteCV = lazy(() => import('../DeleteCV/DeleteCV.tsx'));
+const UpdateCV = lazy(() => import('../UpdateCV/UpdateCV.tsx'));
 
 interface UserCVsTableProps {
   searchValue?: string;
@@ -179,7 +179,7 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({ searchValue, cvs }) => {
                   <TableCell
                     align="left"
                     onClick={() =>
-                      navigate(AppRoutes.CVS.Children.DETAILS.create(cv.id))
+                      navigate(AppRoutes.Cvs.Children.Details.Create(cv.id))
                     }
                   >
                     <MoreVertIcon />
@@ -200,7 +200,7 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({ searchValue, cvs }) => {
                       textAlign: 'justify',
                     }}
                     onClick={() =>
-                      navigate(AppRoutes.CVS.Children.DETAILS.create(cv.id))
+                      navigate(AppRoutes.Cvs.Children.Details.Create(cv.id))
                     }
                   >
                     {cv.description}

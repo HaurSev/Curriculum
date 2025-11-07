@@ -14,7 +14,7 @@ const UserCvTable = lazy(
   () => import('../../modules/UserCVsTable/UserCVsTable'),
 );
 
-const AddCV = lazy(() => import('../../modules/AddCV/AddCV'));
+const AddCV = lazy(() => import('../../modules/AddCV/AddCV.tsx'));
 
 const CVsPage = () => {
   const [t] = useTranslation(['CVs', 'common']);
@@ -72,7 +72,7 @@ const CVsPage = () => {
           >
             <Search
               searchValue={searchValue}
-              onClick={(e) => setSearchValue(e.target.value)}
+              onChange={(e) => setSearchValue(e.target.value)}
             ></Search>
             <Button
               onClick={handleSetAdd}

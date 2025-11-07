@@ -16,7 +16,7 @@ import { useLazyDeleteProfileSkill } from '../../graphql/mutations/deleteProfile
 import { HeaderPart, MainPart } from '../Components';
 
 const SkillsBlock = lazy(() => import('../../modules/SkillsBlock/SkillsBlock'));
-const AddSkill = lazy(() => import('../../modules/AddSkill/AddSkill'));
+const AddSkill = lazy(() => import('../../modules/AddSkill/AddSkill.tsx'));
 
 const ProfileSkills = () => {
   const { userId } = useParams<{ userId: string }>();
