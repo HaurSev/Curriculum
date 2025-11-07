@@ -1,0 +1,11 @@
+{
+  "addProject": "Новый проект",
+  "project": "Проект",
+  "name": "Название",
+  "internalName": "Внутренне название",
+  "description": "Описание",
+  "domain": "Домен",
+  "stratDate": "Дата начала",
+  "endDate": "Дата окончания",
+  "untilNow": "Продолжается"
+}

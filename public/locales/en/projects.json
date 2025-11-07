@@ -1,0 +1,11 @@
+{
+  "addProject": "Add project",
+  "project": "Project",
+  "name": "Name",
+  "internalName": "Internal name",
+  "description": "description",
+  "domain": "domain",
+  "stratDate": "Start date",
+  "endDate": "End date",
+  "untilNow": "Until now"
+}
