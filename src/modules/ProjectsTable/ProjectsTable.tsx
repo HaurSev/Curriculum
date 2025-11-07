@@ -1,11 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { lazy, Suspense, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { TableBody, TableRow, TableSortLabel } from '@mui/material';
-import type { CvProject } from 'cv-graphql';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useNavigate } from 'react-router-dom';
-import { AppRoutes } from '../../router/router';
 import {
   CustomTable,
   CustomTableCell,
@@ -14,44 +10,31 @@ import {
   CustomTableRow,
   TableCellDescrition,
 } from './ProjectsTable';
+import type { Order, UserProjectsTableProps } from './ProjectTableType';
 
-interface UserProjectsTableProps {
-  searchValue?: string;
-  projects: CvProject[];
-}
-
-type Order = 'asc' | 'desc';
+const DeleteCvProject = lazy(
+  () => import('../../components/DeleteCvProject/DeleteCvProject.tsx'),
+);
+const UpdateCvProject = lazy(
+  () => import('../../modules/UpdateCvProject/UpdateCvProject.tsx'),
+);
 
 const ProjectsTable: React.FC<UserProjectsTableProps> = ({
   searchValue,
   projects,
 }) => {
   const { t } = useTranslation(['common', 'CVs', 'projects']);
-  const navigate = useNavigate();
   const [order, setOrder] = useState<Order>('asc');
 
-  //  const [loadProjects, { loading }] = useLazyProjects();
-  // const [projects, setProjects] = useState<Project[]>([]);
+  const [isDeleteId, setDeleteId] = useState('');
+  const handleClearDeleteId = () => {
+    setDeleteId('');
+  };
 
-  // const getProjects = async () => {
-  //   try {
-  //     const result = await loadProjects();
-  //     if (!result.data?.projects) return;
-
-  //     setProjects(result.data.projects);
-  //   } catch (error) {
-  //     toast.error(`${error}`, {
-  //       position: 'top-center',
-  //       autoClose: 5000,
-  //       theme: 'dark',
-  //       transition: Bounce,
-  //     });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getProjects();
-  // }, [loadProjects]);
+  const [isUpdateId, setUpdateId] = useState('');
+  const handleClearUpdateId = () => {
+    setUpdateId('');
+  };
 
   const filteredProjects = useMemo(() => {
     if (!projects) return [];
@@ -98,7 +81,7 @@ const ProjectsTable: React.FC<UserProjectsTableProps> = ({
             </CustomTableCell>
             <CustomTableCell>{t('projects:internalName')}</CustomTableCell>
             <CustomTableCell>{t('projects:domain')}</CustomTableCell>
-            <CustomTableCell>{t('projects:stratDate')}</CustomTableCell>
+            <CustomTableCell>{t('projects:startDate')}</CustomTableCell>
             <CustomTableCell>{t('projects:endDate')}</CustomTableCell>
             <CustomTableCell></CustomTableCell>
           </TableRow>
@@ -107,12 +90,27 @@ const ProjectsTable: React.FC<UserProjectsTableProps> = ({
           {sortedProjects.map((project, index) => {
             return (
               <React.Fragment key={project.id || index}>
-                <CustomTableRow
-                  onContextMenu={(event) => {
-                    event.preventDefault();
-                  }}
-                >
-                  <CustomTableCell>{project.name}</CustomTableCell>
+                {isDeleteId === project.id && (
+                  <Suspense>
+                    <DeleteCvProject
+                      onClick={handleClearDeleteId}
+                      projectId={project.project.id}
+                      projectName={project.name}
+                    />
+                  </Suspense>
+                )}
+                {isUpdateId === project.id && (
+                  <Suspense>
+                    <UpdateCvProject
+                      onClick={handleClearUpdateId}
+                      project={project}
+                    ></UpdateCvProject>
+                  </Suspense>
+                )}
+                <CustomTableRow>
+                  <CustomTableCell onClick={() => setUpdateId(project.id)}>
+                    {project.name}
+                  </CustomTableCell>
                   <CustomTableCell>
                     {project.internal_name || t('notFound')}
                   </CustomTableCell>
@@ -123,18 +121,12 @@ const ProjectsTable: React.FC<UserProjectsTableProps> = ({
                   <CustomTableCell>
                     {project.end_date || 'until now'}
                   </CustomTableCell>
-                  <CustomTableCell
-                    onClick={() =>
-                      navigate(
-                        AppRoutes.Cvs.Children.Details.Create(project.id),
-                      )
-                    }
-                  >
+                  <CustomTableCell onClick={() => setDeleteId(project.id)}>
                     <MoreVertIcon />
                   </CustomTableCell>
                 </CustomTableRow>
 
-                <TableRow>
+                <TableRow onClick={() => setUpdateId(project.id)}>
                   <TableCellDescrition colSpan={6}>
                     {project.description}
                   </TableCellDescrition>

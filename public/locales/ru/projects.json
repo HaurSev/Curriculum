@@ -5,7 +5,11 @@
   "internalName": "Внутренне название",
   "description": "Описание",
   "domain": "Домен",
-  "stratDate": "Дата начала",
+  "startDate": "Дата начала",
   "endDate": "Дата окончания",
-  "untilNow": "Продолжается"
+  "untilNow": "Продолжается",
+  "addPproject": "Новый проект",
+  "environment": "Среда разработки",
+  "responsibilities": "ответсвенность",
+  "removeCvProject": "Удалить проект"
 }

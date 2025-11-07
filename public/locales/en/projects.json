@@ -5,7 +5,11 @@
   "internalName": "Internal name",
   "description": "description",
   "domain": "domain",
-  "stratDate": "Start date",
+  "startDate": "Start date",
   "endDate": "End date",
-  "untilNow": "Until now"
+  "untilNow": "Until now",
+  "addPproject": "add project",
+  "environment": "environment",
+  "responsibilities": "responsibilities",
+  "removeCvProject": "Remove project"
 }

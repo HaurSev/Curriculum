@@ -1,5 +1,4 @@
 import {
-  Paper,
   styled,
   TableContainer,
   Table,
@@ -11,8 +10,6 @@ import theme from '../../theme/theme';
 
 export const CustomTableContainer = styled(TableContainer)(() => ({
   background: 'transparent',
-  elevation: 0,
-  component: Paper,
 }));
 
 export const CustomTable = styled(Table)(() => ({
@@ -26,7 +23,7 @@ export const CustomTableHead = styled(TableHead)(() => ({
 }));
 
 export const CustomTableCell = styled(TableCell)(() => ({
-  align: 'left',
+  textAlign: 'left',
 }));
 
 export const CustomTableRow = styled(TableRow)(() => ({
