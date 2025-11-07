@@ -6,7 +6,6 @@ import theme from '../../theme/theme';
 import { useForm } from 'react-hook-form';
 import { type Skill } from 'cv-graphql';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { Bounce, toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { useLazySkills } from '../../graphql/queries/skills';
@@ -19,37 +18,17 @@ import {
   FormBody,
   FormHeader,
 } from './AddCvSkill';
-
-interface AddSkillProps {
-  onClick: () => void;
-}
-
-interface AddSkillData {
-  cvId: string;
-  categoryId?: string;
-  name: string;
-  mastery: 'Novice' | 'Advanced' | 'Competent' | 'Proficient' | 'Expert';
-}
-
-const AddSkillSchema = z.object({
-  cvId: z.string(),
-  name: z.string().nonempty(),
-  mastery: z.enum(['Novice', 'Advanced', 'Competent', 'Proficient', 'Expert']),
-  categoryId: z.string().optional(),
-});
+import {
+  AddSkillSchema,
+  masteryKeys,
+  type AddSkillData,
+  type AddSkillProps,
+} from './AddCvSkillType';
 
 const AddCvSkill: React.FC<AddSkillProps> = ({ onClick }) => {
   const [t] = useTranslation(['skills', 'common']);
 
   const { cvId } = useParams<{ cvId: string }>();
-
-  const masteryKeys = [
-    'Novice',
-    'Advanced',
-    'Competent',
-    'Proficient',
-    'Expert',
-  ];
 
   const [loadSkills] = useLazySkills();
   const [skills, setSkills] = useState<Skill[]>([]);

@@ -9,7 +9,7 @@ import Search from '../../components/Search/Search';
 import { Container, HeaderPart, MainPart } from '../Components';
 
 const UpdateProfile = lazy(
-  () => import('../../modules/UpdateProfile/UpdateProfile'),
+  () => import('../../modules/UpdateProfile/UpdateProfile.tsx'),
 );
 
 const Users = () => {
@@ -38,7 +38,7 @@ const Users = () => {
             {t('employees')}
           </Typography>
           <Search
-            onClick={(e) => setSearchValue(e.target.value)}
+            onChange={(e) => setSearchValue(e.target.value)}
             searchValue={searchValue}
           ></Search>
         </HeaderPart>
