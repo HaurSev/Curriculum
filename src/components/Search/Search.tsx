@@ -12,6 +12,7 @@ const SearchContainer = styled(Box)(({ theme }) => ({
     transition: '0.4s ease',
   },
   marginLeft: 0,
+
   width: '600px',
   height: theme.spacing(10),
   border: `1px solid ${theme.palette.text.disabled}`,
@@ -49,12 +50,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 interface SearchProps {
   searchValue: string;
-  onClick: (
+  onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ searchValue, onClick }) => {
+const Search: React.FC<SearchProps> = ({ searchValue, onChange }) => {
   return (
     <SearchContainer>
       <SearchIconWrapper>
@@ -64,7 +65,7 @@ const Search: React.FC<SearchProps> = ({ searchValue, onClick }) => {
         placeholder="Search…"
         inputProps={{ 'aria-label': 'search' }}
         value={searchValue}
-        onChange={onClick}
+        onChange={onChange}
       />
     </SearchContainer>
   );
