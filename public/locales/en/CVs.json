@@ -10,5 +10,8 @@
   "update": "update CV",
   "details": "details",
   "projects": "projects",
-  "preview": "preview"
+  "preview": "preview",
+  "domain": "domains",
+  "exportPDF": "export PDF",
+  "languageProficiency": "Language proficiency"
 }
