@@ -11,7 +11,7 @@ import Header from '../../components/Header/Header';
 import { Container, HeaderPart, MainPart } from '../Components';
 
 const UserUpdateProfile = lazy(
-  () => import('../../modules/UserUpdateProfile/UserUpdateProfile.tsx'),
+  () => import('../../modules/UserUpdateProfile/UserUpdateProfile'),
 );
 
 const ProfileAvatar = lazy(

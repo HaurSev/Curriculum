@@ -1,46 +1,27 @@
 import React from 'react';
-import { Button, MenuItem, Stack, TextField } from '@mui/material';
+import { MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bounce, toast } from 'react-toastify';
-import * as z from 'zod';
 import { useLazyDepartments } from '../../graphql/queries/departments';
 import { useLazyPositions } from '../../graphql/queries/position';
 import { useForm } from 'react-hook-form';
-import theme from '../../theme/theme';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLazyUpdateUser } from '../../graphql/mutations/updateUser';
-import { FormContainer } from './UserUpdateProfile';
-
-type DepartmentType = {
-  id: string;
-  name: string;
-};
-
-type PositionsType = {
-  id: string;
-  name: string;
-};
-
-interface UpdateUserProfileProps {
-  userId: string;
-  first_name: string;
-  last_name: string;
-  position_name: string;
-  department_name: string;
-}
-
-interface UpdatePositionDepartmentDate {
-  userId: string;
-  positionId: string;
-  departmentId: string;
-}
-
-const UpdatePositionDepartmentSchema = z.object({
-  userId: z.string(),
-  departmentId: z.string(),
-  positionId: z.string(),
-});
+import {
+  UpdatePositionDepartmentSchema,
+  type DepartmentType,
+  type PositionsType,
+  type UpdatePositionDepartmentDate,
+  type UpdateUserProfileProps,
+} from './type';
+import {
+  FormContainer,
+  FormStack,
+  FormFieldsStack,
+  ButtonStack,
+  SubmitButton,
+} from './style';
 
 const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
   userId,
@@ -177,16 +158,11 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
 
   const userJson = sessionStorage.getItem('user') || '';
   const userData = JSON.parse(userJson);
+
   return (
     <FormContainer>
       <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
-        <Stack
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: theme.spacing(5),
-          }}
-        >
+        <FormStack>
           <TextField
             label={t('firstName')}
             defaultValue={first_name || ''}
@@ -197,17 +173,10 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
             disabled
             defaultValue={last_name || ''}
           />
-        </Stack>
+        </FormStack>
 
         {userId === userData.id || userData.role === 'Admin' ? (
-          <Stack
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: theme.spacing(5),
-              marginTop: theme.spacing(3),
-            }}
-          >
+          <FormFieldsStack>
             <TextField
               select
               label={t('department')}
@@ -237,49 +206,27 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
                 </MenuItem>
               ))}
             </TextField>
-          </Stack>
+          </FormFieldsStack>
         ) : (
-          <Stack
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: theme.spacing(5),
-              marginTop: theme.spacing(3),
-            }}
-          >
+          <FormFieldsStack>
             <TextField
               label={t('department')}
               fullWidth
               disabled
               defaultValue={department_name}
-            ></TextField>
-
+            />
             <TextField
               label={t('position')}
               fullWidth
               disabled
               defaultValue={position_name}
-            ></TextField>
-          </Stack>
+            />
+          </FormFieldsStack>
         )}
 
-        <Stack
-          direction="row"
-          justifyContent="flex-end"
-          sx={{
-            marginTop: theme.spacing(3),
-          }}
-        >
-          <Button
-            type="submit"
-            color="primary"
-            sx={{
-              width: 'fit-content',
-            }}
-          >
-            {t('update')}
-          </Button>
-        </Stack>
+        <ButtonStack>
+          <SubmitButton type="submit">{t('update')}</SubmitButton>
+        </ButtonStack>
       </form>
     </FormContainer>
   );

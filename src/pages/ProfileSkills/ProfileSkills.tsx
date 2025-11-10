@@ -1,19 +1,23 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
-import { Button, Container, Typography } from '@mui/material';
-import theme from '../../theme/theme';
 import SideBar from '../../components/SideBar/SideBar';
 import Header from '../../components/Header/Header';
 import { useParams } from 'react-router-dom';
 import { useLazyProfile } from '../../graphql/queries/profile';
 import { Bounce, toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { Stack } from '@mui/system';
 import useCheckedItemStore from '../../store/checkedItemStore';
 import { useLazyDeleteProfileSkill } from '../../graphql/mutations/deleteProfileSkill';
-import { HeaderPart, MainPart } from '../Components';
+import { Container, HeaderPart, MainPart } from '../Components';
+import {
+  ButtonStack,
+  AddSkillButton,
+  ActiveDeleteButton,
+  InactiveDeleteButton,
+} from './style';
+import { CircularProgress } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const SkillsBlock = lazy(() => import('../../modules/SkillsBlock/SkillsBlock'));
 const AddSkill = lazy(() => import('../../modules/AddSkill/AddSkill.tsx'));
@@ -90,9 +94,7 @@ const ProfileSkills = () => {
     setAddOpen(!isAddOpen);
   };
 
-  if (loading) {
-    return <Typography>{t('common:loading')}</Typography>;
-  }
+  if (loading) return <CircularProgress></CircularProgress>;
 
   return (
     <Container>
@@ -107,48 +109,24 @@ const ProfileSkills = () => {
         </Suspense>
         {(userId === userData.id || userData.role === 'Admin') && (
           <Suspense>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: theme.spacing(3),
-              }}
-            >
-              <Button
-                onClick={handlSetAddOpen}
-                sx={{
-                  gap: theme.spacing(3),
-                }}
-              >
+            <ButtonStack>
+              <AddSkillButton onClick={handlSetAddOpen}>
                 <AddIcon />
                 {t('skills:addSkill')}
-              </Button>
+              </AddSkillButton>
 
               {checkedItems.length ? (
-                <Button
-                  onClick={deleteSkill}
-                  sx={{
-                    color: theme.palette.text.primary,
-                    gap: theme.spacing(3),
-                  }}
-                  variant="contained"
-                >
+                <ActiveDeleteButton onClick={deleteSkill} variant="contained">
                   <DeleteForeverIcon />
                   {`${t('skills:removeSkills')} ${checkedItems.length}`}
-                </Button>
+                </ActiveDeleteButton>
               ) : (
-                <Button
-                  onClick={deleteSkill}
-                  sx={{
-                    color: theme.palette.text.secondary,
-                    gap: theme.spacing(3),
-                  }}
-                >
+                <InactiveDeleteButton onClick={deleteSkill}>
                   <DeleteForeverIcon />
                   {t('skills:removeSkills')}
-                </Button>
+                </InactiveDeleteButton>
               )}
-            </Stack>
+            </ButtonStack>
           </Suspense>
         )}
       </MainPart>

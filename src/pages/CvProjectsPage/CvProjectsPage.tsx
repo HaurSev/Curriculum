@@ -1,18 +1,16 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Container, HeaderPart, MainPart } from '../Components';
 import SideBar from '../../components/SideBar/SideBar';
-import { Button, CircularProgress } from '@mui/material';
-import theme from '../../theme/theme';
+import { CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import Search from '../../components/Search/Search';
-import AddIcon from '@mui/icons-material/Add';
 import CvsHeader from '../../components/CvsHeader/CvsHeader';
 import CvsNavigation from '../../components/CvsNavigation/CvsNavigation';
-
 import { Bounce, toast } from 'react-toastify';
-import { SerachBox } from './style';
 import { useLazyCvProjects } from '../../graphql/queries/cvProjects.ts';
 import { useParams } from 'react-router-dom';
+import { SerachBox, AddProjectButton } from './style';
+import AddIcon from '@mui/icons-material/Add';
 
 const ProjectsTable = lazy(
   () => import('../../modules/ProjectsTable/ProjectsTable.tsx'),
@@ -74,17 +72,12 @@ const CvProjectsPage = () => {
             <Search
               searchValue={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-            ></Search>
+            />
             {(user.id === data?.cv?.user?.id || user.role === 'Admin') && (
-              <Button
-                sx={{
-                  color: theme.palette.text.secondary,
-                }}
-                onClick={handleSetOpen}
-              >
+              <AddProjectButton onClick={handleSetOpen}>
                 <AddIcon />
                 {t('projects:addProject')}
-              </Button>
+              </AddProjectButton>
             )}
           </SerachBox>
         </HeaderPart>
@@ -94,7 +87,7 @@ const CvProjectsPage = () => {
               projects={data?.cv.projects || []}
               searchValue={searchValue}
               userId={data?.cv.user?.id || ''}
-            ></ProjectsTable>
+            />
           </Suspense>
         )}
       </MainPart>

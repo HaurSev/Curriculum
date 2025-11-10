@@ -1,18 +1,23 @@
-import { Button, CircularProgress, Stack } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import React, { lazy, Suspense, useEffect, useState } from 'react';
-import theme from '../../theme/theme';
 import SideBar from '../../components/SideBar/SideBar';
 import CvsHeader from '../../components/CvsHeader/CvsHeader';
 import CvsNavigation from '../../components/CvsNavigation/CvsNavigation';
 import { useParams } from 'react-router-dom';
 import { Bounce, toast } from 'react-toastify';
 import { useLazyCvSkills } from '../../graphql/queries/cvSkills';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import useCheckedItemStore from '../../store/checkedItemStore';
 import { useTranslation } from 'react-i18next';
 import { useLazyDeleteCvSkill } from '../../graphql/mutations/deleteCvSkill';
 import { Container, HeaderPart, MainPart } from '../Components';
+import {
+  ButtonStack,
+  AddSkillButton,
+  ActiveDeleteButton,
+  InactiveDeleteButton,
+} from './style';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const AddCvSkill = lazy(
   () => import('../../modules/AddCvSkill/AddCvSkill.tsx'),
@@ -106,48 +111,24 @@ const CvSkillsPage = () => {
 
         {(data?.cv.user?.id === userData.id || userData.role === 'Admin') && (
           <Suspense>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: theme.spacing(3),
-              }}
-            >
-              <Button
-                onClick={handlSetAddOpen}
-                sx={{
-                  gap: theme.spacing(3),
-                }}
-              >
+            <ButtonStack>
+              <AddSkillButton onClick={handlSetAddOpen}>
                 <AddIcon />
                 {t('skills:addSkill')}
-              </Button>
+              </AddSkillButton>
 
               {checkedItems.length ? (
-                <Button
-                  onClick={deleteSkill}
-                  sx={{
-                    color: theme.palette.text.primary,
-                    gap: theme.spacing(3),
-                  }}
-                  variant="contained"
-                >
+                <ActiveDeleteButton onClick={deleteSkill} variant="contained">
                   <DeleteForeverIcon />
                   {`${t('skills:removeSkills')} ${checkedItems.length}`}
-                </Button>
+                </ActiveDeleteButton>
               ) : (
-                <Button
-                  onClick={deleteSkill}
-                  sx={{
-                    color: theme.palette.text.secondary,
-                    gap: theme.spacing(3),
-                  }}
-                >
+                <InactiveDeleteButton onClick={deleteSkill}>
                   <DeleteForeverIcon />
                   {t('skills:removeSkills')}
-                </Button>
+                </InactiveDeleteButton>
               )}
-            </Stack>
+            </ButtonStack>
           </Suspense>
         )}
       </MainPart>

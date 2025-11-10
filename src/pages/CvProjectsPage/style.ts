@@ -1,4 +1,4 @@
-import { Box, styled } from '@mui/material';
+import { Box, Button, styled } from '@mui/material';
 import theme from '../../theme/theme';
 
 export const SerachBox = styled(Box)(() => ({
@@ -8,4 +8,8 @@ export const SerachBox = styled(Box)(() => ({
   justifyContent: 'space-between',
   paddingRight: theme.spacing(5),
   marginTop: theme.spacing(3),
+}));
+
+export const AddProjectButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.text.secondary,
 }));
