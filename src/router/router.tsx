@@ -38,6 +38,10 @@ export const AppRoutes = {
         Path: '/cvs/:cvId/projects',
         Create: (cvId: string) => `/cvs/${cvId}/projects`,
       },
+      Preview: {
+        Path: '/cvs/:cvId/preview',
+        Create: (cvId: string) => `/cvs/${cvId}/preview`,
+      },
     },
   },
   Languages: '/languages',
