@@ -1,4 +1,5 @@
 import { Box, Paper, Stack, styled } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export const Container = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -11,8 +12,8 @@ export const Container = styled(Box)(({ theme }) => ({
   zIndex: 100,
   background: 'rgba(0,0,0,0.8)',
   position: 'absolute',
-  top: 0,
   left: 0,
+  top: 0,
 }));
 
 export const Form = styled(Paper)(({ theme }) => ({
@@ -42,4 +43,16 @@ export const FormBody = styled(Stack)(({ theme }) => ({
   width: '100%',
   gap: theme.spacing(5),
   paddingTop: theme.spacing(2),
+}));
+
+export const HorizontalStack = styled(Stack)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  gap: theme.spacing(5),
+}));
+
+export const ClearIconHover = styled(ClearIcon)(() => ({
+  ':hover': {
+    cursor: 'pointer',
+  },
 }));

@@ -6,6 +6,7 @@ export const CV_SKILLS = gql`
   query CV($cvId: ID!) {
     cv(cvId: $cvId) {
       id
+      name
       skills {
         categoryId
         name

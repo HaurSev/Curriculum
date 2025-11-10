@@ -6,6 +6,7 @@ export const CV_PROJECTS = gql`
   query CV($cvId: ID!) {
     cv(cvId: $cvId) {
       id
+      name
       user {
         id
       }

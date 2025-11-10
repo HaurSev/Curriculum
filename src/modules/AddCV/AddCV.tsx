@@ -1,33 +1,21 @@
-import { Button, Stack, TextField, Typography } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import theme from '../../theme/theme';
-import * as z from 'zod';
 import { Form, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLazyCreateCv } from '../../graphql/mutations/createCV';
 import { Bounce, toast } from 'react-toastify';
-import { Container, FormBody, FormHeader } from './AddCV';
-
-interface AddCVProps {
-  onClick: () => void;
-}
-
-const CreateCVSchema = z.object({
-  name: z.string(),
-  education: z.string().optional(),
-  description: z.string().nonempty(),
-  userId: z.string().optional(),
-});
-
-interface CreateCVData {
-  name: string;
-  education?: string;
-  description: string;
-  userId?: string;
-}
+import {
+  ButtonStack,
+  CancelButton,
+  CloseIcon,
+  Container,
+  FormBody,
+  FormHeader,
+  SubmitButton,
+} from './style';
+import { CreateCVSchema, type AddCVProps, type CreateCVData } from './type';
 
 const AddCV: React.FC<AddCVProps> = ({ onClick }) => {
   const [t] = useTranslation(['common', 'CVs']);
@@ -87,14 +75,7 @@ const AddCV: React.FC<AddCVProps> = ({ onClick }) => {
         <FormHeader>
           <Typography variant="h4"> {t('CVs:createCV')}</Typography>
 
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormBody>
@@ -125,21 +106,12 @@ const AddCV: React.FC<AddCVProps> = ({ onClick }) => {
               error={!!errors.description}
               helperText={errors.description?.message}
             ></TextField>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: theme.spacing(5),
-              }}
-            >
-              <Button variant="outlined" onClick={onClick}>
+            <ButtonStack>
+              <CancelButton onClick={onClick}>
                 {t('common:cancel')}
-              </Button>
-              <Button type={'submit'} variant="contained">
-                {t('common:confirm')}
-              </Button>
-            </Stack>
+              </CancelButton>
+              <SubmitButton type="submit">{t('common:confirm')}</SubmitButton>
+            </ButtonStack>
           </FormBody>
         </form>
       </Form>

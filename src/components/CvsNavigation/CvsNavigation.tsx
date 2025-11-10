@@ -1,13 +1,9 @@
-import { Button, ButtonGroup } from '@mui/material';
 import React from 'react';
-import theme from '../../theme/theme';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import { useTranslation } from 'react-i18next';
-
-interface CvsHeaderProps {
-  active: 'details' | 'skills' | 'projects' | 'preview';
-}
+import { ActiveButton, CvsNavigationButtonGroup, DefButton } from './style';
+import type { CvsHeaderProps } from './type';
 
 const CvsNavigation: React.FC<CvsHeaderProps> = ({ active }) => {
   const navigate = useNavigate();
@@ -15,95 +11,88 @@ const CvsNavigation: React.FC<CvsHeaderProps> = ({ active }) => {
 
   const { t } = useTranslation(['common', 'CVs']);
   return (
-    <ButtonGroup
-      variant="text"
-      sx={{
-        width: '100%',
-        justifyContent: 'flex-start',
-        gap: 2,
-        '& .MuiButton-root': {
-          width: 200,
-          fontSize: 14,
-          paddingY: theme.spacing(4),
-        },
-      }}
-    >
-      <Button
-        variant="text"
-        onClick={() =>
-          navigate(AppRoutes.Cvs.Children.Details.Create(cvId || ''))
-        }
-        sx={{
-          color:
-            active === 'details'
-              ? theme.palette.text.secondary
-              : theme.palette.text.disabled,
-          borderBottom:
-            active === 'details'
-              ? `2px solid ${theme.palette.text.secondary}`
-              : 'none',
+    <CvsNavigationButtonGroup variant="text">
+      {active === 'details' ? (
+        <ActiveButton
+          variant="text"
+          onClick={() =>
+            navigate(AppRoutes.Cvs.Children.Details.Create(cvId || ''))
+          }
+        >
+          {' '}
+          {t('CVs:details')}
+        </ActiveButton>
+      ) : (
+        <DefButton
+          variant="text"
+          onClick={() =>
+            navigate(AppRoutes.Cvs.Children.Details.Create(cvId || ''))
+          }
+        >
+          {' '}
+          {t('CVs:details')}
+        </DefButton>
+      )}
 
-          borderRadius: 0,
-        }}
-      >
-        {t('CVs:details')}
-      </Button>
+      {active === 'skills' ? (
+        <ActiveButton
+          variant="text"
+          onClick={() =>
+            navigate(AppRoutes.Cvs.Children.Skills.Create(cvId || ''))
+          }
+        >
+          {t('skills')}
+        </ActiveButton>
+      ) : (
+        <DefButton
+          variant="text"
+          onClick={() =>
+            navigate(AppRoutes.Cvs.Children.Skills.Create(cvId || ''))
+          }
+        >
+          {t('skills')}
+        </DefButton>
+      )}
 
-      <Button
-        variant="text"
-        onClick={() =>
-          navigate(AppRoutes.Cvs.Children.Skills.Create(cvId || ''))
-        }
-        sx={{
-          color:
-            active === 'skills'
-              ? theme.palette.text.secondary
-              : theme.palette.text.disabled,
-          borderBottom:
-            active === 'skills'
-              ? `2px solid ${theme.palette.text.secondary}`
-              : 'none',
-          borderRadius: 0,
-        }}
-      >
-        {t('skills')}
-      </Button>
-      <Button
-        variant="text"
-        onClick={() =>
-          navigate(AppRoutes.Cvs.Children.Projects.Create(cvId || ''))
-        }
-        sx={{
-          color:
-            active === 'projects'
-              ? theme.palette.text.secondary
-              : theme.palette.text.disabled,
-          borderBottom:
-            active === 'projects'
-              ? `2px solid ${theme.palette.text.secondary}`
-              : 'none',
-          borderRadius: 0,
-        }}
-      >
-        {t('CVs:projects')}
-      </Button>
-      <Button
-        variant="text"
-        sx={{
-          color:
-            active === 'preview'
-              ? theme.palette.text.secondary
-              : theme.palette.text.disabled,
-          borderBottom:
-            active === 'preview'
-              ? `2px solid ${theme.palette.text.secondary}`
-              : 'none',
-          borderRadius: 0,
-        }}
-      >
-        {t('CVs:preview')}
-      </Button>
-    </ButtonGroup>
+      {active === 'projects' ? (
+        <ActiveButton
+          variant="text"
+          onClick={() =>
+            navigate(AppRoutes.Cvs.Children.Projects.Create(cvId || ''))
+          }
+        >
+          {t('CVs:projects')}
+        </ActiveButton>
+      ) : (
+        <DefButton
+          variant="text"
+          onClick={() =>
+            navigate(AppRoutes.Cvs.Children.Projects.Create(cvId || ''))
+          }
+        >
+          {t('CVs:projects')}
+        </DefButton>
+      )}
+      {active === 'preview' ? (
+        <ActiveButton
+          variant="text"
+          onClick={() =>
+            navigate(AppRoutes.Cvs.Children.Preview.Create(cvId || ''))
+          }
+        >
+          {t('CVs:preview')}
+        </ActiveButton>
+      ) : (
+        <DefButton
+          variant="text"
+          onClick={() =>
+            navigate(AppRoutes.Cvs.Children.Preview.Create(cvId || ''))
+          }
+        >
+          {t('CVs:preview')}
+        </DefButton>
+      )}
+    </CvsNavigationButtonGroup>
   );
 };
 

@@ -1,22 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useLazyLogin } from '../../graphql/queries/login';
-import { Button, TextField, Paper, Stack, Box } from '@mui/material';
-import * as z from 'zod';
+import { TextField } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Bounce, toast } from 'react-toastify';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
-
-const LoginUserSchema = z.object({
-  email: z.email('Invalid email address').nonempty('Email is required'),
-  password: z.string().nonempty('Password is required'),
-});
+import { BoxForm, FormButton, FormPaper, FormStack } from './style';
+import { LoginUserSchema, type LoginFormData } from './type';
 
 const LoginForm = () => {
   const {
@@ -69,28 +60,10 @@ const LoginForm = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 2,
-      }}
-    >
-      <Paper
-        className="authForm"
-        sx={{ width: '100%', maxWidth: 600 }}
-        elevation={0}
-      >
+    <BoxForm>
+      <FormPaper elevation={0}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack
-            spacing={5}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <FormStack spacing={5}>
             <TextField
               {...register('email')}
               label={t('email')}
@@ -112,31 +85,29 @@ const LoginForm = () => {
               disabled={loading}
             />
 
-            <Button
+            <FormButton
               variant="contained"
               size="large"
               type="submit"
               disabled={loading}
               fullWidth
-              sx={{ height: 45, width: 210 }}
               loading={loading}
             >
               {t('authorisation:login')}
-            </Button>
+            </FormButton>
 
-            <Button
+            <FormButton
               variant="text"
               fullWidth
               disabled={loading}
-              sx={{ height: 45, width: 210 }}
               onClick={() => navigate(AppRoutes.ForgotPassword)}
             >
               {t('forgotPassword')}
-            </Button>
-          </Stack>
+            </FormButton>
+          </FormStack>
         </form>
-      </Paper>
-    </Box>
+      </FormPaper>
+    </BoxForm>
   );
 };
 

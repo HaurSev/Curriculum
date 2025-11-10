@@ -1,23 +1,18 @@
 import { Button, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
 import { Bounce, toast } from 'react-toastify';
 import {
+  ClearIconHover,
   Container,
   Form,
   FormBody,
   FormHeader,
   HorizontalStack,
-} from './DeleteCvProject';
+} from './style';
 import { useLazyRemoveCvProject } from '../../graphql/mutations/removeCvProject';
 import { useParams } from 'react-router-dom';
-
-interface DeleteCvProjectProps {
-  onClick: () => void;
-  projectId: string;
-  projectName: string;
-}
+import type { DeleteCvProjectProps } from './type';
 
 const DeleteCvProject: React.FC<DeleteCvProjectProps> = ({
   onClick,
@@ -26,11 +21,11 @@ const DeleteCvProject: React.FC<DeleteCvProjectProps> = ({
 }) => {
   const [t] = useTranslation(['common', 'projects']);
   const { cvId } = useParams<{ cvId: string }>();
+
   const [deleteCvProject, { loading }] = useLazyRemoveCvProject();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    //ПРОВЕРКА НА НАЛИЧИЕ ПРАВ
 
     try {
       const response = await deleteCvProject({
@@ -67,14 +62,7 @@ const DeleteCvProject: React.FC<DeleteCvProjectProps> = ({
       <Form>
         <FormHeader>
           <Typography variant="h5">{t('projects:removeCvProject')} </Typography>
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <ClearIconHover />
         </FormHeader>
 
         <form onSubmit={onSubmit}>

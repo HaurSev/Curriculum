@@ -1,6 +1,7 @@
 import { Box, Paper, Stack, styled } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
 
-export const Container = styled(Box)(({ theme }) => ({
+export const AddSkillContainer = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
   display: 'flex',
   flexDirection: 'column',
@@ -11,11 +12,9 @@ export const Container = styled(Box)(({ theme }) => ({
   zIndex: 100,
   background: 'rgba(0,0,0,0.8)',
   position: 'absolute',
-  left: 0,
-  top: 0,
 }));
 
-export const Form = styled(Paper)(({ theme }) => ({
+export const AddSkillForm = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.primary,
   display: 'flex',
   flexDirection: 'column',
@@ -44,8 +43,15 @@ export const FormBody = styled(Stack)(({ theme }) => ({
   paddingTop: theme.spacing(2),
 }));
 
-export const HorizontalStack = styled(Stack)(({ theme }) => ({
+export const CloseIcon = styled(ClearIcon)(() => ({
+  ':hover': {
+    cursor: 'pointer',
+  },
+}));
+
+export const ButtonStack = styled(Stack)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
+  justifyContent: 'flex-end',
   gap: theme.spacing(5),
 }));

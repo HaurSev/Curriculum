@@ -1,6 +1,6 @@
 import { Box, Paper, Stack, styled } from '@mui/material';
 
-export const AddSkillContainer = styled(Box)(({ theme }) => ({
+export const Container = styled(Box)(({ theme }) => ({
   color: theme.palette.text.primary,
   display: 'flex',
   flexDirection: 'column',
@@ -11,9 +11,11 @@ export const AddSkillContainer = styled(Box)(({ theme }) => ({
   zIndex: 100,
   background: 'rgba(0,0,0,0.8)',
   position: 'absolute',
+  top: 0,
+  left: 0,
 }));
 
-export const AddSkillForm = styled(Paper)(({ theme }) => ({
+export const Form = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.primary,
   display: 'flex',
   flexDirection: 'column',
@@ -32,12 +34,22 @@ export const FormHeader = styled(Stack)(({ theme }) => ({
   width: '100%',
   padding: theme.spacing(2),
   justifyContent: 'space-between',
+  alignItems: 'center',
+  mb: 2,
 }));
 
 export const FormBody = styled(Stack)(({ theme }) => ({
   display: 'flex',
-  alignItems: 'flex-end',
+  flexDirection: 'row',
   width: '100%',
   gap: theme.spacing(5),
   paddingTop: theme.spacing(2),
+  paddingBottom: theme.spacing(5),
+}));
+
+export const ButtonStack = styled(Stack)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%',
+  gap: theme.spacing(5),
 }));

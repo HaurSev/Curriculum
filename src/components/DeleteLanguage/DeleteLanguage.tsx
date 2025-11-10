@@ -1,17 +1,17 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
 import { useLazyDeleteLanguage } from '../../graphql/mutations/deleteLanguage';
-import type { Language } from 'cv-graphql';
 import { Bounce, toast } from 'react-toastify';
-import theme from '../../theme/theme';
-import { Container, Form, FormBody, FormHeader } from './DeleteLanguage';
-
-interface DeleteLanguageProps {
-  onClick: () => void;
-  language: Language;
-}
+import {
+  ButtonStack,
+  ClearIconHover,
+  Container,
+  Form,
+  FormBody,
+  FormHeader,
+} from './style';
+import { type DeleteLanguageProps } from './type';
 
 const DeleteLanguage: React.FC<DeleteLanguageProps> = ({
   onClick,
@@ -70,34 +70,21 @@ const DeleteLanguage: React.FC<DeleteLanguageProps> = ({
       <Form>
         <FormHeader>
           <Typography variant="h5">{t('languages:removeSkills')} </Typography>
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <ClearIconHover></ClearIconHover>
         </FormHeader>
 
         <form onSubmit={onSubmit}>
           <FormBody>
             <Typography>{`${t('common:sure')} ${language.name} ${t('language')}?`}</Typography>
 
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: theme.spacing(5),
-              }}
-            >
+            <ButtonStack>
               <Button variant="outlined" onClick={onClick}>
                 {t('cancel')}
               </Button>
               <Button variant="contained" type="submit" loading={loading}>
                 {t('common:confirm')}
               </Button>
-            </Stack>
+            </ButtonStack>
           </FormBody>
         </form>
       </Form>

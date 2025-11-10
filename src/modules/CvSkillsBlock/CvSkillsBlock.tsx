@@ -10,12 +10,7 @@ import {
 import type { Cv, SkillMastery } from 'cv-graphql';
 import theme from '../../theme/theme';
 import checkedItemStore from '../../store/checkedItemStore';
-import {
-  CategoryBlock,
-  CheckedContent,
-  Content,
-  SkillsRow,
-} from './CvSkillBlock';
+import { CategoryBlock, CheckedContent, Content, SkillsRow } from './style.ts';
 
 const UpdateCvSkill = lazy(
   () => import('../../modules/UpdateCvSkill/UpdateCvSkill.tsx'),

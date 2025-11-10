@@ -4,7 +4,7 @@ import { Bounce, toast } from 'react-toastify';
 import { Button, Typography } from '@mui/material';
 import type { SkillMastery } from 'cv-graphql';
 import SkillContent from '../../components/SkillContent/SkillContent';
-import { Block, Container } from './SkillBlock';
+import { Block, Container } from './style';
 
 interface SkilBlockProps {
   skills: SkillMastery[];

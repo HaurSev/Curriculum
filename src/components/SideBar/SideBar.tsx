@@ -1,35 +1,24 @@
 import {
-  Avatar,
-  List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Typography,
 } from '@mui/material';
-import GroupIcon from '@mui/icons-material/Group';
-import MovingIcon from '@mui/icons-material/Moving';
-import PortraitIcon from '@mui/icons-material/Portrait';
-import theme from '../../theme/theme';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import { useTranslation } from 'react-i18next';
-import GTranslateIcon from '@mui/icons-material/GTranslate';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { Box, Stack, styled } from '@mui/system';
-
-interface SideBarProps {
-  active: 'employees' | 'skills' | 'language' | 'cv';
-}
-
-const Container = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  width: '100%',
-  padding: theme.spacing(3),
-  gap: theme.spacing(3),
-  marginBottom: '0',
-}));
+import type { SideBarProps } from './type';
+import {
+  StyledList,
+  Container,
+  UserStack,
+  UserAvatar,
+  BackIcon,
+  StyledGroupIcon,
+  StyledMovingIcon,
+  StyledGTranslateIcon,
+  StyledPortraitIcon,
+} from './style';
 
 const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
   const navigate = useNavigate();
@@ -37,115 +26,64 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
   const userData = JSON.parse(sessionStorage.getItem('user') || '');
 
   return (
-    <List
-      sx={{
-        paddingTop: 10,
-      }}
-    >
+    <StyledList>
       <ListItemButton
         onClick={() => navigate(AppRoutes.Users.Path)}
         className={active === 'employees' ? 'active' : ''}
       >
         <ListItemIcon>
-          <GroupIcon
-            sx={{
-              color:
-                active === 'employees'
-                  ? theme.palette.text.primary
-                  : theme.palette.text.disabled,
-            }}
-          />
+          <StyledGroupIcon isActive={active === 'employees'} />
         </ListItemIcon>
         <ListItemText primary={t('employees')} />
       </ListItemButton>
+
       <ListItemButton
         className={active === 'skills' ? 'active' : ''}
         onClick={() => navigate(AppRoutes.Skills)}
       >
         <ListItemIcon>
-          <MovingIcon
-            sx={{
-              color:
-                active === 'skills'
-                  ? theme.palette.text.primary
-                  : theme.palette.text.disabled,
-            }}
-          />
+          <StyledMovingIcon isActive={active === 'skills'} />
         </ListItemIcon>
         <ListItemText primary={t('skills')} />
       </ListItemButton>
+
       <ListItemButton
         className={active === 'language' ? 'active' : ''}
         onClick={() => navigate(AppRoutes.Languages)}
       >
         <ListItemIcon>
-          <GTranslateIcon
-            sx={{
-              color:
-                active === 'language'
-                  ? theme.palette.text.primary
-                  : theme.palette.text.disabled,
-            }}
-          />
+          <StyledGTranslateIcon isActive={active === 'language'} />
         </ListItemIcon>
         <ListItemText primary={t('language')} />
       </ListItemButton>
+
       <ListItemButton
         className={active === 'cv' ? 'active' : ''}
         onClick={() => navigate(AppRoutes.Cvs.Path)}
       >
         <ListItemIcon>
-          <PortraitIcon
-            sx={{
-              color:
-                active === 'cv'
-                  ? theme.palette.text.primary
-                  : theme.palette.text.disabled,
-            }}
-          />
+          <StyledPortraitIcon isActive={active === 'cv'} />
         </ListItemIcon>
         <ListItemText primary={t('cv')} />
       </ListItemButton>
 
       <Container>
-        <Stack
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: theme.spacing(5),
-          }}
-        >
+        <UserStack>
           {userData.avatar ? (
-            <Avatar
-              src={userData.avatar}
-              sx={{
-                bgcolor: theme.palette.primary.main,
-                width: '50px',
-                height: '50px',
-              }}
-            />
+            <UserAvatar src={userData.avatar} />
           ) : (
-            <Avatar
-              sx={{
-                bgcolor: theme.palette.primary.main,
-                width: '50px',
-                height: '50px',
-              }}
-            >
-              {userData.full_name?.[0] ?? ''}
-            </Avatar>
+            <UserAvatar>{userData.full_name?.[0] ?? ''}</UserAvatar>
           )}
           <Typography>{userData.full_name}</Typography>
-        </Stack>
+        </UserStack>
 
-        <ArrowBackIosNewIcon
+        <BackIcon
           onClick={() =>
             navigate(AppRoutes.Users.Children.Profile.Create(userData.id))
           }
         />
       </Container>
-    </List>
+    </StyledList>
   );
 };
 
