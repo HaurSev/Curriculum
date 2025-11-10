@@ -7,6 +7,9 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 export const StyledList = styled(List)(({ theme }) => ({
   paddingTop: theme.spacing(10),
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
 }));
 
 export const Container = styled(Box)(({ theme }) => ({
@@ -28,12 +31,13 @@ export const UserStack = styled(Stack)(({ theme }) => ({
 
 export const UserAvatar = styled(Avatar)(({ theme }) => ({
   bgcolor: theme.palette.primary.main,
-  width: '50px',
-  height: '50px',
+  width: '40px',
+  height: '40px',
 }));
 
 export const BackIcon = styled(ArrowBackIosNewIcon)(({ theme }) => ({
   cursor: 'pointer',
+  height: theme.spacing(5),
   '&:hover': {
     color: theme.palette.primary.main,
   },
