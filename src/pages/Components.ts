@@ -28,3 +28,12 @@ export const HeaderPart = styled(Box)(() => ({
   paddingLeft: theme.spacing(5),
   elevation: 0,
 }));
+
+export const SearchBox = styled(Box)(() => ({
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  paddingRight: theme.spacing(5),
+  marginTop: theme.spacing(3),
+}));

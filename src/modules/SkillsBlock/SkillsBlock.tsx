@@ -1,14 +1,10 @@
 import React, { useEffect } from 'react';
 import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
 import { Bounce, toast } from 'react-toastify';
-import { Button, Typography } from '@mui/material';
-import type { SkillMastery } from 'cv-graphql';
+import { CircularProgress, Typography } from '@mui/material';
 import SkillContent from '../../components/SkillContent/SkillContent';
 import { Block, Container } from './style';
-
-interface SkilBlockProps {
-  skills: SkillMastery[];
-}
+import type { SkilBlockProps } from './type';
 
 const SkillsBlock: React.FC<SkilBlockProps> = ({ skills }) => {
   const [skillCategory, { loading, data }] = useLazySkillCategories();
@@ -36,7 +32,7 @@ const SkillsBlock: React.FC<SkilBlockProps> = ({ skills }) => {
   };
 
   if (loading) {
-    return <Button variant="text" loading={loading}></Button>;
+    return <CircularProgress></CircularProgress>;
   }
 
   return (

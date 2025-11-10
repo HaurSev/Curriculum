@@ -1,4 +1,4 @@
-import { Button, Stack } from '@mui/material';
+import { Button, CircularProgress, Stack } from '@mui/material';
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import theme from '../../theme/theme';
 import SideBar from '../../components/SideBar/SideBar';
@@ -90,11 +90,11 @@ const CvSkillsPage = () => {
     setAddOpen(!isAddOpen);
   };
 
-  if (loading) return <Button variant="text" loading={loading}></Button>;
+  if (loading) return <CircularProgress />;
 
   return (
     <Container>
-      <SideBar active="skills"></SideBar>
+      <SideBar active="cv"></SideBar>
       <MainPart>
         <HeaderPart>
           <CvsHeader cv={data?.cv.name || ''}></CvsHeader>

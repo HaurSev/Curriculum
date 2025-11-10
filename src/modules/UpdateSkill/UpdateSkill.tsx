@@ -1,33 +1,24 @@
-import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Button, MenuItem, TextField, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import type { Skill } from 'cv-graphql';
 import { Bounce, toast } from 'react-toastify';
-import theme from '../../theme/theme';
-import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
 import { useLazyUpdateSkill } from '../../graphql/mutations/updateSkill';
-import { Container, Form, FormBody, FormHeader } from './UpdateSkill';
-
-interface UpdateSkillProps {
-  onClick: () => void;
-  skill: Skill;
-}
-
-interface UpdateSkillForm {
-  skillId: string;
-  name: string;
-  categoryId: string;
-}
-
-const UpdateSkillSchema = z.object({
-  name: z.string().nonempty(),
-  skillId: z.string().nonempty(),
-  categoryId: z.string().nonempty(),
-});
+import {
+  ButtonStack,
+  CloseIcon,
+  Container,
+  Form,
+  FormBody,
+  FormHeader,
+} from './style';
+import {
+  UpdateSkillSchema,
+  type UpdateSkillForm,
+  type UpdateSkillProps,
+} from './type';
 
 const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
   const [t] = useTranslation(['skills', 'common']);
@@ -140,14 +131,7 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
       <Form>
         <FormHeader>
           <Typography variant="h4">{t('addSkill')}</Typography>
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
 
         <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
@@ -176,21 +160,14 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
               ))}
             </TextField>
 
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: theme.spacing(5),
-              }}
-            >
+            <ButtonStack>
               <Button onClick={onClick} variant="outlined">
                 {t('common:cancel')}
               </Button>
               <Button type={'submit'} variant="contained" disabled={!isChanged}>
                 {t('common:confirm')}
               </Button>
-            </Stack>
+            </ButtonStack>
           </FormBody>
         </form>
       </Form>

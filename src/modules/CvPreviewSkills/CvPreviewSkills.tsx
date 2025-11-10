@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { type CvPreviewSkillsProps } from './CvPreviewSkills';
+import { type CvPreviewSkillsProps } from './type';
 import { CircularProgress, Stack, Typography } from '@mui/material';
 import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
 import { Bounce, toast } from 'react-toastify';

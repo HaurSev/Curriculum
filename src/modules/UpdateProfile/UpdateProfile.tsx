@@ -1,51 +1,21 @@
-import {
-  Button,
-  Container,
-  MenuItem,
-  Box,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { Bounce, toast } from 'react-toastify';
-import type { UserData } from '../../graphql/queries/users';
 import { useLazyDepartments } from '../../graphql/queries/departments';
 import { useLazyPositions } from '../../graphql/queries/position';
 import { useLazyUpdateProfile } from '../../graphql/mutations/updateProfile';
-import theme from '../../theme/theme';
-import { Form } from './UpdateProfile';
-
-interface UpdateProfileProps {
-  onClick: () => void;
-  user: UserData;
-}
-
-type UpdateProfileData = {
-  userId: string;
-  firstName: string;
-  lastName: string;
-};
-
-type DepartmentType = {
-  id: string;
-  name: string;
-};
-type PositionsType = {
-  id: string;
-  name: string;
-};
-
-const UpdateProfileSchema = z.object({
-  userId: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-});
+import { ButtonStack, Container, Form, FormBody, FormHeader } from './style';
+import {
+  UpdateProfileSchema,
+  type DepartmentType,
+  type PositionsType,
+  type UpdateProfileData,
+  type UpdateProfileProps,
+} from './type';
 
 const UpdateProfile: React.FC<UpdateProfileProps> = ({ onClick, user }) => {
   const [t] = useTranslation(['users', 'common']);
@@ -132,31 +102,15 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onClick, user }) => {
   return (
     <Container>
       <Form>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            width: '100%',
-            alignItems: 'center',
-            mb: 2,
-          }}
-        >
+        <FormHeader>
           <Typography variant="h6" textTransform="capitalize">
             {t('updateProfile')}
           </Typography>
           <CloseIcon onClick={onClick} sx={{ cursor: 'pointer' }} />
-        </Box>
+        </FormHeader>
 
         <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: theme.spacing(5),
-
-              marginBottom: theme.spacing(5),
-            }}
-          >
+          <FormBody>
             <Stack spacing={5} width="50%">
               <TextField
                 select
@@ -188,10 +142,10 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onClick, user }) => {
                 defaultValue={user.role}
               >
                 <MenuItem key="admin" value="admin">
-                  admin
+                  {t('common:admin')}
                 </MenuItem>
                 <MenuItem key="employee" value="employee">
-                  employee
+                  {t('common:employee')}
                 </MenuItem>
               </TextField>
             </Stack>
@@ -211,23 +165,19 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onClick, user }) => {
                 ))}
               </TextField>
             </Stack>
-          </Box>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={onClick}
-            sx={{ width: '45%' }}
-          >
-            {t('common:cancel')}
-          </Button>
-          <Button
-            variant="outlined"
-            size="large"
-            type="submit"
-            sx={{ width: '45%' }}
-          >
-            {t('common:update')}
-          </Button>
+          </FormBody>
+          <ButtonStack>
+            <Button
+              variant="contained"
+              onClick={onClick}
+              style={{ width: '50%' }}
+            >
+              {t('common:cancel')}
+            </Button>
+            <Button variant="outlined" type="submit" style={{ width: '50%' }}>
+              {t('common:update')}
+            </Button>
+          </ButtonStack>
         </form>
       </Form>
     </Container>

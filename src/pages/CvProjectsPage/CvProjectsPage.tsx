@@ -1,15 +1,16 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Container, HeaderPart, MainPart } from '../Components';
 import SideBar from '../../components/SideBar/SideBar';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import theme from '../../theme/theme';
 import { useTranslation } from 'react-i18next';
 import Search from '../../components/Search/Search';
 import AddIcon from '@mui/icons-material/Add';
 import CvsHeader from '../../components/CvsHeader/CvsHeader';
 import CvsNavigation from '../../components/CvsNavigation/CvsNavigation';
+
 import { Bounce, toast } from 'react-toastify';
-import { SerachBox } from './CvProjectsPage.ts';
+import { SerachBox } from './style';
 import { useLazyCvProjects } from '../../graphql/queries/cvProjects.ts';
 import { useParams } from 'react-router-dom';
 
@@ -25,7 +26,8 @@ const CvProjectsPage = () => {
   const [searchValue, setSearchValue] = useState('');
   const { cvId } = useParams<{ cvId: string }>();
 
-  const user = JSON.parse(sessionStorage.getItem('user') || '');
+  const userData = sessionStorage.getItem('user');
+  const user = userData ? JSON.parse(userData) : null;
 
   const [isAddOpen, setAddOpen] = useState(false);
   const handleSetOpen = () => {
@@ -59,14 +61,14 @@ const CvProjectsPage = () => {
     getCvProjects();
   }, [loadCvProjects]);
 
-  if (loading) return <Button loading={loading}></Button>;
+  if (loading) return <CircularProgress />;
 
   return (
     <Container>
       <SideBar active="cv"></SideBar>
       <MainPart>
         <HeaderPart>
-          <CvsHeader cv={'hello'}></CvsHeader>
+          <CvsHeader cv={data?.cv.name || ' '}></CvsHeader>
           <CvsNavigation active="projects"></CvsNavigation>
           <SerachBox>
             <Search
@@ -91,6 +93,7 @@ const CvProjectsPage = () => {
             <ProjectsTable
               projects={data?.cv.projects || []}
               searchValue={searchValue}
+              userId={data?.cv.user?.id || ''}
             ></ProjectsTable>
           </Suspense>
         )}

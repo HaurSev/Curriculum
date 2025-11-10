@@ -20,13 +20,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
-
-type Order = 'asc' | 'desc';
-
-interface UserTableProps {
-  onClick: (user: UserData) => void;
-  searchValue?: string;
-}
+import type { Order, UserTableProps } from './style';
 
 const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
   const { t } = useTranslation('users');
@@ -201,7 +195,7 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
                 component="th"
                 scope="row"
                 onClick={() =>
-                  navigate(AppRoutes.USERS.Children.PROFILE.create(user.id))
+                  navigate(AppRoutes.Users.Children.Profile.Create(user.id))
                 }
               >
                 {user.profile.avatar ? (
@@ -242,7 +236,7 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
                 ) : (
                   <ArrowForwardIosIcon
                     onClick={() =>
-                      navigate(AppRoutes.USERS.Children.PROFILE.create(user.id))
+                      navigate(AppRoutes.Users.Children.Profile.Create(user.id))
                     }
                   />
                 )}

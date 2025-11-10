@@ -1,29 +1,24 @@
-import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Button, MenuItem, TextField, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import theme from '../../theme/theme';
 import { Bounce, toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { useLazySkillCategories } from '../../graphql/queries/skillsCategory';
 import { useLazyCreateSkill } from '../../graphql/mutations/createSkill';
-import { Container, Form, FormBody, FormHeader } from './CreateSkill';
-
-interface CreateSkillProps {
-  onClick: () => void;
-}
-
-interface CreateSkillForm {
-  name: string;
-  categoryId: string;
-}
-
-const CreateSkillSchema = z.object({
-  name: z.string().nonempty(),
-  categoryId: z.string().nonempty(),
-});
+import {
+  ButtonStack,
+  CloseIcon,
+  Container,
+  Form,
+  FormBody,
+  FormHeader,
+} from './style';
+import {
+  CreateSkillSchema,
+  type CreateSkillForm,
+  type CreateSkillProps,
+} from './type';
 
 const CreateSkill: React.FC<CreateSkillProps> = ({ onClick }) => {
   const [t] = useTranslation(['skills', 'common']);
@@ -108,14 +103,7 @@ const CreateSkill: React.FC<CreateSkillProps> = ({ onClick }) => {
       <Form>
         <FormHeader>
           <Typography variant="h4">{t('addSkill')}</Typography>
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
 
         <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
@@ -144,21 +132,14 @@ const CreateSkill: React.FC<CreateSkillProps> = ({ onClick }) => {
               ))}
             </TextField>
 
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: theme.spacing(5),
-              }}
-            >
+            <ButtonStack>
               <Button onClick={onClick} variant="outlined">
                 {t('common:cancel')}
               </Button>
               <Button type={'submit'} variant="contained">
                 {t('common:confirm')}
               </Button>
-            </Stack>
+            </ButtonStack>
           </FormBody>
         </form>
       </Form>

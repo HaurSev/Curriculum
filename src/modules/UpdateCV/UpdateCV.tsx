@@ -1,34 +1,18 @@
-import { Button, Container, Stack, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Container,
+  TextField,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLazyUpdateCv } from '../../graphql/mutations/updateCV';
-import type { Cv } from 'cv-graphql';
 import { Bounce, toast } from 'react-toastify';
-import theme from '../../theme/theme';
-import { Form, FormBody, FormHeader } from './UpdateCV';
-
-const CreateCVSchema = z.object({
-  name: z.string(),
-  education: z.string().optional(),
-  description: z.string().nonempty(),
-  cvId: z.string().optional(),
-});
-
-interface CreateCVData {
-  name: string;
-  education?: string;
-  description: string;
-  cvId?: string;
-}
-
-interface UpdateCvProps {
-  onClick: () => void;
-  cv: Cv;
-}
+import { ButtonStack, CloseIcon, Form, FormBody, FormHeader } from './style';
+import { CreateCVSchema, type CreateCVData, type UpdateCvProps } from './type';
 
 const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
   const [t] = useTranslation(['common', 'CVs']);
@@ -98,7 +82,7 @@ const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
     currentValues.education !== cv.education ||
     currentValues.name !== cv.name;
 
-  if (loading) return <Button loading={loading} variant="text"></Button>;
+  if (loading) return <CircularProgress />;
 
   return (
     <Container>
@@ -106,14 +90,7 @@ const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
         <FormHeader>
           <Typography variant="h4"> {t('CVs:update')}</Typography>
 
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormBody>
@@ -144,14 +121,7 @@ const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
               error={!!errors.description}
               helperText={errors.description?.message}
             ></TextField>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: theme.spacing(5),
-              }}
-            >
+            <ButtonStack>
               <Button variant="outlined" onClick={onClick}>
                 {t('common:cancel')}
               </Button>
@@ -163,7 +133,7 @@ const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
               >
                 {t('update')}
               </Button>
-            </Stack>
+            </ButtonStack>
           </FormBody>
         </form>
       </Form>

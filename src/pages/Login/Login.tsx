@@ -1,30 +1,11 @@
-import AuthHeader from '../../components/AuthHeader/AuthHeader';
-import LoginForm from '../../modules/LoginForm/LoginForm';
+import AuthHeader from '../../components/AuthHeader/AuthHeader.tsx';
+import LoginForm from '../../modules/LoginForm/LoginForm.tsx';
 import { useTranslation } from 'react-i18next';
-import { Box, styled, Typography } from '@mui/material';
-import theme from '../../theme/theme';
+import { Typography } from '@mui/material';
+import { Container, MainPart } from './style';
 
 const Login = () => {
   const { t } = useTranslation('authorisation');
-
-  const Container = styled(Box)(({ theme }) => ({
-    color: theme.palette.text.primary,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '100%',
-    minHeight: '100vh',
-  }));
-
-  const MainPart = styled(Box)(() => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: theme.spacing(5),
-    padding: theme.spacing(5),
-    height: '80vh',
-  }));
 
   return (
     <Container>

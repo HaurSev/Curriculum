@@ -1,46 +1,32 @@
-import { Button, MenuItem, TextField, Typography } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import { MenuItem } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import CloseIcon from '@mui/icons-material/Close';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { Bounce, toast } from 'react-toastify';
 import { useLazyUpdateUser } from '../../graphql/mutations/updateUser';
-import type { UserData } from '../../graphql/queries/users';
 import { useLazyDepartments } from '../../graphql/queries/departments';
 import { useLazyPositions } from '../../graphql/queries/position';
-import theme from '../../theme/theme';
-import { Container, Form } from './UpdateUser';
-
-interface UpdateUserProps {
-  onClick: () => void;
-  user: UserData;
-}
-
-type UpdateFormData = {
-  userId: string;
-  departmentId?: string;
-  positionId?: string;
-  role: 'admin' | 'employee';
-};
-
-type DepartmentType = {
-  id: string;
-  name: string;
-};
-type PositionsType = {
-  id: string;
-  name: string;
-};
-
-const UpdateUserSchema = z.object({
-  userId: z.string(),
-  departmentId: z.string().optional(),
-  positionId: z.string().optional(),
-  role: z.enum(['admin', 'employee']),
-});
+import {
+  UpdateUserSchema,
+  type DepartmentType,
+  type PositionsType,
+  type UpdateFormData,
+  type UpdateUserProps,
+} from './type';
+import {
+  Container,
+  Form,
+  FormHeader,
+  FormTitle,
+  CloseButton,
+  FormContent,
+  FormColumn,
+  StyledTextField,
+  ButtonContainer,
+  CancelButton,
+  SubmitButton,
+} from './style';
 
 const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
   const [t] = useTranslation(['users', 'common']);
@@ -128,33 +114,15 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
   return (
     <Container>
       <Form>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            width: '100%',
-            alignItems: 'center',
-            mb: 2,
-          }}
-        >
-          <Typography variant="h6" textTransform="capitalize">
-            {t('updateUser')}
-          </Typography>
-          <CloseIcon onClick={onClick} sx={{ cursor: 'pointer' }} />
-        </Box>
+        <FormHeader>
+          <FormTitle>{t('updateUser')}</FormTitle>
+          <CloseButton onClick={onClick} />
+        </FormHeader>
 
         <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: theme.spacing(5),
-
-              marginBottom: theme.spacing(5),
-            }}
-          >
-            <Stack spacing={5} width="50%">
-              <TextField
+          <FormContent>
+            <FormColumn>
+              <StyledTextField
                 select
                 label={t('email')}
                 fullWidth
@@ -162,13 +130,13 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
                 defaultValue={user.email}
               />
 
-              <TextField
+              <StyledTextField
                 label={t('lastName')}
                 fullWidth
                 defaultValue={user.profile.last_name || ''}
               />
 
-              <TextField
+              <StyledTextField
                 select
                 label={t('department')}
                 fullWidth
@@ -179,9 +147,9 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
                     {d.name}
                   </MenuItem>
                 ))}
-              </TextField>
+              </StyledTextField>
 
-              <TextField
+              <StyledTextField
                 select
                 label={t('role')}
                 fullWidth
@@ -194,16 +162,20 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
                 <MenuItem key="employee" value="employee">
                   employee
                 </MenuItem>
-              </TextField>
-            </Stack>
-            <Stack spacing={5} width="50%">
-              <TextField label={t('password')} type="password" fullWidth />
-              <TextField
+              </StyledTextField>
+            </FormColumn>
+            <FormColumn>
+              <StyledTextField
+                label={t('password')}
+                type="password"
+                fullWidth
+              />
+              <StyledTextField
                 label={t('firstName')}
                 fullWidth
                 defaultValue={user.profile.first_name || ''}
               />
-              <TextField
+              <StyledTextField
                 select
                 label={t('position')}
                 fullWidth
@@ -214,25 +186,13 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
                     {p.name}
                   </MenuItem>
                 ))}
-              </TextField>
-            </Stack>
-          </Box>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={onClick}
-            sx={{ width: '45%' }}
-          >
-            {t('common:cancel')}
-          </Button>
-          <Button
-            variant="outlined"
-            size="large"
-            type="submit"
-            sx={{ width: '45%' }}
-          >
-            {t('common:update')}
-          </Button>
+              </StyledTextField>
+            </FormColumn>
+          </FormContent>
+          <ButtonContainer>
+            <CancelButton onClick={onClick}>{t('common:cancel')}</CancelButton>
+            <SubmitButton type="submit">{t('common:update')}</SubmitButton>
+          </ButtonContainer>
         </form>
       </Form>
     </Container>

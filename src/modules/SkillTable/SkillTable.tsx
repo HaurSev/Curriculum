@@ -1,20 +1,24 @@
 import {
-  Button,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
-  TableHead,
   TableRow,
   TableSortLabel,
 } from '@mui/material';
 import React, { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bounce, toast } from 'react-toastify';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import theme from '../../theme/theme';
 import { useLazySkills } from '../../graphql/queries/skills';
 import type { Skill } from 'cv-graphql';
+import type { Order, SkillTableProps } from './type';
+import {
+  StyledTableContainer,
+  StyledTableHead,
+  SortableTableCell,
+  ActionTableCell,
+} from './style';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const DeleteSkill = lazy(
   () => import('../../components/DeleteSkill/DeleteSkill'),
@@ -22,22 +26,17 @@ const DeleteSkill = lazy(
 
 const UpdateSkill = lazy(() => import('../../modules/UpdateSkill/UpdateSkill'));
 
-type Order = 'asc' | 'desc';
-
-interface SkillTableProps {
-  searchValue?: string;
-}
-
 const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
   const { t } = useTranslation(['skills', 'common']);
 
   const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
+  const [openUpdateId, setOpenUpdateId] = useState<string | null>(null);
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<'name' | 'category'>('name');
 
   const handleOpenDelete = (id: string) => {
     setOpenDeleteId((prev) => (prev === id ? null : id));
   };
-
-  const [openUpdateId, setOpenUpdateId] = useState<string | null>(null);
 
   const handleOpenUpdate = (id: string) => {
     setOpenUpdateId((prev) => (prev === id ? null : id));
@@ -74,9 +73,6 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
       return lowerName.includes(lowerSearch);
     });
   }, [skillsData, searchValue]);
-
-  const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<'name' | 'category'>('name');
 
   const sortedSkills = useMemo(() => {
     if (!filteredSkills) return [];
@@ -116,30 +112,14 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
     loadSkills();
   }, []);
 
-  if (loading) return <Button variant="text" loading={loading}></Button>;
+  if (loading) return <CircularProgress />;
 
   return (
-    <TableContainer
-      sx={{
-        padding: theme.spacing(5),
-      }}
-    >
+    <StyledTableContainer>
       <Table>
-        <TableHead
-          sx={{
-            height: 60,
-            textTransform: 'capitalize',
-          }}
-        >
+        <StyledTableHead>
           <TableRow>
-            <TableCell
-              sx={{
-                cursor: 'pointer !important',
-                '&:hover': {
-                  textDecoration: 'underline',
-                },
-              }}
-            >
+            <SortableTableCell>
               <TableSortLabel
                 active={orderBy === 'name'}
                 direction={orderBy === 'name' ? order : 'asc'}
@@ -147,8 +127,8 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
               >
                 {t('skills:skill')}
               </TableSortLabel>
-            </TableCell>
-            <TableCell>
+            </SortableTableCell>
+            <SortableTableCell>
               <TableSortLabel
                 active={orderBy === 'category'}
                 direction={orderBy === 'category' ? order : 'asc'}
@@ -156,10 +136,10 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
               >
                 {t('skills:category')}
               </TableSortLabel>
-            </TableCell>
+            </SortableTableCell>
             <TableCell></TableCell>
           </TableRow>
-        </TableHead>
+        </StyledTableHead>
         <TableBody>
           {sortedSkills.map((skill, index) => (
             <TableRow key={skill.id || index}>
@@ -167,9 +147,9 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
                 {skill.name}
               </TableCell>
               <TableCell>{skill.category?.name}</TableCell>
-              <TableCell onClick={() => handleOpenDelete(skill.id)}>
+              <ActionTableCell onClick={() => handleOpenDelete(skill.id)}>
                 <MoreVertIcon />
-              </TableCell>
+              </ActionTableCell>
               {openDeleteId === skill.id && (
                 <Suspense>
                   <DeleteSkill
@@ -183,14 +163,14 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
                   <UpdateSkill
                     skill={skill}
                     onClick={() => setOpenUpdateId(null)}
-                  ></UpdateSkill>
+                  />
                 </Suspense>
               )}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
   );
 };
 

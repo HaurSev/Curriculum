@@ -7,43 +7,19 @@ import {
   CircularProgress,
   Container,
 } from '@mui/material';
-import type { Cv, SkillMastery } from 'cv-graphql';
+import type { SkillMastery } from 'cv-graphql';
 import theme from '../../theme/theme';
 import checkedItemStore from '../../store/checkedItemStore';
 import { CategoryBlock, CheckedContent, Content, SkillsRow } from './style.ts';
+import {
+  getMasteryProgress,
+  type SkillBlockProps,
+  type SkillBodyProps,
+} from './type.ts';
 
 const UpdateCvSkill = lazy(
   () => import('../../modules/UpdateCvSkill/UpdateCvSkill.tsx'),
 );
-
-interface SkillBlockProps {
-  cv: Cv;
-}
-
-interface SkillBodyProps {
-  skill: SkillMastery;
-  progress: {
-    value: number;
-    className: string;
-  };
-  userId: string;
-}
-
-const getMasteryProgress = (mastery: string) => {
-  const masteryMap = {
-    Novice: { value: 20, className: 'novice' },
-    Advanced: { value: 40, className: 'advanced' },
-    Competent: { value: 60, className: 'competent' },
-    Proficient: { value: 80, className: 'proficient' },
-    Expert: { value: 100, className: 'expert' },
-  };
-  return (
-    masteryMap[mastery as keyof typeof masteryMap] || {
-      value: 0,
-      className: 'unknown',
-    }
-  );
-};
 
 const SkillBody: React.FC<SkillBodyProps> = ({ skill, progress, userId }) => {
   const userData = JSON.parse(sessionStorage.getItem('user') || '');

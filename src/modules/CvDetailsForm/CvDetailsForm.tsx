@@ -1,32 +1,12 @@
 import React from 'react';
-import theme from '../../theme/theme';
-import { Button, Stack, TextField } from '@mui/material';
+import { Button, CircularProgress, TextField } from '@mui/material';
 import { Bounce, toast } from 'react-toastify';
 import { useLazyUpdateCv } from '../../graphql/mutations/updateCV';
-import type { Cv } from 'cv-graphql';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { FormBody } from './CvDetailsForm';
-
-interface UpdateCvProps {
-  cv: Cv;
-}
-
-const CreateCVSchema = z.object({
-  name: z.string(),
-  education: z.string().optional(),
-  description: z.string().nonempty(),
-  cvId: z.string().optional(),
-});
-
-interface CreateCVData {
-  name: string;
-  education?: string;
-  description: string;
-  cvId?: string;
-}
+import { ButtonStack, FormBody } from './style';
+import { CreateCVSchema, type CreateCVData, type UpdateCvProps } from './type';
 
 const CvDetailsForm: React.FC<UpdateCvProps> = ({ cv }) => {
   const [t] = useTranslation(['common', 'CVs']);
@@ -96,7 +76,7 @@ const CvDetailsForm: React.FC<UpdateCvProps> = ({ cv }) => {
     currentValues.education !== cv.education ||
     currentValues.name !== cv.name;
 
-  if (loading) return <Button loading={loading}></Button>;
+  if (loading) return <CircularProgress />;
 
   return (
     <form
@@ -132,14 +112,7 @@ const CvDetailsForm: React.FC<UpdateCvProps> = ({ cv }) => {
           helperText={errors.description?.message}
         ></TextField>
         {(cv.user?.id === user.id || user.role === 'Admin') && (
-          <Stack
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              gap: theme.spacing(5),
-            }}
-          >
+          <ButtonStack>
             <Button
               type={'submit'}
               variant="contained"
@@ -148,7 +121,7 @@ const CvDetailsForm: React.FC<UpdateCvProps> = ({ cv }) => {
             >
               {t('update')}
             </Button>
-          </Stack>
+          </ButtonStack>
         )}
       </FormBody>
     </form>

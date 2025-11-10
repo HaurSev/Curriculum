@@ -1,8 +1,5 @@
 import { Button, MenuItem, TextField, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import theme from '../../theme/theme';
 import { useForm } from 'react-hook-form';
 import { type Skill } from 'cv-graphql';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,15 +12,17 @@ import { useLazyAddCvSkill } from '../../graphql/mutations/addCvSkill';
 import {
   AddSkillContainer,
   AddSkillForm,
+  ButtonStack,
+  CloseIcon,
   FormBody,
   FormHeader,
-} from './AddCvSkill';
+} from './style';
 import {
   AddSkillSchema,
   masteryKeys,
   type AddSkillData,
   type AddSkillProps,
-} from './AddCvSkillType';
+} from './type';
 
 const AddCvSkill: React.FC<AddSkillProps> = ({ onClick }) => {
   const [t] = useTranslation(['skills', 'common']);
@@ -149,14 +148,7 @@ const AddCvSkill: React.FC<AddSkillProps> = ({ onClick }) => {
       <AddSkillForm>
         <FormHeader>
           <Typography variant="h4">{t('skills:addSkill')}</Typography>
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
@@ -191,21 +183,14 @@ const AddCvSkill: React.FC<AddSkillProps> = ({ onClick }) => {
                 </MenuItem>
               ))}
             </TextField>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: theme.spacing(5),
-              }}
-            >
+            <ButtonStack>
               <Button variant="outlined" onClick={onClick}>
                 {t('common:cancel')}
               </Button>
               <Button type={'submit'} variant="contained">
                 {t('common:confirm')}
               </Button>
-            </Stack>
+            </ButtonStack>
           </FormBody>
         </form>
       </AddSkillForm>

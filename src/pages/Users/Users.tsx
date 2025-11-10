@@ -33,7 +33,7 @@ const Users = () => {
         <HeaderPart>
           <Typography
             variant="body1"
-            sx={{ color: theme.palette.text.disabled }}
+            style={{ color: theme.palette.text.disabled }}
           >
             {t('employees')}
           </Typography>

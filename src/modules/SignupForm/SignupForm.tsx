@@ -3,23 +3,12 @@ import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useLazySignup } from '../../graphql/mutations/signup';
-import { Button, TextField, Paper, Stack, Box } from '@mui/material';
-import * as z from 'zod';
+import { TextField } from '@mui/material';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Bounce, toast } from 'react-toastify';
-
-type SignupFormData = {
-  email: string;
-  password: string;
-};
-
-const SignupUserSchema = z.object({
-  email: z
-    .string()
-    .nonempty('Email is required')
-    .email('Invalid email address'),
-  password: z.string().nonempty('Password is required'),
-});
+import { BoxForm, FormButton, FormPaper, FormStack } from './style';
+import { SignupUserSchema, type SignupFormData } from './type';
 
 const SignupForm = () => {
   const {
@@ -61,28 +50,10 @@ const SignupForm = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 2,
-      }}
-    >
-      <Paper
-        className="authForm"
-        sx={{ width: '100%', maxWidth: 600 }}
-        elevation={0}
-      >
+    <BoxForm>
+      <FormPaper elevation={0}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack
-            spacing={5}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <FormStack spacing={5}>
             <TextField
               {...register('email')}
               label={t('email')}
@@ -104,31 +75,29 @@ const SignupForm = () => {
               disabled={loading}
             />
 
-            <Button
+            <FormButton
               variant="contained"
               size="large"
               type="submit"
               disabled={loading}
               fullWidth
-              sx={{ height: 45, width: 210 }}
               loading={loading}
             >
               {t('authorisation:createAccount')}
-            </Button>
+            </FormButton>
 
-            <Button
+            <FormButton
               variant="text"
               fullWidth
               disabled={loading}
               onClick={handleNavigate}
-              sx={{ height: 45, width: 210 }}
             >
               {t('authorisation:haveAccount')}
-            </Button>
-          </Stack>
+            </FormButton>
+          </FormStack>
         </form>
-      </Paper>
-    </Box>
+      </FormPaper>
+    </BoxForm>
   );
 };
 

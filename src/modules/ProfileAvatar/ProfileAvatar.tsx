@@ -1,17 +1,17 @@
-import { Avatar, IconButton, Typography } from '@mui/material';
+import {
+  Avatar,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import theme from '../../theme/theme';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { Bounce, toast } from 'react-toastify';
 import { useLazyUploadAvatar } from '../../graphql/mutations/uploadAvatar';
-import { AvatarContainer, HiddenInput, UploadBlock } from './ProfileAvatar';
-
-interface ProfileAvatarProps {
-  userId: string;
-  first_name: string | null;
-  avatar: string | null;
-}
+import { AvatarContainer, HiddenInput, UploadBlock } from './style';
+import type { ProfileAvatarProps } from './type';
 
 const ProfileAvatar: React.FC<ProfileAvatarProps> = ({
   first_name,
@@ -75,7 +75,7 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({
     reader.readAsDataURL(file);
   };
 
-  if (loading) return <Typography>{t('common:loading')}</Typography>;
+  if (loading) return <CircularProgress />;
 
   return (
     <AvatarContainer>

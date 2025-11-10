@@ -1,35 +1,23 @@
-import { Button, Stack, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import theme from '../../theme/theme';
 import { Bounce, toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { useLazyCreateLanguage } from '../../graphql/mutations/createLanguage';
 import {
   AddLanguageContainer,
   AddLanguageForm,
+  ButtonStack,
+  CloseIcon,
   FormBody,
   FormHeader,
-} from './CreateLanguage';
-
-interface CreateLanguageProps {
-  onClick: () => void;
-}
-
-interface CreateLangugeForm {
-  name: string;
-  native_name: string;
-  iso: string;
-}
-
-const CreateLanguageSchema = z.object({
-  name: z.string().nonempty(),
-  native_name: z.string().nonempty(),
-  iso: z.string().nonempty(),
-});
+} from './style';
+import {
+  CreateLanguageSchema,
+  type CreateLanguageProps,
+  type CreateLangugeForm,
+} from './type';
 
 const CreateLanguages: React.FC<CreateLanguageProps> = ({ onClick }) => {
   const [t] = useTranslation(['languages', 'common']);
@@ -92,14 +80,7 @@ const CreateLanguages: React.FC<CreateLanguageProps> = ({ onClick }) => {
       <AddLanguageForm>
         <FormHeader>
           <Typography variant="h4">{t('addLanguage')}</Typography>
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
 
         <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
@@ -130,21 +111,14 @@ const CreateLanguages: React.FC<CreateLanguageProps> = ({ onClick }) => {
               error={!!errors.iso}
               helperText={errors.iso?.message}
             ></TextField>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: theme.spacing(5),
-              }}
-            >
+            <ButtonStack>
               <Button onClick={onClick} variant="outlined">
                 {t('common:cancel')}
               </Button>
               <Button type={'submit'} variant="contained">
                 {t('common:confirm')}
               </Button>
-            </Stack>
+            </ButtonStack>
           </FormBody>
         </form>
       </AddLanguageForm>

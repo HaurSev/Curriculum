@@ -1,17 +1,17 @@
 import React from 'react';
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import theme from '../../theme/theme';
 import { Bounce, toast } from 'react-toastify';
-import type { Cv } from 'cv-graphql';
 import { useLazyDeleteCv } from '../../graphql/mutations/deleteCV';
-import { Container, Form, FormBody, FormHeader } from './DeleteCV';
-
-interface DeleteCVProps {
-  cv: Cv;
-  onClick: () => void;
-}
+import {
+  ButtonStack,
+  CloseIcon,
+  Container,
+  Form,
+  FormBody,
+  FormHeader,
+} from './style';
+import type { DeleteCVProps } from './type';
 
 const DeleteCV: React.FC<DeleteCVProps> = ({ onClick, cv }) => {
   const [t] = useTranslation(['common', 'CVs']);
@@ -66,34 +66,20 @@ const DeleteCV: React.FC<DeleteCVProps> = ({ onClick, cv }) => {
       <Form>
         <FormHeader>
           <Typography variant="h4"> {t('CVs:deleteCV')}</Typography>
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
 
         <form onSubmit={handleSubmit}>
           <FormBody>
             <Typography>{`${t('CVs:AreYouShure')} ${cv.name}`}</Typography>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: theme.spacing(5),
-              }}
-            >
+            <ButtonStack>
               <Button variant="outlined" onClick={onClick}>
                 {t('common:cancel')}
               </Button>
               <Button type={'submit'} variant="contained">
                 {t('common:confirm')}
               </Button>
-            </Stack>
+            </ButtonStack>
           </FormBody>
         </form>
       </Form>

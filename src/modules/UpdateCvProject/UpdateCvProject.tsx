@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
 import {
   ButtonStack,
+  CloseIcon,
   Container,
   Form,
   FormBody,
   FormHeader,
   HorizontalStack,
-} from './UpdateCvProject';
-import { Button, TextField, Typography } from '@mui/material';
+} from './style';
+import { Button, CircularProgress, TextField, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Bounce, toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams } from 'react-router-dom';
-import ClearIcon from '@mui/icons-material/Clear';
 import {
   type UpdateCvProjectProps,
   type UpdateCvProjectData,
   UpdateCvProjectSchema,
-} from './UpdateCvProjectType.ts';
+} from './type.ts';
 import { useLazyUpdateCvProject } from '../../graphql/mutations/updateCvProject.ts';
+
 const UpdateCvProject: React.FC<UpdateCvProjectProps> = ({
   onClick,
   project,
@@ -82,21 +83,14 @@ const UpdateCvProject: React.FC<UpdateCvProjectProps> = ({
     }
   };
 
-  if (loading) return <Button loading={loading}></Button>;
+  if (loading) return <CircularProgress />;
 
   return (
     <Container>
       <Form>
         <FormHeader>
           <Typography variant="h4">{t('common:update')}</Typography>
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>

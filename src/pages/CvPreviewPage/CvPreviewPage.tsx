@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 import { Bounce, toast } from 'react-toastify';
 import theme from '../../theme/theme';
 import CvPreviewSkills from '../../modules/CvPreviewSkills/CvPreviewSkills.tsx';
-import { InfoBlock, LargeBlock, SmallBlock } from './CvPreviewPage.ts';
+import { InfoBlock, LargeBlock, SmallBlock } from './style';
 import { useTranslation } from 'react-i18next';
 
 const CvPreviewPage = () => {

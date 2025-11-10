@@ -6,14 +6,14 @@ import {
   FormBody,
   FormHeader,
   HorizontalStack,
-} from './AddCvProject';
+} from './style';
 import { Button, MenuItem, TextField, Typography } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import {
   type AddCVProjectData,
   AddCvProjectSchema,
   type AddCvProjectProps,
-} from './AddCvProjectType';
+} from './type';
 import { useTranslation } from 'react-i18next';
 import type { Project } from 'cv-graphql';
 import { Bounce, toast } from 'react-toastify';

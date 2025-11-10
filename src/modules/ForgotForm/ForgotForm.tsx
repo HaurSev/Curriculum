@@ -2,25 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import Button from '@mui/material/Button';
-import { Box, Stack } from '@mui/system';
-import { Paper, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { Bounce, toast } from 'react-toastify';
-import * as z from 'zod';
 import { useForgotPassword } from '../../graphql/mutations/forgotPassword';
 import { zodResolver } from '@hookform/resolvers/zod';
 import theme from '../../theme/theme';
-
-type ForgotPasswordData = {
-  email: string;
-};
-
-const ForgotPasswordSchema = z.object({
-  email: z
-    .string()
-    .nonempty('Email is required')
-    .email('Invalid email address'),
-});
+import { BoxForm, FormButton, FormPaper, FormStack } from './style';
+import { ForgotPasswordSchema, type ForgotPasswordData } from './type';
 
 const ForgotForm = () => {
   const {
@@ -69,28 +57,10 @@ const ForgotForm = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 2,
-      }}
-    >
-      <Paper
-        className="authForm"
-        sx={{ width: '100%', maxWidth: 600 }}
-        elevation={0}
-      >
+    <BoxForm>
+      <FormPaper elevation={0}>
         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-          <Stack
-            spacing={theme.spacing(5)}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <FormStack spacing={theme.spacing(5)}>
             <TextField
               {...register('email')}
               label={t('email')}
@@ -100,31 +70,29 @@ const ForgotForm = () => {
               helperText={errors.email?.message}
               disabled={loading}
             />
-            <Button
+            <FormButton
               variant="contained"
               size="large"
               type="submit"
               disabled={loading}
               fullWidth
-              sx={{ height: 45, width: 210 }}
               loading={loading}
             >
               {t('authorisation:resetPassword')}
-            </Button>
+            </FormButton>
 
-            <Button
+            <FormButton
               variant="outlined"
               fullWidth
               disabled={loading}
               onClick={handleNavigate}
-              sx={{ height: 45, width: 210 }}
             >
               {t('authorisation:cancel')}
-            </Button>
-          </Stack>
+            </FormButton>
+          </FormStack>
         </form>
-      </Paper>
-    </Box>
+      </FormPaper>
+    </BoxForm>
   );
 };
 

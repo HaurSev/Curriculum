@@ -2,42 +2,49 @@ import { createBrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './router';
 import ProtectedRoute from './ProtectedRoute';
 import { lazy, Suspense } from 'react';
+import { CircularProgress } from '@mui/material';
 
 const ProfileLanguage = lazy(
-  () => import('../pages/ProfileLanguage/ProfileLanguage'),
+  () => import('../pages/ProfileLanguage/ProfileLanguage.tsx'),
 );
-const CVsPage = lazy(() => import('../pages/CVsPage/CVsPage'));
-const Login = lazy(() => import('../pages/Login/Login'));
-const Signup = lazy(() => import('../pages/Signup/Signup'));
+const CVsPage = lazy(() => import('../pages/CVsPage/CVsPage.tsx'));
+const Login = lazy(() => import('../pages/Login/Login.tsx'));
+const Signup = lazy(() => import('../pages/Signup/Signup.tsx'));
 const ForgotPassword = lazy(
-  () => import('../pages/ForgotPassword/ForgotPassword'),
+  () => import('../pages/ForgotPassword/ForgotPassword.tsx'),
 );
-const Users = lazy(() => import('../pages/Users/Users'));
-const Profile = lazy(() => import('../pages/Profile/Profile'));
+const Users = lazy(() => import('../pages/Users/Users.tsx'));
+const Profile = lazy(() => import('../pages/Profile/Profile.tsx'));
 const ProfileSkills = lazy(
-  () => import('../pages/ProfileSkills/ProfileSkills'),
+  () => import('../pages/ProfileSkills/ProfileSkills.tsx'),
 );
-const UserCv = lazy(() => import('../pages/UserCV/UserCV'));
+const UserCv = lazy(() => import('../pages/UserCV/UserCV.tsx'));
 
-const Languages = lazy(() => import('../pages/Languages/Languages'));
+const Languages = lazy(() => import('../pages/Languages/Languages.tsx'));
 
-const Skills = lazy(() => import('../pages/Skills/Skills'));
+const Skills = lazy(() => import('../pages/Skills/Skills.tsx'));
 
 const CvDetailsPage = lazy(
-  () => import('../pages/CvDetailsPage/CvDetailsPage'),
+  () => import('../pages/CvDetailsPage/CvDetailsPage.tsx'),
 );
 
-const CvSkillsPage = lazy(() => import('../pages/CvSkillsPage/CvSkillsPage'));
+const CvSkillsPage = lazy(
+  () => import('../pages/CvSkillsPage/CvSkillsPage.tsx'),
+);
 
 const CvProjectsPage = lazy(
-  () => import('../pages/CvProjectsPage/CvProjectsPage'),
+  () => import('../pages/CvProjectsPage/CvProjectsPage.tsx'),
+);
+
+const CvPreview = lazy(
+  () => import('../pages/CvPreviewPage/CvPreviewPage.tsx'),
 );
 
 const router = createBrowserRouter([
   {
     path: AppRoutes.Login,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<CircularProgress />}>
         <ProtectedRoute requireAuth={false}>
           <Login />
         </ProtectedRoute>
@@ -47,7 +54,7 @@ const router = createBrowserRouter([
   {
     path: AppRoutes.Registration,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<CircularProgress />}>
         <ProtectedRoute requireAuth={false}>
           <Signup />
         </ProtectedRoute>
@@ -57,7 +64,7 @@ const router = createBrowserRouter([
   {
     path: AppRoutes.ForgotPassword,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<CircularProgress />}>
         <ProtectedRoute requireAuth={false}>
           <ForgotPassword />
         </ProtectedRoute>
@@ -67,8 +74,8 @@ const router = createBrowserRouter([
   {
     path: AppRoutes.Users.Path,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <ProtectedRoute requireAuth={false}>
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
           <Users />
         </ProtectedRoute>
       </Suspense>
@@ -77,88 +84,120 @@ const router = createBrowserRouter([
   {
     path: AppRoutes.Users.Children.Profile.Path,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <Profile />
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
       </Suspense>
     ),
   },
   {
     path: AppRoutes.Users.Children.Skills.Path,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <ProfileSkills />
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <ProfileSkills />
+        </ProtectedRoute>
       </Suspense>
     ),
   },
   {
     path: AppRoutes.Users.Children.UserLanguages.Path,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <ProfileLanguage />
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <ProfileLanguage />
+        </ProtectedRoute>
       </Suspense>
     ),
   },
   {
     path: AppRoutes.Users.Children.UserCv.Path,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <UserCv />
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <UserCv />
+        </ProtectedRoute>
       </Suspense>
     ),
   },
   {
     path: AppRoutes.Cvs.Path,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <CVsPage />
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <CVsPage />
+        </ProtectedRoute>
       </Suspense>
     ),
   },
   {
     path: AppRoutes.Cvs.Children.Details.Path,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <CvDetailsPage />
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <CvDetailsPage />
+        </ProtectedRoute>
       </Suspense>
     ),
   },
   {
     path: AppRoutes.Cvs.Children.Skills.Path,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <CvSkillsPage></CvSkillsPage>
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <CvSkillsPage />
+        </ProtectedRoute>
       </Suspense>
     ),
   },
   {
     path: AppRoutes.Cvs.Children.Skills.Path,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <CvSkillsPage></CvSkillsPage>
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <CvSkillsPage />
+        </ProtectedRoute>
       </Suspense>
     ),
   },
   {
     path: AppRoutes.Cvs.Children.Projects.Path,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <CvProjectsPage></CvProjectsPage>
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <CvProjectsPage />
+        </ProtectedRoute>
+      </Suspense>
+    ),
+  },
+  {
+    path: AppRoutes.Cvs.Children.Preview.Path,
+    element: (
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <CvPreview />
+        </ProtectedRoute>
       </Suspense>
     ),
   },
   {
     path: AppRoutes.Languages,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <Languages />
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <Languages />
+        </ProtectedRoute>
       </Suspense>
     ),
   },
   {
     path: AppRoutes.Skills,
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <Skills />
+      <Suspense fallback={<CircularProgress />}>
+        <ProtectedRoute>
+          <Skills />
+        </ProtectedRoute>
       </Suspense>
     ),
   },

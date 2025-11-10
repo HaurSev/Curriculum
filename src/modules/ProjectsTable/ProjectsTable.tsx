@@ -9,8 +9,8 @@ import {
   CustomTableHead,
   CustomTableRow,
   TableCellDescrition,
-} from './ProjectsTable';
-import type { Order, UserProjectsTableProps } from './ProjectTableType';
+} from './style';
+import type { Order, UserProjectsTableProps } from './type.ts';
 
 const DeleteCvProject = lazy(
   () => import('../../components/DeleteCvProject/DeleteCvProject.tsx'),
@@ -22,9 +22,12 @@ const UpdateCvProject = lazy(
 const ProjectsTable: React.FC<UserProjectsTableProps> = ({
   searchValue,
   projects,
+  userId,
 }) => {
   const { t } = useTranslation(['common', 'CVs', 'projects']);
   const [order, setOrder] = useState<Order>('asc');
+  const userData = sessionStorage.getItem('user');
+  const user = JSON.parse(userData || '');
 
   const [isDeleteId, setDeleteId] = useState('');
   const handleClearDeleteId = () => {
@@ -90,23 +93,27 @@ const ProjectsTable: React.FC<UserProjectsTableProps> = ({
           {sortedProjects.map((project, index) => {
             return (
               <React.Fragment key={project.id || index}>
-                {isDeleteId === project.id && (
-                  <Suspense>
-                    <DeleteCvProject
-                      onClick={handleClearDeleteId}
-                      projectId={project.project.id}
-                      projectName={project.name}
-                    />
-                  </Suspense>
-                )}
-                {isUpdateId === project.id && (
-                  <Suspense>
-                    <UpdateCvProject
-                      onClick={handleClearUpdateId}
-                      project={project}
-                    ></UpdateCvProject>
-                  </Suspense>
-                )}
+                {isDeleteId === project.id &&
+                  user.role === 'Admin' &&
+                  user.id === userId && (
+                    <Suspense>
+                      <DeleteCvProject
+                        onClick={handleClearDeleteId}
+                        projectId={project.project.id}
+                        projectName={project.name}
+                      />
+                    </Suspense>
+                  )}
+                {isUpdateId === project.id &&
+                  user.role === 'Admin' &&
+                  user.id === userId && (
+                    <Suspense>
+                      <UpdateCvProject
+                        onClick={handleClearUpdateId}
+                        project={project}
+                      ></UpdateCvProject>
+                    </Suspense>
+                  )}
                 <CustomTableRow>
                   <CustomTableCell onClick={() => setUpdateId(project.id)}>
                     {project.name}
