@@ -57,6 +57,7 @@ const AddCV: React.FC<AddCVProps> = ({ onClick, onCreated }) => {
         theme: 'dark',
         transition: Bounce,
       });
+
       onCreated(response?.data?.createCv);
 
       onClick();

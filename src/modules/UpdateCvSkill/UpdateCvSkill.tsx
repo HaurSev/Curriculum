@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { useLazyUpdateCvSkill } from '../../graphql/mutations/updateCvSkill';
 import { Container, Form, FormBody, FormHeader } from './style';
 import {
+  masteryKeys,
   UpdateSkillSchema,
   type UpdateSkillData,
   type UpdateSkillProps,
@@ -17,14 +18,6 @@ import { CloseIcon } from '../AddLanguages/style';
 const UpdateCvSkill: React.FC<UpdateSkillProps> = ({ onClick, userSkill }) => {
   const [t] = useTranslation(['skills', 'common']);
   const { cvId } = useParams<{ cvId: string }>();
-
-  const masteryKeys = [
-    'Novice',
-    'Advanced',
-    'Competent',
-    'Proficient',
-    'Expert',
-  ];
 
   const { handleSubmit, register } = useForm<UpdateSkillData>({
     resolver: zodResolver(UpdateSkillSchema),

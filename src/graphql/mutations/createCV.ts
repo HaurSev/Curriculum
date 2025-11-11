@@ -9,6 +9,10 @@ export const CREATE_CV = gql`
       name
       education
       description
+      user {
+        id
+        email
+      }
     }
   }
 `;
