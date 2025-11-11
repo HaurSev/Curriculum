@@ -68,6 +68,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
 
       <Container>
         <LanguageSwitcher />
+
         <UserStack>
           <BackIcon
             onClick={() =>
@@ -77,9 +78,11 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
           {userData.avatar ? (
             <UserAvatar src={userData.avatar} />
           ) : (
-            <UserAvatar>{userData.full_name?.[0] ?? ''}</UserAvatar>
+            <UserAvatar>
+              {(userData.first_name?.[0], userData.last_name?.[0]) ?? ''}
+            </UserAvatar>
           )}
-          <Typography>{userData.full_name}</Typography>
+          <Typography>{`${userData.first_name} ${userData.last_name}`}</Typography>
         </UserStack>
       </Container>
     </StyledList>
