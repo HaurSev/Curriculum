@@ -231,18 +231,7 @@ const AddCvProject: React.FC<AddCvProjectProps> = ({ onClick, onSuccess }) => {
                   setValue('responsibilities', value);
                 }
               }}
-              onBlur={
-                handleResponsibilitiesBlur
-                //   () => {
-                //   const value = inputValue
-                //     .split(/[,;\s]+/)
-                //     .map((s) => s.trim())
-                //     .filter(Boolean);
-
-                //   setValue('responsibilities', value);
-                //   setInputValue(value.join(', '));
-                // }
-              }
+              onBlur={handleResponsibilitiesBlur}
             />
           </FormBody>
 

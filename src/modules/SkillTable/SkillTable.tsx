@@ -42,7 +42,6 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
 
   const [getSkills, { loading, data: skillsData }] = useLazySkills();
 
-  // ✅ Мемоизированная загрузка
   const loadSkills = useCallback(async () => {
     try {
       const response = await getSkills({ variables: {} });
