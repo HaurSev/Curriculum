@@ -13,7 +13,7 @@ import {
 } from './style';
 import type { DeleteCVProps } from './type';
 
-const DeleteCV: React.FC<DeleteCVProps> = ({ onClick, cv }) => {
+const DeleteCV: React.FC<DeleteCVProps> = ({ onClick, cv, onSuccess }) => {
   const [t] = useTranslation(['common', 'CVs']);
 
   const userData = sessionStorage.getItem('user');
@@ -35,6 +35,8 @@ const DeleteCV: React.FC<DeleteCVProps> = ({ onClick, cv }) => {
         });
 
         if (!response.data) return;
+
+        onSuccess();
 
         toast.success(`${t('common:successfully')}`, {
           position: 'top-center',

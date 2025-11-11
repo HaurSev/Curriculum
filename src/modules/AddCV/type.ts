@@ -1,7 +1,9 @@
+import type { Cv } from 'cv-graphql';
 import * as z from 'zod';
 
 export interface AddCVProps {
   onClick: () => void;
+  onCreated?: (newCv: Cv) => void;
 }
 
 export const CreateCVSchema = z.object({

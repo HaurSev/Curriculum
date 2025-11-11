@@ -12,6 +12,8 @@ export const Container = styled(Box)(({ theme }) => ({
   zIndex: 100,
   background: 'rgba(0,0,0,0.8)',
   position: 'absolute',
+  top: 0,
+  left: 0,
 }));
 
 export const Form = styled(Paper)(({ theme }) => ({

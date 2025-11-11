@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Stack, styled } from '@mui/material';
+import { Box, Paper, Stack, styled } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 
 export const Container = styled(Box)(({ theme }) => ({
@@ -54,13 +54,4 @@ export const ButtonStack = styled(Stack)(({ theme }) => ({
   flexDirection: 'row',
   justifyContent: 'flex-end',
   gap: theme.spacing(5),
-}));
-
-export const CancelButton = styled(Button)(() => ({
-  variant: 'outlined',
-}));
-
-export const SubmitButton = styled(Button)(() => ({
-  variant: 'contained',
-  type: 'submit',
 }));

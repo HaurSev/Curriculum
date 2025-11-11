@@ -18,7 +18,7 @@ export type AppCvArgs = {
 };
 
 export type AddCvResult = {
-  newCv: Cv;
+  createCv: Cv;
 };
 
 export const useLazyCreateCv = () => {

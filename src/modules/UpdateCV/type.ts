@@ -17,5 +17,6 @@ export interface CreateCVData {
 
 export interface UpdateCvProps {
   onClick: () => void;
+  onUpdated?: (cv: Cv) => void;
   cv: Cv;
 }

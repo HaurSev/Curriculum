@@ -1,20 +1,21 @@
-import {
-  Button,
-  CircularProgress,
-  Container,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, CircularProgress, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLazyUpdateCv } from '../../graphql/mutations/updateCV';
 import { Bounce, toast } from 'react-toastify';
-import { ButtonStack, CloseIcon, Form, FormBody, FormHeader } from './style';
+import {
+  ButtonStack,
+  CloseIcon,
+  Container,
+  Form,
+  FormBody,
+  FormHeader,
+} from './style';
 import { CreateCVSchema, type CreateCVData, type UpdateCvProps } from './type';
 
-const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
+const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv, onUpdated }) => {
   const [t] = useTranslation(['common', 'CVs']);
 
   const user = JSON.parse(sessionStorage.getItem('user') || '');
@@ -59,6 +60,8 @@ const UpdateCV: React.FC<UpdateCvProps> = ({ onClick, cv }) => {
       });
 
       if (!response.data) return;
+
+      onUpdated(response?.data?.updateCv);
 
       toast.success(`${t('common:successfully')}`, {
         position: 'top-center',
