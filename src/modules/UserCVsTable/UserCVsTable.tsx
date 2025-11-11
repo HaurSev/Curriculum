@@ -125,7 +125,7 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
                     <DeleteCV
                       cv={cv}
                       onClick={() => handleOpenDelete('')}
-                      onSuccess={onDelete}
+                      onDelete={onDelete}
                     />
                   </Suspense>
                 )}

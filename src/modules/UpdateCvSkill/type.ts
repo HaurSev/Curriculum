@@ -17,3 +17,11 @@ export const UpdateSkillSchema = z.object({
   name: z.string().nonempty(),
   mastery: z.enum(['Novice', 'Advanced', 'Competent', 'Proficient', 'Expert']),
 });
+
+export const masteryKeys = [
+  'Novice',
+  'Advanced',
+  'Competent',
+  'Proficient',
+  'Expert',
+];
