@@ -99,7 +99,7 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
         theme: 'dark',
         transition: Bounce,
       });
-      console.log('Updated user:', response.data);
+      if (!response.data) return;
       onClick();
     } catch (error) {
       toast.error(`${error}`, {

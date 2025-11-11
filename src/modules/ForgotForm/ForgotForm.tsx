@@ -37,6 +37,7 @@ const ForgotForm = () => {
           },
         },
       });
+      if (!response) return;
 
       toast.success(`We sent an email!`, {
         position: 'top-center',
@@ -44,7 +45,7 @@ const ForgotForm = () => {
         theme: 'dark',
         transition: Bounce,
       });
-      console.log(response);
+
       navigate(AppRoutes.Login);
     } catch (error) {
       toast.error(`${error}`, {

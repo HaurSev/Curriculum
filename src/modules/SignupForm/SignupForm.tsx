@@ -32,8 +32,8 @@ const SignupForm = () => {
           },
         },
       });
+      if (!response) return;
 
-      console.log('Signup result:', response.data);
       navigate(AppRoutes.Login);
     } catch (error) {
       toast.error(`${error}`, {
