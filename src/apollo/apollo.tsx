@@ -10,6 +10,7 @@ import { getRefreshToken, getAccessToken, saveTokens } from './authStorage';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { clearTokensAndLogout } from './authServise';
+import { AuthError } from './apollo.type';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -80,7 +81,6 @@ const refreshToken = async (): Promise<boolean> => {
     }
 
     saveTokens(access_token, refresh_token);
-    console.log('Token refreshed successfully');
     return true;
   } catch (error) {
     console.error('Token refresh failed:', error);
@@ -108,19 +108,17 @@ const errorLink = onError(
         console.error(`[GraphQL error]: ${error.message}`, error);
 
         if (
-          error.message === 'Unauthorized' ||
-          error.message === 'Invalid token' ||
-          error.message.includes('expired') ||
-          error.extensions?.code === 'UNAUTHENTICATED'
+          error.message === AuthError.Unauthorized ||
+          error.message === AuthError.InvalidToken ||
+          error.message.includes(AuthError.Expired) ||
+          error.extensions?.code === AuthError.Unauthenticated
         ) {
           if (operation.operationName === 'UpdateToken') {
-            console.log('UpdateToken failed, logging out');
             clearTokensAndLogout();
             return;
           }
 
           if (isRefreshing) {
-            console.log('Token refresh in progress, queuing request');
             return fromPromise(
               new Promise<void>((resolve) => {
                 pendingRequests.push(() => resolve());
@@ -128,25 +126,19 @@ const errorLink = onError(
             ).flatMap(() => forward(operation));
           }
 
-          console.log('Starting token refresh');
           isRefreshing = true;
 
           return fromPromise(
             refreshToken()
               .then((success) => {
                 if (!success) {
-                  console.log('Token refresh failed, logging out');
                   clearTokensAndLogout();
                   throw new Error('Token refresh failed');
                 }
-                console.log(
-                  'Token refresh successful, resolving pending requests',
-                );
                 resolvePendingRequests();
                 return success;
               })
               .catch((error) => {
-                console.log('Token refresh error:', error);
                 pendingRequests = [];
                 clearTokensAndLogout();
                 throw error;
@@ -163,7 +155,6 @@ const errorLink = onError(
       console.error(`[Network error]: ${networkError}`);
 
       if ('statusCode' in networkError && networkError.statusCode === 401) {
-        console.log('Network 401 error, logging out');
         clearTokensAndLogout();
       }
     }
