@@ -8,6 +8,13 @@ export const LOGIN = gql`
       user {
         id
         email
+        role
+        profile {
+          avatar
+          full_name
+          first_name
+          last_name
+        }
       }
       access_token
       refresh_token

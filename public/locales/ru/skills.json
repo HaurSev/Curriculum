@@ -1,0 +1,11 @@
+{
+  "skill": "Навык",
+  "skillMastery": "уровень",
+  "addSkill": "Добавить навык",
+  "removeSkills": "Удалить навык",
+  "UpdateSkill": "Обновить",
+  "haveSkill": "Этот навык уже добавлен",
+  "notChange": "Надо внести изменения",
+  "category": "Категория",
+  "skillName": "Название"
+}

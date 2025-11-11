@@ -1,0 +1,14 @@
+{
+  "firstName": "first name",
+  "lastName": "last name",
+  "email": "email",
+  "department": "department",
+  "position": "position",
+  "updateUser": "update user",
+  "updateProfile": "update profile",
+  "role": "role",
+  "password": "password",
+  "uploadRules": "png, jpg or gif no more than 0.5MB",
+  "uploadAvatarImg": "upload avatar image",
+  "aMemberSince": "a member since"
+}

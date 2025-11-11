@@ -1,0 +1,17 @@
+{
+  "cv": "CVs",
+  "cvName": "name",
+  "description": "description",
+  "education": "education",
+  "employee": "employee",
+  "createCV": "create cv",
+  "deleteCV": "Delete CV",
+  "AreYouShure": "Are ypu sure you want to delete CV ",
+  "update": "update CV",
+  "details": "details",
+  "projects": "projects",
+  "preview": "preview",
+  "domain": "domains",
+  "exportPDF": "export PDF",
+  "languageProficiency": "Language proficiency"
+}
