@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
 import { useLazyUser } from '../../graphql/queries/user';
 import { Bounce, toast } from 'react-toastify';
-import { Typography } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import SideBar from '../../components/SideBar/SideBar';
 import { useParams } from 'react-router-dom';
@@ -15,18 +15,14 @@ const UserUpdateProfile = lazy(
 );
 
 const ProfileAvatar = lazy(
-  () => import('../../modules/ProfileAvatar/ProfileAvatar'),
+  () => import('../../modules/ProfileAvatar/ProfileAvatar.tsx'),
 );
 
 const Profile = () => {
   const { userId } = useParams<{ userId: string }>();
   const [t] = useTranslation(['common', 'users']);
 
-  const [user, { loading, data }] = useLazyUser();
-
-  useEffect(() => {
-    loadUser();
-  }, []);
+  const [user, { loading, data, refetch }] = useLazyUser();
 
   const loadUser = async () => {
     try {
@@ -48,8 +44,12 @@ const Profile = () => {
     }
   };
 
+  useEffect(() => {
+    loadUser();
+  }, [userId]);
+
   if (loading) {
-    return <Typography>{t('loading')}</Typography>;
+    return <CircularProgress />;
   }
 
   return (
@@ -57,7 +57,7 @@ const Profile = () => {
       <SideBar active="employees" />
       <MainPart>
         <HeaderPart>
-          <Header full_name={data?.user.profile.full_name || ''}></Header>
+          <Header fullName={data?.user.profile.full_name || ''}></Header>
 
           <ProfileHeader active="profile" />
         </HeaderPart>
@@ -67,6 +67,7 @@ const Profile = () => {
             first_name={data?.user.profile.first_name || t('firstName')}
             avatar={data?.user.profile.avatar || ''}
             userId={userId || ''}
+            onUpdate={refetch}
           />
         </Suspense>
 
@@ -83,6 +84,7 @@ const Profile = () => {
             last_name={data?.user.profile.last_name || ''}
             position_name={data?.user.position?.name || ''}
             department_name={data?.user.department?.name || ''}
+            onUpdate={refetch}
           ></UserUpdateProfile>
         </Suspense>
       </MainPart>

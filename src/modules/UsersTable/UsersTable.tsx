@@ -1,72 +1,51 @@
-import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState, useMemo } from 'react';
-import {
-  useLazyUsers,
-  type UserData,
-  type UserProfile,
-} from '../../graphql/queries/users';
-import { Bounce, toast } from 'react-toastify';
-import { Avatar, Button } from '@mui/material';
-import theme from '../../theme/theme';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useState, useMemo, useCallback } from 'react';
+import { type UserData, type UserProfile } from '../../graphql/queries/users';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
+import type { Order, UserTableProps } from './type';
+import {
+  StyledTableContainer,
+  StyledTable,
+  StyledTableHead,
+  StyledTableRow,
+  SortableTableCell,
+  SortLabel,
+  UserAvatar,
+  EmailTableCell,
+  ActionTableCell,
+  MoreIcon,
+  ArrowIcon,
+} from './style';
+import { TableCell } from '@mui/material';
 
-type Order = 'asc' | 'desc';
-
-interface UserTableProps {
-  onClick: (user: UserData) => void;
-  searchValue?: string;
-}
-
-const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
+const UsersTable: React.FC<UserTableProps> = ({
+  onClick,
+  searchValue,
+  users,
+}) => {
   const { t } = useTranslation('users');
   const navigate = useNavigate();
 
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
   const userId = user.id;
 
-  const [loadUsers, { data, loading, error }] = useLazyUsers();
-
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<
     keyof UserData | keyof UserProfile | null
   >(null);
 
-  useEffect(() => {
-    loadUsers();
-  }, [loadUsers]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(`Error: ${error.message}`, {
-        position: 'top-center',
-        autoClose: 5000,
-        theme: 'dark',
-        transition: Bounce,
-      });
-    }
-  }, [error]);
-
   const filteredUsers = useMemo(() => {
-    if (!data?.users) return [];
-    if (!searchValue) return data.users;
+    if (!users) return [];
+    if (!searchValue) return users;
 
     const lowerSearch = searchValue.toLowerCase();
-    return data.users.filter((user) => {
+    return users.filter((user) => {
       const fullName = user.profile.full_name?.toLowerCase() || '';
       return fullName.includes(lowerSearch);
     });
-  }, [data, searchValue]);
+  }, [users, searchValue]);
 
   const sortedUsers = useMemo(() => {
     if (!filteredUsers) return [];
@@ -108,121 +87,105 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
     });
   }, [filteredUsers, order, orderBy]);
 
-  const handleSort = (property: keyof UserData | keyof UserProfile) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+  const handleSort = useCallback(
+    (property: keyof UserData | keyof UserProfile) => {
+      const isAsc = orderBy === property && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(property);
+    },
+    [order, orderBy],
+  );
+
+  const getSortHandler = useCallback(
+    (property: keyof UserData | keyof UserProfile) => () =>
+      handleSort(property),
+    [handleSort],
+  );
+
+  const getProfileNavigate = (id: string) => {
+    navigate(AppRoutes.Users.Children.Profile.Create(id));
   };
 
-  if (loading) return <Button variant="text" loading={loading}></Button>;
+  const handleUserClick = useCallback(
+    (selectedUser: UserData) => () => {
+      onClick(selectedUser);
+    },
+    [onClick],
+  );
+
+  const handleProfileNavigate = useCallback(
+    (id: string) => () => {
+      getProfileNavigate(id);
+    },
+    [onClick],
+  );
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ background: 'transparent' }}
-      elevation={0}
-    >
-      <Table sx={{ minWidth: 650 }} aria-label="sortable table">
-        <TableHead
-          sx={{
-            height: 60,
-            textTransform: 'capitalize',
-          }}
-        >
-          <TableRow>
+    <StyledTableContainer>
+      <StyledTable aria-label="sortable table">
+        <StyledTableHead>
+          <StyledTableRow>
             <TableCell></TableCell>
-            <TableCell align="left">
-              <TableSortLabel
-                sx={{
-                  fontWeight: 600,
-                }}
+            <SortableTableCell>
+              <SortLabel
                 active={orderBy === 'first_name'}
                 direction={orderBy === 'first_name' ? order : 'asc'}
-                onClick={() => handleSort('first_name')}
+                onClick={getSortHandler('first_name')}
               >
                 {t('firstName')}
-              </TableSortLabel>
-            </TableCell>
-            <TableCell align="left">
-              <TableSortLabel
-                sx={{
-                  fontWeight: 600,
-                }}
+              </SortLabel>
+            </SortableTableCell>
+            <SortableTableCell>
+              <SortLabel
                 active={orderBy === 'last_name'}
                 direction={orderBy === 'last_name' ? order : 'asc'}
-                onClick={() => handleSort('last_name')}
+                onClick={getSortHandler('last_name')}
               >
                 {t('lastName')}
-              </TableSortLabel>
-            </TableCell>
-            <TableCell align="left">
-              <TableSortLabel
-                sx={{
-                  fontWeight: 600,
-                }}
+              </SortLabel>
+            </SortableTableCell>
+            <SortableTableCell>
+              <SortLabel
                 active={orderBy === 'email'}
                 direction={orderBy === 'email' ? order : 'asc'}
-                onClick={() => handleSort('email')}
+                onClick={getSortHandler('email')}
               >
                 {t('email')}
-              </TableSortLabel>
-            </TableCell>
-            <TableCell align="left">
-              <TableSortLabel
-                sx={{
-                  fontWeight: 600,
-                }}
+              </SortLabel>
+            </SortableTableCell>
+            <SortableTableCell>
+              <SortLabel
                 active={orderBy === 'department_name'}
                 direction={orderBy === 'department_name' ? order : 'asc'}
-                onClick={() => handleSort('department_name')}
+                onClick={getSortHandler('department_name')}
               >
                 {t('department')}
-              </TableSortLabel>
-            </TableCell>
-            <TableCell align="left">
-              <TableSortLabel
-                sx={{
-                  fontWeight: 600,
-                }}
+              </SortLabel>
+            </SortableTableCell>
+            <SortableTableCell>
+              <SortLabel
                 active={orderBy === 'position_name'}
                 direction={orderBy === 'position_name' ? order : 'asc'}
-                onClick={() => handleSort('position_name')}
+                onClick={getSortHandler('position_name')}
               >
                 {t('position')}
-              </TableSortLabel>
-            </TableCell>
+              </SortLabel>
+            </SortableTableCell>
             <TableCell align="left"></TableCell>
-          </TableRow>
-        </TableHead>
+          </StyledTableRow>
+        </StyledTableHead>
         <TableBody>
           {sortedUsers.map((user, index) => (
-            <TableRow key={user.id || index}>
+            <StyledTableRow key={user.id || index}>
               <TableCell
                 component="th"
                 scope="row"
-                onClick={() =>
-                  navigate(AppRoutes.USERS.Children.PROFILE.create(user.id))
-                }
+                onClick={handleProfileNavigate(user.id)}
               >
                 {user.profile.avatar ? (
-                  <Avatar
-                    src={user.profile.avatar}
-                    sx={{
-                      bgcolor: theme.palette.primary.main,
-                      width: '50px',
-                      height: '50px',
-                    }}
-                  />
+                  <UserAvatar src={user.profile.avatar} />
                 ) : (
-                  <Avatar
-                    sx={{
-                      bgcolor: theme.palette.primary.main,
-                      width: '50px',
-                      height: '50px',
-                    }}
-                  >
-                    {user.profile.first_name?.[0] ?? ''}
-                  </Avatar>
+                  <UserAvatar>{user.profile.first_name?.[0] ?? ''}</UserAvatar>
                 )}
               </TableCell>
               <TableCell align="left">
@@ -231,27 +194,21 @@ const UsersTable: React.FC<UserTableProps> = ({ onClick, searchValue }) => {
               <TableCell align="left">
                 {user.profile?.last_name || '-'}
               </TableCell>
-              <TableCell sx={{ textTransform: 'lowercase' }} align="left">
-                {user.email}
-              </TableCell>
+              <EmailTableCell>{user.email}</EmailTableCell>
               <TableCell align="left">{user.department_name || '-'}</TableCell>
               <TableCell align="left">{user.position_name || '-'}</TableCell>
-              <TableCell align="left">
+              <ActionTableCell>
                 {user.id === userId ? (
-                  <MoreVertIcon onClick={() => onClick(user)} />
+                  <MoreIcon onClick={handleUserClick(user)} />
                 ) : (
-                  <ArrowForwardIosIcon
-                    onClick={() =>
-                      navigate(AppRoutes.USERS.Children.PROFILE.create(user.id))
-                    }
-                  />
+                  <ArrowIcon onClick={handleProfileNavigate(user.id)} />
                 )}
-              </TableCell>
-            </TableRow>
+              </ActionTableCell>
+            </StyledTableRow>
           ))}
         </TableBody>
-      </Table>
-    </TableContainer>
+      </StyledTable>
+    </StyledTableContainer>
   );
 };
 

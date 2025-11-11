@@ -1,35 +1,20 @@
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
-
 import React from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useTranslation } from 'react-i18next';
-import type { LanguageProficiency } from 'cv-graphql';
 import theme from '../../theme/theme';
 import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 import { useLazyUpdateProfileLanguage } from '../../graphql/mutations/updateProfileLanguages';
 import { useParams } from 'react-router-dom';
 import { Bounce, toast } from 'react-toastify';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container, Form, FormBody, FormHeader } from './UpdateProfileLanguage';
-
-interface UpdateLanguageProps {
-  onClick: () => void;
-  userLanguage: LanguageProficiency;
-}
-const proficiencyKeys = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Native'];
-
-interface UpdateLangugeForm {
-  userId: string;
-  name: string;
-  proficiency: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | 'Native';
-}
-
-const UpdateLanguageSchema = z.object({
-  userId: z.string(),
-  name: z.string().nonempty(),
-  proficiency: z.enum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Native']),
-});
+import { Container, Form, FormBody, FormHeader } from './style';
+import {
+  proficiencyKeys,
+  UpdateLanguageSchema,
+  type UpdateLanguageProps,
+  type UpdateLangugeForm,
+} from './type';
 
 const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
   onClick,

@@ -1,22 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useLazyLogin } from '../../graphql/queries/login';
-import { Button, TextField, Paper, Stack, Box } from '@mui/material';
-import * as z from 'zod';
+import { TextField } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Bounce, toast } from 'react-toastify';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
-
-const LoginUserSchema = z.object({
-  email: z.email('Invalid email address').nonempty('Email is required'),
-  password: z.string().nonempty('Password is required'),
-});
+import { BoxForm, FormButton, FormPaper, FormStack } from './style';
+import { LoginUserSchema, type LoginFormData } from './type';
 
 const LoginForm = () => {
   const {
@@ -28,6 +19,10 @@ const LoginForm = () => {
   });
 
   const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate(AppRoutes.ForgotPassword);
+  };
 
   const { t } = useTranslation(['authorisation', 'common']);
   const [login, { loading }] = useLazyLogin();
@@ -46,7 +41,8 @@ const LoginForm = () => {
       if (!response.data) return;
 
       const { email, id, role } = response.data.login.user;
-      const { avatar, full_name } = response.data.login.user.profile;
+      const { avatar, full_name, last_name, first_name } =
+        response.data.login.user.profile;
       sessionStorage.setItem('access_token', response.data.login.access_token);
       sessionStorage.setItem(
         'refresh_token',
@@ -54,7 +50,15 @@ const LoginForm = () => {
       );
       sessionStorage.setItem(
         'user',
-        JSON.stringify({ id, email, role, full_name, avatar }),
+        JSON.stringify({
+          id,
+          email,
+          role,
+          full_name,
+          avatar,
+          first_name,
+          last_name,
+        }),
       );
 
       navigate(AppRoutes.Users.Path);
@@ -69,28 +73,10 @@ const LoginForm = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 2,
-      }}
-    >
-      <Paper
-        className="authForm"
-        sx={{ width: '100%', maxWidth: 600 }}
-        elevation={0}
-      >
+    <BoxForm>
+      <FormPaper elevation={0}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack
-            spacing={5}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <FormStack spacing={5}>
             <TextField
               {...register('email')}
               label={t('email')}
@@ -112,31 +98,29 @@ const LoginForm = () => {
               disabled={loading}
             />
 
-            <Button
+            <FormButton
               variant="contained"
               size="large"
               type="submit"
               disabled={loading}
               fullWidth
-              sx={{ height: 45, width: 210 }}
               loading={loading}
             >
               {t('authorisation:login')}
-            </Button>
+            </FormButton>
 
-            <Button
+            <FormButton
               variant="text"
               fullWidth
               disabled={loading}
-              sx={{ height: 45, width: 210 }}
-              onClick={() => navigate(AppRoutes.ForgotPassword)}
+              onClick={handleNavigate}
             >
               {t('forgotPassword')}
-            </Button>
-          </Stack>
+            </FormButton>
+          </FormStack>
         </form>
-      </Paper>
-    </Box>
+      </FormPaper>
+    </BoxForm>
   );
 };
 

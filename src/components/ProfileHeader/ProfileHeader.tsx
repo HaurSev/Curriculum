@@ -1,96 +1,55 @@
 import { useTranslation } from 'react-i18next';
-import { Button, ButtonGroup } from '@mui/material';
-import theme from '../../theme/theme';
 import type React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
-
-interface ProfileHeaderProps {
-  active: 'profile' | 'skills' | 'languages';
-}
+import type { ProfileHeaderProps } from './type';
+import { StyledButtonGroup, ProfileButton } from './style';
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
 
+  const handleProfileNavigate = () => {
+    navigate(AppRoutes.Users.Children.Profile.Create(userId || ''));
+  };
+
+  const handleSkillNavigate = () => {
+    navigate(AppRoutes.Users.Children.Skills.Create(userId || ''));
+  };
+
+  const handleLanguageNavigate = () => {
+    navigate(AppRoutes.Users.Children.UserLanguages.Create(userId || ''));
+  };
+
   const { t } = useTranslation('common');
+
   return (
     <div>
-      <ButtonGroup
-        variant="text"
-        sx={{
-          width: '100%',
-          justifyContent: 'center',
-          gap: 2,
-          '& .MuiButton-root': {
-            width: 180,
-            fontSize: 14,
-            paddingY: theme.spacing(4),
-          },
-        }}
-      >
-        <Button
+      <StyledButtonGroup variant="text">
+        <ProfileButton
           variant="text"
-          onClick={() =>
-            navigate(AppRoutes.Users.Children.Profile.Create(userId || ''))
-          }
-          sx={{
-            color:
-              active === 'profile'
-                ? theme.palette.text.secondary
-                : theme.palette.text.disabled,
-            borderBottom:
-              active === 'profile'
-                ? `2px solid ${theme.palette.text.secondary}`
-                : 'none',
-
-            borderRadius: 0,
-          }}
+          onClick={handleProfileNavigate}
+          isActive={active === 'profile'}
         >
           {t('profile')}
-        </Button>
+        </ProfileButton>
 
-        <Button
+        <ProfileButton
           variant="text"
-          onClick={() =>
-            navigate(AppRoutes.Users.Children.Skills.Create(userId || ''))
-          }
-          sx={{
-            color:
-              active === 'skills'
-                ? theme.palette.text.secondary
-                : theme.palette.text.disabled,
-            borderBottom:
-              active === 'skills'
-                ? `2px solid ${theme.palette.text.secondary}`
-                : 'none',
-            borderRadius: 0,
-          }}
+          onClick={handleSkillNavigate}
+          isActive={active === 'skills'}
         >
           {t('skills')}
-        </Button>
-        <Button
+        </ProfileButton>
+
+        <ProfileButton
           variant="text"
-          onClick={() =>
-            navigate(
-              AppRoutes.Users.Children.UserLanguages.Create(userId || ''),
-            )
-          }
-          sx={{
-            color:
-              active === 'languages'
-                ? theme.palette.text.secondary
-                : theme.palette.text.disabled,
-            borderBottom:
-              active === 'languages'
-                ? `2px solid ${theme.palette.text.secondary}`
-                : 'none',
-            borderRadius: 0,
-          }}
+          onClick={handleLanguageNavigate}
+          isActive={active === 'languages'}
         >
           {t('languages')}
-        </Button>
-      </ButtonGroup>
+        </ProfileButton>
+      </StyledButtonGroup>
     </div>
   );
 };

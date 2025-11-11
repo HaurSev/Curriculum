@@ -1,7 +1,5 @@
-import { Button, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
 import React, { lazy, Suspense, useEffect, useState } from 'react';
-import theme from '../../theme/theme';
+import { CircularProgress } from '@mui/material';
 import SideBar from '../../components/SideBar/SideBar';
 import Header from '../../components/Header/Header';
 import { useTranslation } from 'react-i18next';
@@ -9,18 +7,24 @@ import { useParams } from 'react-router-dom';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
 import { useLazyProfile } from '../../graphql/queries/profile';
 import { Bounce, toast } from 'react-toastify';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useLazyDeleteProfileLanguage } from '../../graphql/mutations/deleteProfileLanguages';
 import useCheckedLanguagesStore from '../../store/ckeckeLanguagesStore';
 import { Container, HeaderPart, MainPart } from '../Components';
+import {
+  ButtonStack,
+  AddLanguageButton,
+  ActiveDeleteButton,
+  InactiveDeleteButton,
+} from './style';
+import { useLazyDeleteProfileLanguage } from '../../graphql/mutations/deleteProfileLanguages.ts';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const LanguageContent = lazy(
   () => import('../../components/LanguagesContent/LanguageContent'),
 );
 
 const AddLanguages = lazy(
-  () => import('../../modules/AddLanguages/AddLanguages'),
+  () => import('../../modules/AddLanguages/AddLanguages.tsx'),
 );
 
 const ProfileLanguage = () => {
@@ -97,7 +101,7 @@ const ProfileLanguage = () => {
   };
 
   if (loading) {
-    return <Typography>{t('common:loading')}</Typography>;
+    return <CircularProgress />;
   }
 
   return (
@@ -105,57 +109,34 @@ const ProfileLanguage = () => {
       <SideBar active="language" />
       <MainPart>
         <HeaderPart>
-          <Header full_name={data?.profile.full_name || ''} />{' '}
-          <ProfileHeader active="languages" />{' '}
+          <Header fullName={data?.profile.full_name || ''} />
+          <ProfileHeader active="languages" />
         </HeaderPart>
 
         {data?.profile.languages && (
           <Suspense>
-            <LanguageContent
-              languages={data?.profile.languages || []}
-            ></LanguageContent>
+            <LanguageContent languages={data?.profile.languages || []} />
           </Suspense>
         )}
         {(userId === userData.id || userData.role === 'Admin') && (
-          <Stack
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-            }}
-          >
-            <Button
-              sx={{
-                gap: theme.spacing(3),
-              }}
-              onClick={handlSetAddOpen}
-            >
+          <ButtonStack>
+            <AddLanguageButton onClick={handlSetAddOpen}>
               <AddIcon />
               {t('addLanguage')}
-            </Button>
+            </AddLanguageButton>
 
             {checkedItems.length ? (
-              <Button
-                onClick={deleteLanguage}
-                sx={{
-                  gap: theme.spacing(3),
-                }}
-                variant="contained"
-              >
+              <ActiveDeleteButton onClick={deleteLanguage} variant="contained">
                 <DeleteForeverIcon />
                 {`${t('removeSkills')}  ${checkedItems.length}`}
-              </Button>
+              </ActiveDeleteButton>
             ) : (
-              <Button
-                sx={{
-                  color: theme.palette.text.secondary,
-                  gap: theme.spacing(3),
-                }}
-              >
+              <InactiveDeleteButton>
                 <DeleteForeverIcon />
                 {t('removeSkills')}
-              </Button>
+              </InactiveDeleteButton>
             )}
-          </Stack>
+          </ButtonStack>
         )}
       </MainPart>
       {isAddOpen && (
@@ -163,7 +144,7 @@ const ProfileLanguage = () => {
           <AddLanguages
             onClick={handlSetAddOpen}
             userLanguages={data?.profile.languages || []}
-          ></AddLanguages>
+          />
         </Suspense>
       )}
     </Container>

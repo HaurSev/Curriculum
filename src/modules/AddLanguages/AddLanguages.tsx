@@ -1,40 +1,25 @@
 import { Button, MenuItem, TextField, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import theme from '../../theme/theme';
 import { useLazyLanguages } from '../../graphql/queries/languages';
 import { Bounce, toast } from 'react-toastify';
 import { useLazyAddProfileLanguage } from '../../graphql/mutations/addProfileLanguage';
 import { useParams } from 'react-router-dom';
-import type { LanguageProficiency } from 'cv-graphql';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import {
   AddLanguageContainer,
   AddLanguageForm,
+  ButtonStack,
+  CloseIcon,
   FormBody,
   FormHeader,
-} from './AddLanguages';
-
-interface AddLanguageProps {
-  onClick: () => void;
-  userLanguages: LanguageProficiency[];
-}
-
-interface AddLangugeForm {
-  userId: string;
-  name: string;
-  proficiency: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | 'Native';
-}
-
-const AddLanguageSchema = z.object({
-  userId: z.string(),
-  name: z.string().nonempty(),
-  proficiency: z.enum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Native']),
-});
+} from './style';
+import {
+  AddLanguageSchema,
+  type AddLanguageProps,
+  type AddLangugeForm,
+} from './type';
 
 const AddLanguages: React.FC<AddLanguageProps> = ({
   onClick,
@@ -132,14 +117,7 @@ const AddLanguages: React.FC<AddLanguageProps> = ({
       <AddLanguageForm>
         <FormHeader>
           <Typography variant="h4">{t('addLanguage')}</Typography>
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
 
         <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
@@ -174,21 +152,14 @@ const AddLanguages: React.FC<AddLanguageProps> = ({
                 </MenuItem>
               ))}
             </TextField>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: theme.spacing(5),
-              }}
-            >
+            <ButtonStack>
               <Button onClick={onClick} variant="outlined">
                 {t('common:cancel')}
               </Button>
               <Button type={'submit'} variant="contained">
                 {t('common:confirm')}
               </Button>
-            </Stack>
+            </ButtonStack>
           </FormBody>
         </form>
       </AddLanguageForm>

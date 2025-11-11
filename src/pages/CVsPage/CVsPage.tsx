@@ -1,20 +1,20 @@
-import { Box, Button, Typography } from '@mui/material';
-import React, { lazy, Suspense, useEffect, useState } from 'react';
-import theme from '../../theme/theme';
+import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AddIcon from '@mui/icons-material/Add';
 import SideBar from '../../components/SideBar/SideBar';
 import { useLazyCvs } from '../../graphql/queries/cvs';
 import type { Cv } from 'cv-graphql';
 import { Bounce, toast } from 'react-toastify';
 import { Container, HeaderPart, MainPart } from '../Components';
 import Search from '../../components/Search/Search';
+import AddIcon from '@mui/icons-material/Add';
+import { PageTitle, HeaderContent, AddCvButton } from './style';
+import { CircularProgress } from '@mui/material';
 
 const UserCvTable = lazy(
   () => import('../../modules/UserCVsTable/UserCVsTable'),
 );
 
-const AddCV = lazy(() => import('../../modules/AddCV/AddCV'));
+const AddCV = lazy(() => import('../../modules/AddCV/AddCV.tsx'));
 
 const CVsPage = () => {
   const [t] = useTranslation(['CVs', 'common']);
@@ -32,7 +32,6 @@ const CVsPage = () => {
     try {
       const result = await loadCvs();
       if (!result.data?.cvs) return;
-
       setCvs(result.data.cvs);
     } catch (error) {
       toast.error(`${error}`, {
@@ -44,56 +43,60 @@ const CVsPage = () => {
     }
   };
 
+  const addCvToState = (newCv: Cv) => {
+    setCvs((prev) => [newCv, ...prev]);
+  };
+
+  const updateCvInState = (updatedCv: Cv) => {
+    setCvs((prev) =>
+      prev.map((cv) => (cv.id === updatedCv.id ? updatedCv : cv)),
+    );
+  };
+
+  const deleteCvItem = () => {
+    getCvs();
+  };
+
   useEffect(() => {
     getCvs();
   }, [loadCvs]);
 
-  if (loading) return <Button variant="text" loading={loading}></Button>;
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [],
+  );
+
+  if (loading) return <CircularProgress />;
 
   return (
     <Container>
       <SideBar active={'cv'}></SideBar>
       <MainPart>
         <HeaderPart>
-          <Typography
-            sx={{
-              color: theme.palette.text.disabled,
-            }}
-          >
-            {t('cv')}
-          </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              lexDirection: 'row',
-              width: '100%',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Search
-              searchValue={searchValue}
-              onClick={(e) => setSearchValue(e.target.value)}
-            ></Search>
-            <Button
-              onClick={handleSetAdd}
-              sx={{
-                gap: theme.spacing(3),
-                color: theme.palette.text.secondary,
-              }}
-            >
+          <PageTitle>{t('cv')}</PageTitle>
+          <HeaderContent>
+            <Search searchValue={searchValue} onChange={handleSearchChange} />
+            <AddCvButton onClick={handleSetAdd}>
               <AddIcon />
               {t('CVs:createCV')}
-            </Button>
-          </Box>
+            </AddCvButton>
+          </HeaderContent>
         </HeaderPart>
 
         <Suspense>
-          <UserCvTable searchValue={searchValue} cvs={cvs || []}></UserCvTable>
+          <UserCvTable
+            searchValue={searchValue}
+            cvs={cvs || []}
+            onUpdated={updateCvInState}
+            onDelete={deleteCvItem}
+          />
         </Suspense>
       </MainPart>
       {isAddOpen && (
         <Suspense>
-          <AddCV onClick={handleSetAdd} />
+          <AddCV onClick={handleSetAdd} onCreated={addCvToState} />
         </Suspense>
       )}
     </Container>

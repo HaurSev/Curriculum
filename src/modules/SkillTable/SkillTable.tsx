@@ -1,58 +1,52 @@
 import {
-  Button,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
-  TableHead,
   TableRow,
   TableSortLabel,
 } from '@mui/material';
-import React, { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import React, {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bounce, toast } from 'react-toastify';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import theme from '../../theme/theme';
 import { useLazySkills } from '../../graphql/queries/skills';
 import type { Skill } from 'cv-graphql';
+import type { Order, SkillTableProps } from './type';
+import {
+  StyledTableContainer,
+  StyledTableHead,
+  SortableTableCell,
+  ActionTableCell,
+} from './style';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const DeleteSkill = lazy(
   () => import('../../components/DeleteSkill/DeleteSkill'),
 );
-
 const UpdateSkill = lazy(() => import('../../modules/UpdateSkill/UpdateSkill'));
-
-type Order = 'asc' | 'desc';
-
-interface SkillTableProps {
-  searchValue?: string;
-}
 
 const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
   const { t } = useTranslation(['skills', 'common']);
 
   const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
-
-  const handleOpenDelete = (id: string) => {
-    setOpenDeleteId((prev) => (prev === id ? null : id));
-  };
-
   const [openUpdateId, setOpenUpdateId] = useState<string | null>(null);
-
-  const handleOpenUpdate = (id: string) => {
-    setOpenUpdateId((prev) => (prev === id ? null : id));
-  };
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<'name' | 'category'>('name');
 
   const [getSkills, { loading, data: skillsData }] = useLazySkills();
 
-  const loadSkills = async () => {
+  // ✅ Мемоизированная загрузка
+  const loadSkills = useCallback(async () => {
     try {
-      const response = await getSkills({
-        variables: {},
-      });
-
-      if (!response.data) return;
-      if (!response.data.skills) return;
+      const response = await getSkills({ variables: {} });
+      if (!response.data?.skills) return;
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',
@@ -61,31 +55,66 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
         transition: Bounce,
       });
     }
-  };
+  }, [getSkills]);
+
+  useEffect(() => {
+    loadSkills();
+  }, [loadSkills]);
+
+  const handleSort = useCallback(
+    (property: 'name' | 'category') => {
+      const isAsc = orderBy === property && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(property);
+    },
+    [order, orderBy],
+  );
+
+  const getSortHandler = useCallback(
+    (property: 'name' | 'category') => () => handleSort(property),
+    [handleSort],
+  );
+
+  const handleOpenDelete = useCallback((id: string) => {
+    setOpenDeleteId((prev) => (prev === id ? null : id));
+  }, []);
+
+  const handleOpenUpdate = useCallback((id: string) => {
+    setOpenUpdateId((prev) => (prev === id ? null : id));
+  }, []);
+
+  const getOpenDeleteHandler = useCallback(
+    (id: string) => () => handleOpenDelete(id),
+    [handleOpenDelete],
+  );
+
+  const getOpenUpdateHandler = useCallback(
+    (id: string) => () => handleOpenUpdate(id),
+    [handleOpenUpdate],
+  );
+
+  const handleCloseDelete = useCallback(() => {
+    setOpenDeleteId(null);
+  }, []);
+
+  const handleCloseUpdate = useCallback(() => {
+    setOpenUpdateId(null);
+  }, []);
 
   const filteredSkills = useMemo(() => {
     if (!skillsData) return [];
     if (!searchValue) return skillsData.skills;
-
     const lowerSearch = searchValue.toLowerCase();
-
-    return skillsData.skills.filter((skill: Skill) => {
-      const lowerName = skill.name.toLowerCase();
-      return lowerName.includes(lowerSearch);
-    });
+    return skillsData.skills.filter((skill: Skill) =>
+      skill.name.toLowerCase().includes(lowerSearch),
+    );
   }, [skillsData, searchValue]);
-
-  const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<'name' | 'category'>('name');
 
   const sortedSkills = useMemo(() => {
     if (!filteredSkills) return [];
-    if (!orderBy) return filteredSkills;
-
     return [...filteredSkills].sort((a, b) => {
       let aValue = '';
       let bValue = '';
-
       switch (orderBy) {
         case 'name':
           aValue = a.name;
@@ -95,102 +124,67 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
           aValue = a.category?.name ?? '';
           bValue = b.category?.name ?? '';
           break;
-        default:
-          aValue = '';
-          bValue = '';
       }
-
       return order === 'asc'
         ? aValue.localeCompare(bValue)
         : bValue.localeCompare(aValue);
     });
   }, [filteredSkills, order, orderBy]);
 
-  const handleSort = (property: 'name' | 'category') => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-  useEffect(() => {
-    loadSkills();
-  }, []);
-
-  if (loading) return <Button variant="text" loading={loading}></Button>;
+  if (loading) return <CircularProgress />;
 
   return (
-    <TableContainer
-      sx={{
-        padding: theme.spacing(5),
-      }}
-    >
+    <StyledTableContainer>
       <Table>
-        <TableHead
-          sx={{
-            height: 60,
-            textTransform: 'capitalize',
-          }}
-        >
+        <StyledTableHead>
           <TableRow>
-            <TableCell
-              sx={{
-                cursor: 'pointer !important',
-                '&:hover': {
-                  textDecoration: 'underline',
-                },
-              }}
-            >
+            <SortableTableCell>
               <TableSortLabel
                 active={orderBy === 'name'}
                 direction={orderBy === 'name' ? order : 'asc'}
-                onClick={() => handleSort('name')}
+                onClick={getSortHandler('name')}
               >
                 {t('skills:skill')}
               </TableSortLabel>
-            </TableCell>
-            <TableCell>
+            </SortableTableCell>
+            <SortableTableCell>
               <TableSortLabel
                 active={orderBy === 'category'}
                 direction={orderBy === 'category' ? order : 'asc'}
-                onClick={() => handleSort('category')}
+                onClick={getSortHandler('category')}
               >
                 {t('skills:category')}
               </TableSortLabel>
-            </TableCell>
+            </SortableTableCell>
             <TableCell></TableCell>
           </TableRow>
-        </TableHead>
+        </StyledTableHead>
         <TableBody>
           {sortedSkills.map((skill, index) => (
             <TableRow key={skill.id || index}>
-              <TableCell onClick={() => handleOpenUpdate(skill.id)}>
+              <TableCell onClick={getOpenUpdateHandler(skill.id)}>
                 {skill.name}
               </TableCell>
               <TableCell>{skill.category?.name}</TableCell>
-              <TableCell onClick={() => handleOpenDelete(skill.id)}>
-                <MoreVertIcon />
-              </TableCell>
+              <ActionTableCell onClick={getOpenDeleteHandler(skill.id)}>
+                <DeleteForeverIcon />
+              </ActionTableCell>
+
               {openDeleteId === skill.id && (
                 <Suspense>
-                  <DeleteSkill
-                    skill={skill}
-                    onClick={() => setOpenDeleteId(null)}
-                  />
+                  <DeleteSkill skill={skill} onClick={handleCloseDelete} />
                 </Suspense>
               )}
               {openUpdateId === skill.id && (
                 <Suspense>
-                  <UpdateSkill
-                    skill={skill}
-                    onClick={() => setOpenUpdateId(null)}
-                  ></UpdateSkill>
+                  <UpdateSkill skill={skill} onClick={handleCloseUpdate} />
                 </Suspense>
               )}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
   );
 };
 

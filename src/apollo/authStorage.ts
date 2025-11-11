@@ -1,6 +1,6 @@
 import { makeVar } from '@apollo/client';
 import type { User } from 'cv-graphql';
-import { AppRoutes } from '../router/router';
+// import { AppRoutes } from '../router/router';
 
 export const isAuthenticatedVar = makeVar<boolean>(
   !!sessionStorage.getItem('access_token'),
@@ -26,13 +26,6 @@ export function authSuccess(data: {
   }
 }
 
-export function clearTokensAndLogout() {
-  clearTokens();
-  isAuthenticatedVar(false);
-  currentUserVar(null);
-  window.location.href = AppRoutes.LOGIN;
-}
-
 export function getAccessToken(): string | null {
   return sessionStorage.getItem('access_token');
 }
@@ -49,7 +42,7 @@ export function saveTokens(access: string, refresh: string) {
 export function clearTokens() {
   sessionStorage.removeItem('access_token');
   sessionStorage.removeItem('refresh_token');
-  sessionStorage.removeItem('user_id');
+  sessionStorage.removeItem('user');
 }
 
 export function saveUserId(id: string) {

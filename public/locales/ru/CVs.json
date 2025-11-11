@@ -10,5 +10,8 @@
   "update": "Обновить резюме",
   "details": "подробнее",
   "projects": "проекты",
-  "preview": "предпросмотр"
+  "preview": "предпросмотр",
+  "domain": "домены",
+  "exportPDF": "скачать PDF",
+  "languageProficiency": "Уровень языка"
 }

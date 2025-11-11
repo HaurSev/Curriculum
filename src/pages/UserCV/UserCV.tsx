@@ -1,48 +1,20 @@
-import { Box, Button, Typography } from '@mui/material';
-import { styled } from '@mui/system';
-import React, { lazy, Suspense, useEffect, useState } from 'react';
-import theme from '../../theme/theme';
+import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import SideBar from '../../components/SideBar/SideBar';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Bounce, toast } from 'react-toastify';
-import AddIcon from '@mui/icons-material/Add';
-import { useLazyCvs } from '../../graphql/queries/cvs';
 import Search from '../../components/Search/Search';
+import { PageTitle, HeaderContent, AddCvButton } from './style';
+import { useLazyCvs } from '../../graphql/queries/cvs.ts';
+import { Container, HeaderPart, MainPart } from '../Components.ts';
+import AddIcon from '@mui/icons-material/Add';
+import { CircularProgress } from '@mui/material';
 
 const UserCvTable = lazy(
   () => import('../../modules/UserCVsTable/UserCVsTable'),
 );
 
-const AddCV = lazy(() => import('../../modules/AddCV/AddCV'));
-
-const Container = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  width: '100%',
-  minHeight: '100vh',
-}));
-
-const MainPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%',
-  padding: theme.spacing(10),
-  paddingTop: theme.spacing(2),
-  elevation: 0,
-  gap: theme.spacing(5),
-}));
-
-const HeaderPart = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: theme.spacing(3),
-  width: '100%',
-  paddingLeft: theme.spacing(5),
-  elevation: 0,
-}));
+const AddCV = lazy(() => import('../../modules/AddCV/AddCV.tsx'));
 
 const UserCV = () => {
   const [t] = useTranslation(['CVs', 'common']);
@@ -74,53 +46,33 @@ const UserCV = () => {
     }
   }, [error]);
 
-  if (loading) return <Button variant="text" loading={loading}></Button>;
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [],
+  );
+
+  if (loading) return <CircularProgress />;
 
   return (
     <Container>
-      <SideBar active={'cv'}></SideBar>
+      <SideBar active={'cv'} />
       <MainPart>
         <HeaderPart>
-          <Typography
-            sx={{
-              color: theme.palette.text.disabled,
-            }}
-          >
-            {t('cv')}
-          </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              lexDirection: 'row',
-              width: '100%',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Search
-              onClick={(e) => setSearchValue(e.target.value)}
-              searchValue={searchValue}
-            ></Search>
-
+          <PageTitle>{t('cv')}</PageTitle>
+          <HeaderContent>
+            <Search onChange={handleSearchChange} searchValue={searchValue} />
             {userId == user.id && (
-              <Button
-                onClick={handleSetAdd}
-                sx={{
-                  gap: theme.spacing(3),
-                  color: theme.palette.text.secondary,
-                }}
-              >
+              <AddCvButton onClick={handleSetAdd}>
                 <AddIcon />
                 {t('CVs:createCV')}
-              </Button>
+              </AddCvButton>
             )}
-          </Box>
+          </HeaderContent>
         </HeaderPart>
-
         <Suspense>
-          <UserCvTable
-            searchValue={searchValue}
-            cvs={data?.cvs || []}
-          ></UserCvTable>
+          <UserCvTable searchValue={searchValue} cvs={data?.cvs || []} />
         </Suspense>
       </MainPart>
 

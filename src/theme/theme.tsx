@@ -33,9 +33,14 @@ const theme = createTheme({
     h2: { fontSize: '2rem', fontWeight: 600, textTransform: 'capitalize' },
     h3: { fontSize: '1.75rem', fontWeight: 500, textTransform: 'capitalize' },
     h4: { fontSize: '1.5rem', fontWeight: 500, textTransform: 'capitalize' },
-    h5: { fontSize: '1.25rem', fontWeight: 500, textTransform: 'capitalize' },
-    h6: { fontSize: '1rem', fontWeight: 500, textTransform: 'capitalize' },
-    body1: { fontSize: '1rem', lineHeight: 1.5, textTransform: 'capitalize' },
+    h5: { fontSize: '1.25rem', fontWeight: 300, textTransform: 'capitalize' },
+    h6: { fontSize: '1rem', fontWeight: 100, textTransform: 'capitalize' },
+    body1: {
+      fontSize: '1rem',
+      lineHeight: 1.5,
+      textTransform: 'capitalize',
+      fontWeight: 100,
+    },
     button: {
       textTransform: 'uppercase',
       fontWeight: 500,
@@ -57,6 +62,7 @@ const theme = createTheme({
           fontSize: '15px',
           letterSpacing: '1px',
           border: 'none',
+          gap: theme.spacing(3),
           transition: 'background 0.4s ease',
           '&:hover': {
             ...(ownerState.variant === 'contained' && {
@@ -90,43 +96,45 @@ const theme = createTheme({
             borderRadius: 8,
             background: 'transparent',
             color: theme.palette.text.primary,
-            border: `1px solid ${theme.palette.text.disabled}`,
+            border: `1px solid ${theme.palette.text.primary}`,
             transition: 'background 0.4s ease, border 0.4s ease',
-            '&:hover': { background: 'rgba(75, 75, 75, 0.413)' },
+
+            '&:hover': {
+              background: 'rgba(75, 75, 75, 0.413)',
+            },
+
             '&.Mui-focused': {
               border: `2px solid ${theme.palette.text.secondary}`,
               color: theme.palette.text.primary,
             },
-            '& .MuiOutlinedInput-input': { padding: '10px', color: 'inherit' },
-          },
-          '& .MuiOutlinedInput-input[type="file"]': {
-            background: 'transparent',
-            fontSize: 25,
-            border: 'none',
-            width: 40,
-            '&:hover': {
-              cursor: 'pointer',
+
+            '&.Mui-disabled': {
+              background: 'rgba(255,255,255,0.05)',
+              border: `1px solid ${theme.palette.text.disabled}`,
+              color: theme.palette.text.disabled,
+              cursor: 'not-allowed',
+              '& .MuiOutlinedInput-input': {
+                color: theme.palette.text.disabled,
+              },
+            },
+
+            '& .MuiOutlinedInput-input': {
+              padding: '10px',
+              color: 'inherit',
             },
           },
+
           '& .MuiInputLabel-root': {
             color: theme.palette.text.disabled,
             '&.Mui-focused': {
               color: theme.palette.text.primary,
+              background: theme.palette.background,
             },
-          },
-          '&.Mui-disabled': {
-            background: theme.palette.text.disabled,
-            border: `1px dashed ${theme.palette.text.disabled}`,
-            color: theme.palette.text.disabled,
-            cursor: 'not-allowed',
-            '& .MuiOutlinedInput-input': {
+            '&.Mui-disabled': {
               color: theme.palette.text.disabled,
             },
-            '&hover': {
-              background: 'transparent',
-              cursor: 'not-allowed',
-            },
           },
+
           '& input::placeholder': {
             color: theme.palette.text.disabled,
             opacity: 1,
@@ -134,18 +142,19 @@ const theme = createTheme({
         }),
       },
     },
+
     MuiPaper: {
       styleOverrides: {
         root: ({ theme }) => ({
           backgroundColor: theme.palette.background.default,
           opacity: 1,
           '&.authForm': {
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '20px',
-            width: '600px',
-            gap: '20px',
-            background: 'transparent',
+            // display: 'flex',
+            // flexDirection: 'column',
+            // padding: '20px',
+            // width: '600px',
+            // gap: '20px',
+            // background: 'transparent',
             '& > div': {
               display: 'flex',
               flexDirection: 'column',

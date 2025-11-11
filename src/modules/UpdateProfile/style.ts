@@ -1,0 +1,55 @@
+import { Box, Paper, Stack, styled } from '@mui/material';
+
+export const Container = styled(Box)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  minHeight: '100vh',
+  zIndex: 100,
+  background: 'rgba(0,0,0,0.8)',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+}));
+
+export const Form = styled(Paper)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  maxWidth: 800,
+  width: '80%',
+  padding: theme.spacing(10),
+  paddingTop: theme.spacing(4),
+  opacity: 0.8,
+}));
+
+export const FormHeader = styled(Stack)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%',
+  padding: theme.spacing(2),
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  mb: 2,
+}));
+
+export const FormBody = styled(Stack)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%',
+  gap: theme.spacing(5),
+  paddingTop: theme.spacing(2),
+  paddingBottom: theme.spacing(5),
+}));
+
+export const ButtonStack = styled(Stack)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%',
+  gap: theme.spacing(5),
+}));

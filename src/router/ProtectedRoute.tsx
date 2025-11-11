@@ -15,7 +15,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const token = sessionStorage.getItem('access_token');
 
   if (requireAuth && !token) {
-    return <Navigate to={AppRoutes.LOGIN} state={{ from: location }} replace />;
+    return <Navigate to={AppRoutes.Login} state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

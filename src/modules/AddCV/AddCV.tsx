@@ -1,37 +1,24 @@
-import { Button, Stack, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import theme from '../../theme/theme';
-import * as z from 'zod';
-import { Form, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLazyCreateCv } from '../../graphql/mutations/createCV';
 import { Bounce, toast } from 'react-toastify';
-import { Container, FormBody, FormHeader } from './AddCV';
+import {
+  ButtonStack,
+  CloseIcon,
+  Container,
+  FormBody,
+  FormHeader,
+  Form,
+} from './style';
+import { CreateCVSchema, type AddCVProps, type CreateCVData } from './type';
 
-interface AddCVProps {
-  onClick: () => void;
-}
-
-const CreateCVSchema = z.object({
-  name: z.string(),
-  education: z.string().optional(),
-  description: z.string().nonempty(),
-  userId: z.string().optional(),
-});
-
-interface CreateCVData {
-  name: string;
-  education?: string;
-  description: string;
-  userId?: string;
-}
-
-const AddCV: React.FC<AddCVProps> = ({ onClick }) => {
+const AddCV: React.FC<AddCVProps> = ({ onClick, onCreated }) => {
   const [t] = useTranslation(['common', 'CVs']);
-  const { userId } = useParams<{ userId: string }>();
+  const userData = sessionStorage.getItem('user');
+  const user = JSON.parse(userData || '');
 
   const {
     register,
@@ -40,7 +27,7 @@ const AddCV: React.FC<AddCVProps> = ({ onClick }) => {
   } = useForm<CreateCVData>({
     resolver: zodResolver(CreateCVSchema),
     defaultValues: {
-      userId: userId,
+      userId: user.id,
       education: '',
       description: '',
       name: '',
@@ -54,7 +41,7 @@ const AddCV: React.FC<AddCVProps> = ({ onClick }) => {
       const response = await createCv({
         variables: {
           cv: {
-            userId: userId || '',
+            userId: user.id || '',
             name: newCV?.name || '',
             description: newCV.description || '',
             education: newCV.education || '',
@@ -70,6 +57,9 @@ const AddCV: React.FC<AddCVProps> = ({ onClick }) => {
         theme: 'dark',
         transition: Bounce,
       });
+
+      onCreated(response?.data?.createCv);
+
       onClick();
     } catch (error) {
       toast.error(`${error}`, {
@@ -87,16 +77,9 @@ const AddCV: React.FC<AddCVProps> = ({ onClick }) => {
         <FormHeader>
           <Typography variant="h4"> {t('CVs:createCV')}</Typography>
 
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              ':hover': {
-                cursor: 'pointer',
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
           <FormBody>
             <TextField
               {...register('name')}
@@ -125,21 +108,14 @@ const AddCV: React.FC<AddCVProps> = ({ onClick }) => {
               error={!!errors.description}
               helperText={errors.description?.message}
             ></TextField>
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: theme.spacing(5),
-              }}
-            >
+            <ButtonStack>
               <Button variant="outlined" onClick={onClick}>
                 {t('common:cancel')}
               </Button>
               <Button type={'submit'} variant="contained">
                 {t('common:confirm')}
               </Button>
-            </Stack>
+            </ButtonStack>
           </FormBody>
         </form>
       </Form>

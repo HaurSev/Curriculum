@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import SideBar from '../../components/SideBar/SideBar';
 import CvsNavigation from '../../components/CvsNavigation/CvsNavigation';
 import CvsHeader from '../../components/CvsHeader/CvsHeader';
@@ -37,11 +37,11 @@ const CvDetailsPage = () => {
     loadCvDetails();
   }, []);
 
-  if (loading) return <Button variant="text" loading={loading}></Button>;
+  if (loading) return <CircularProgress />;
 
   return (
     <Container>
-      <SideBar active="skills"></SideBar>
+      <SideBar active="cv"></SideBar>
       <MainPart>
         <HeaderPart>
           <CvsHeader cv={data?.cv.name || ''}></CvsHeader>

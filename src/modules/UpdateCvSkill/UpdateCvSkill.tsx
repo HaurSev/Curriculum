@@ -1,44 +1,23 @@
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
 import theme from '../../theme/theme';
 import { useForm } from 'react-hook-form';
-import { type SkillMastery } from 'cv-graphql';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { Bounce, toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { useLazyUpdateCvSkill } from '../../graphql/mutations/updateCvSkill';
-import { Container, Form, FormBody, FormHeader } from './UpdateCVSkill';
-
-interface UpdateSkillProps {
-  onClick: () => void;
-  userSkill: SkillMastery;
-}
-
-interface UpdateSkillData {
-  cvId: string;
-  name: string;
-  mastery: 'Novice' | 'Advanced' | 'Competent' | 'Proficient' | 'Expert';
-}
-
-const UpdateSkillSchema = z.object({
-  cvId: z.string(),
-  name: z.string().nonempty(),
-  mastery: z.enum(['Novice', 'Advanced', 'Competent', 'Proficient', 'Expert']),
-});
+import { Container, Form, FormBody, FormHeader } from './style';
+import {
+  masteryKeys,
+  UpdateSkillSchema,
+  type UpdateSkillData,
+  type UpdateSkillProps,
+} from './type';
+import { CloseIcon } from '../AddLanguages/style';
 
 const UpdateCvSkill: React.FC<UpdateSkillProps> = ({ onClick, userSkill }) => {
   const [t] = useTranslation(['skills', 'common']);
   const { cvId } = useParams<{ cvId: string }>();
-
-  const masteryKeys = [
-    'Novice',
-    'Advanced',
-    'Competent',
-    'Proficient',
-    'Expert',
-  ];
 
   const { handleSubmit, register } = useForm<UpdateSkillData>({
     resolver: zodResolver(UpdateSkillSchema),
@@ -98,7 +77,7 @@ const UpdateCvSkill: React.FC<UpdateSkillProps> = ({ onClick, userSkill }) => {
       <Form onClick={handleFormClick}>
         <FormHeader>
           <Typography variant="h4">{t('skills:updateSkill')}</Typography>
-          <ClearIcon onClick={handleCloseClick} sx={{ cursor: 'pointer' }} />
+          <CloseIcon onClick={handleCloseClick} />
         </FormHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>

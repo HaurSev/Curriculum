@@ -1,32 +1,16 @@
-import { Button, Container, Stack, TextField, Typography } from '@mui/material';
+import { Button, Container, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import type { Language } from 'cv-graphql';
 import { Bounce, toast } from 'react-toastify';
-import theme from '../../theme/theme';
-import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLazyUpdateLanguage } from '../../graphql/mutations/updateLanguage';
-import { Form, FormBody, FormHeader } from './UpdateLanguage';
-
-interface UpdateLanguageProps {
-  onClick: () => void;
-  language: Language;
-}
-
-interface CreateLanguageForm {
-  name: string;
-  native_name: string;
-  iso: string;
-}
-
-const CreateLanguageSchema = z.object({
-  name: z.string().nonempty(),
-  native_name: z.string().nonempty(),
-  iso: z.string().nonempty(),
-});
+import { ButtonStack, CloseIcon, Form, FormBody, FormHeader } from './style';
+import {
+  CreateLanguageSchema,
+  type CreateLanguageForm,
+  type UpdateLanguageProps,
+} from './type';
 
 const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
   onClick,
@@ -119,15 +103,7 @@ const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
       <Form>
         <FormHeader>
           <Typography>{t('updateLanguage')}</Typography>
-          <ClearIcon
-            onClick={onClick}
-            sx={{
-              cursor: 'pointer',
-              ':hover': {
-                color: theme.palette.error.main,
-              },
-            }}
-          />
+          <CloseIcon onClick={onClick} />
         </FormHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormBody>
@@ -158,19 +134,14 @@ const UpdateLanguage: React.FC<UpdateLanguageProps> = ({
               helperText={errors.iso?.message}
             />
 
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              gap={5}
-              sx={{ width: '100%' }}
-            >
+            <ButtonStack>
               <Button onClick={onClick} variant="outlined">
                 {t('common:cancel')}
               </Button>
               <Button type="submit" variant="contained" disabled={!isChanged}>
                 {t('common:confirm')}
               </Button>
-            </Stack>
+            </ButtonStack>
           </FormBody>
         </form>
       </Form>

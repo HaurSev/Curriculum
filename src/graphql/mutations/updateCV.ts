@@ -9,6 +9,10 @@ export const UPDATE_CV = gql`
       name
       education
       description
+      user {
+        id
+        email
+      }
     }
   }
 `;
@@ -18,7 +22,7 @@ export type AppCvArgs = {
 };
 
 export type AddCvResult = {
-  newCv: Cv;
+  updateCv: Cv;
 };
 
 export const useLazyUpdateCv = () => {

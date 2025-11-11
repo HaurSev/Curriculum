@@ -1,59 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import SideBar from '../../components/SideBar/SideBar';
-import { Box, Button, InputBase, styled, Typography } from '@mui/material';
-import theme from '../../theme/theme';
-import SearchIcon from '@mui/icons-material/Search';
-import { lazy, Suspense, useState } from 'react';
-import AddIcon from '@mui/icons-material/Add';
+import { lazy, Suspense, useCallback, useState } from 'react';
 import SkillTable from '../../modules/SkillTable/SkillTable';
 import { Container, HeaderPart, MainPart } from '../Components';
+import AddIcon from '@mui/icons-material/Add';
 
-const CreateSkill = lazy(() => import('../../modules/CreateSkill/CreateSkill'));
+import { PageTitle, HeaderContent, AddSkillButton } from './style';
+import Search from '../../components/Search/Search.tsx';
 
-const Search = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.spacing(5),
-  backgroundColor: 'transparent',
-  padding: theme.spacing(1, 2),
-  '&:hover': {
-    backgroundColor: theme.palette.primary.main,
-    transition: '0.4s ease',
-  },
-  marginLeft: 0,
-  width: '600px',
-  height: theme.spacing(10),
-  border: `1px solid ${theme.palette.text.disabled}`,
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  paddingRight: theme.spacing(2),
-  paddingTop: theme.spacing(1),
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  width: '400px',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
-  },
-}));
+const CreateSkill = lazy(
+  () => import('../../modules/CreateSkill/CreateSkill.tsx'),
+);
 
 const Skills = () => {
   const { t } = useTranslation(['skills', 'common']);
@@ -64,50 +21,31 @@ const Skills = () => {
     setAddOpen(!isAddOpen);
   };
 
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [],
+  );
+
   return (
     <Container>
       <SideBar active="skills" />
       <MainPart>
         <HeaderPart>
-          <Typography
-            variant="body1"
-            sx={{ color: theme.palette.text.disabled }}
-          >
-            {t('skills:skill')}
-          </Typography>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingRight: theme.spacing(5),
-            }}
-          >
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-            </Search>
-            <Button
-              sx={{
-                gap: theme.spacing(3),
-                color: theme.palette.text.secondary,
-              }}
-              onClick={handlSetAddOpen}
-            >
+          <PageTitle>{t('skills:skill')}</PageTitle>
+          <HeaderContent>
+            <Search
+              searchValue={searchValue}
+              onChange={handleSearchChange}
+            ></Search>
+            <AddSkillButton onClick={handlSetAddOpen}>
               <AddIcon />
               {t('addSkill')}
-            </Button>
-          </Box>
+            </AddSkillButton>
+          </HeaderContent>
         </HeaderPart>
-        <SkillTable searchValue={searchValue}></SkillTable>
+        <SkillTable searchValue={searchValue} />
       </MainPart>
       {isAddOpen && (
         <Suspense>

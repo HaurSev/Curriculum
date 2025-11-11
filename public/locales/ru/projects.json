@@ -1,0 +1,15 @@
+{
+  "addProject": "Новый проект",
+  "project": "Проект",
+  "name": "Название",
+  "internalName": "Внутренне название",
+  "description": "Описание",
+  "domain": "Домен",
+  "startDate": "Дата начала",
+  "endDate": "Дата окончания",
+  "untilNow": "Продолжается",
+  "addPproject": "Новый проект",
+  "environment": "Среда разработки",
+  "responsibilities": "ответсвенность",
+  "removeCvProject": "Удалить проект"
+}
