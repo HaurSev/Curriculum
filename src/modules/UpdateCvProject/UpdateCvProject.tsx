@@ -19,11 +19,12 @@ import {
   type UpdateCvProjectData,
   UpdateCvProjectSchema,
 } from './type.ts';
-import { useLazyUpdateCvProject } from '../../graphql/mutations/updateCvProject.ts';
+import { useLazyUpdateCvProject } from '../../graphql/mutations/updateCvProject';
 
 const UpdateCvProject: React.FC<UpdateCvProjectProps> = ({
   onClick,
   project,
+  onSuccess,
 }) => {
   const [t] = useTranslation(['projects', 'common', 'CVs']);
   const { cvId } = useParams<{ cvId: string }>();
@@ -73,6 +74,8 @@ const UpdateCvProject: React.FC<UpdateCvProjectProps> = ({
         transition: Bounce,
       });
       onClick();
+
+      onSuccess();
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',

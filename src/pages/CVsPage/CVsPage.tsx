@@ -32,7 +32,6 @@ const CVsPage = () => {
     try {
       const result = await loadCvs();
       if (!result.data?.cvs) return;
-
       setCvs(result.data.cvs);
     } catch (error) {
       toast.error(`${error}`, {
@@ -42,6 +41,20 @@ const CVsPage = () => {
         transition: Bounce,
       });
     }
+  };
+
+  const addCvToState = (newCv: Cv) => {
+    setCvs((prev) => [newCv, ...prev]);
+  };
+
+  const updateCvInState = (updatedCv: Cv) => {
+    setCvs((prev) =>
+      prev.map((cv) => (cv.id === updatedCv.id ? updatedCv : cv)),
+    );
+  };
+
+  const deleteCvItem = () => {
+    getCvs();
   };
 
   useEffect(() => {
@@ -69,12 +82,17 @@ const CVsPage = () => {
         </HeaderPart>
 
         <Suspense>
-          <UserCvTable searchValue={searchValue} cvs={cvs || []} />
+          <UserCvTable
+            searchValue={searchValue}
+            cvs={cvs || []}
+            onUpdated={updateCvInState}
+            onDelete={deleteCvItem}
+          />
         </Suspense>
       </MainPart>
       {isAddOpen && (
         <Suspense>
-          <AddCV onClick={handleSetAdd} />
+          <AddCV onClick={handleSetAdd} onCreated={addCvToState} />
         </Suspense>
       )}
     </Container>

@@ -4,6 +4,7 @@ export interface UserProjectsTableProps {
   searchValue?: string;
   projects: CvProject[];
   userId: string;
+  onSuccess: () => void;
 }
 
 export type Order = 'asc' | 'desc';

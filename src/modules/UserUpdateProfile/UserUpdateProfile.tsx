@@ -29,6 +29,7 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
   last_name,
   position_name,
   department_name,
+  onUpdate,
 }) => {
   const [t] = useTranslation();
 
@@ -112,6 +113,7 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
       };
 
       reset(newValues);
+
       setInitialValues(newValues);
     }
   }, [departments, positions, department_name, position_name, userId, reset]);
@@ -139,13 +141,14 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
           },
         },
       });
+      if (!response.data) return;
       toast.success('User updated successfully', {
         position: 'top-center',
         autoClose: 3000,
         theme: 'dark',
         transition: Bounce,
       });
-      console.log('Updated user:', response.data);
+      onUpdate();
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',
@@ -176,37 +179,42 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
         </FormStack>
 
         {userId === userData.id || userData.role === 'Admin' ? (
-          <FormFieldsStack>
-            <TextField
-              select
-              label={t('department')}
-              fullWidth
-              error={!!errors.departmentId}
-              value={watch('departmentId') || ''}
-              {...register('departmentId')}
-            >
-              {departments.map((d) => (
-                <MenuItem key={d.id} value={d.id}>
-                  {d.name}
-                </MenuItem>
-              ))}
-            </TextField>
+          <>
+            <FormFieldsStack>
+              <TextField
+                select
+                label={t('department')}
+                fullWidth
+                error={!!errors.departmentId}
+                value={watch('departmentId') || ''}
+                {...register('departmentId')}
+              >
+                {departments.map((d) => (
+                  <MenuItem key={d.id} value={d.id}>
+                    {d.name}
+                  </MenuItem>
+                ))}
+              </TextField>
 
-            <TextField
-              select
-              label={t('position')}
-              fullWidth
-              error={!!errors.positionId}
-              value={watch('positionId') || ''}
-              {...register('positionId')}
-            >
-              {positions.map((p) => (
-                <MenuItem key={p.id} value={p.id}>
-                  {p.name}
-                </MenuItem>
-              ))}
-            </TextField>
-          </FormFieldsStack>
+              <TextField
+                select
+                label={t('position')}
+                fullWidth
+                error={!!errors.positionId}
+                value={watch('positionId') || ''}
+                {...register('positionId')}
+              >
+                {positions.map((p) => (
+                  <MenuItem key={p.id} value={p.id}>
+                    {p.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormFieldsStack>
+            <ButtonStack>
+              <SubmitButton type="submit">{t('update')}</SubmitButton>
+            </ButtonStack>
+          </>
         ) : (
           <FormFieldsStack>
             <TextField
@@ -223,10 +231,6 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
             />
           </FormFieldsStack>
         )}
-
-        <ButtonStack>
-          <SubmitButton type="submit">{t('update')}</SubmitButton>
-        </ButtonStack>
       </form>
     </FormContainer>
   );

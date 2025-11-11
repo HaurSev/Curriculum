@@ -4,11 +4,11 @@ import {
   TableCell,
   Table,
   styled,
-  Paper,
+  TableContainer,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-export const StyledTableContainer = styled(Paper)(() => ({
+export const StyledTableContainer = styled(TableContainer)(() => ({
   background: 'transparent',
   elevation: 0,
 }));

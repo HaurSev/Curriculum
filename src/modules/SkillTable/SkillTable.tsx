@@ -18,7 +18,7 @@ import {
   SortableTableCell,
   ActionTableCell,
 } from './style';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const DeleteSkill = lazy(
   () => import('../../components/DeleteSkill/DeleteSkill'),
@@ -148,7 +148,7 @@ const SkillTable: React.FC<SkillTableProps> = ({ searchValue }) => {
               </TableCell>
               <TableCell>{skill.category?.name}</TableCell>
               <ActionTableCell onClick={() => handleOpenDelete(skill.id)}>
-                <MoreVertIcon />
+                <DeleteForeverIcon />
               </ActionTableCell>
               {openDeleteId === skill.id && (
                 <Suspense>

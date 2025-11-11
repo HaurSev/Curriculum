@@ -23,7 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams } from 'react-router-dom';
 import { useLazyAddCvProject } from '../../graphql/mutations/addCvProject';
 
-const AddCvProject: React.FC<AddCvProjectProps> = ({ onClick }) => {
+const AddCvProject: React.FC<AddCvProjectProps> = ({ onClick, onSuccess }) => {
   const [t] = useTranslation(['projects', 'common', 'CVs']);
   const { cvId } = useParams<{ cvId: string }>();
   const todayDate = new Date();
@@ -96,8 +96,7 @@ const AddCvProject: React.FC<AddCvProjectProps> = ({ onClick }) => {
       });
 
       if (!response.data || !response.data?.addCvProject.projects) return;
-
-      onClick();
+      onSuccess();
 
       toast.success(t('common:successfully'), {
         position: 'top-center',
@@ -105,6 +104,8 @@ const AddCvProject: React.FC<AddCvProjectProps> = ({ onClick }) => {
         theme: 'dark',
         transition: Bounce,
       });
+
+      onClick();
     } catch (error) {
       toast.error(`${error}`, {
         position: 'top-center',

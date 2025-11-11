@@ -130,7 +130,7 @@ const UpdateSkill: React.FC<UpdateSkillProps> = ({ onClick, skill }) => {
     <Container>
       <Form>
         <FormHeader>
-          <Typography variant="h4">{t('addSkill')}</Typography>
+          <Typography variant="h4">{t('updateSkill')}</Typography>
           <CloseIcon onClick={onClick} />
         </FormHeader>
 

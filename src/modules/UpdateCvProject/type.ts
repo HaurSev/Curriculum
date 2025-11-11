@@ -39,4 +39,5 @@ export const UpdateCvProjectSchema = z
 export interface UpdateCvProjectProps {
   onClick: () => void;
   project: CvProject;
+  onSuccess: () => void;
 }

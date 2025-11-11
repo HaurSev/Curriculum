@@ -87,13 +87,17 @@ const CvProjectsPage = () => {
               projects={data?.cv.projects || []}
               searchValue={searchValue}
               userId={data?.cv.user?.id || ''}
+              onSuccess={() => getCvProjects()}
             />
           </Suspense>
         )}
       </MainPart>
       {isAddOpen && (
         <Suspense>
-          <AddCvProject onClick={handleSetOpen} />
+          <AddCvProject
+            onClick={handleSetOpen}
+            onSuccess={() => getCvProjects()}
+          />
         </Suspense>
       )}
     </Container>

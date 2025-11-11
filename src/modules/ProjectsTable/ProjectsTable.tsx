@@ -1,7 +1,8 @@
 import React, { lazy, Suspense, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TableBody, TableRow, TableSortLabel } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+
 import {
   CustomTable,
   CustomTableCell,
@@ -13,16 +14,17 @@ import {
 import type { Order, UserProjectsTableProps } from './type.ts';
 
 const DeleteCvProject = lazy(
-  () => import('../../components/DeleteCvProject/DeleteCvProject.tsx'),
+  () => import('../../components/DeleteCvProject/DeleteCvProject'),
 );
 const UpdateCvProject = lazy(
-  () => import('../../modules/UpdateCvProject/UpdateCvProject.tsx'),
+  () => import('../../modules/UpdateCvProject/UpdateCvProject'),
 );
 
 const ProjectsTable: React.FC<UserProjectsTableProps> = ({
   searchValue,
   projects,
   userId,
+  onSuccess,
 }) => {
   const { t } = useTranslation(['common', 'CVs', 'projects']);
   const [order, setOrder] = useState<Order>('asc');
@@ -90,59 +92,63 @@ const ProjectsTable: React.FC<UserProjectsTableProps> = ({
           </TableRow>
         </CustomTableHead>
         <TableBody>
-          {sortedProjects.map((project, index) => {
-            return (
-              <React.Fragment key={project.id || index}>
-                {isDeleteId === project.id &&
-                  user.role === 'Admin' &&
-                  user.id === userId && (
-                    <Suspense>
-                      <DeleteCvProject
-                        onClick={handleClearDeleteId}
-                        projectId={project.project.id}
-                        projectName={project.name}
-                      />
-                    </Suspense>
-                  )}
-                {isUpdateId === project.id &&
-                  user.role === 'Admin' &&
-                  user.id === userId && (
-                    <Suspense>
-                      <UpdateCvProject
-                        onClick={handleClearUpdateId}
-                        project={project}
-                      ></UpdateCvProject>
-                    </Suspense>
-                  )}
-                <CustomTableRow>
-                  <CustomTableCell onClick={() => setUpdateId(project.id)}>
-                    {project.name}
-                  </CustomTableCell>
-                  <CustomTableCell>
-                    {project.internal_name || t('notFound')}
-                  </CustomTableCell>
-                  <CustomTableCell>{project.domain}</CustomTableCell>
-                  <CustomTableCell>
-                    {project.start_date || t('notFound')}
-                  </CustomTableCell>
-                  <CustomTableCell>
-                    {project.end_date || 'until now'}
-                  </CustomTableCell>
-                  <CustomTableCell onClick={() => setDeleteId(project.id)}>
-                    <MoreVertIcon />
-                  </CustomTableCell>
-                </CustomTableRow>
+          {sortedProjects.map((project, index) => (
+            <React.Fragment key={project.id || index}>
+              <CustomTableRow>
+                <CustomTableCell
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setUpdateId(project.id);
+                  }}
+                >
+                  {project.name}
+                </CustomTableCell>
+                <CustomTableCell>
+                  {project.internal_name || t('notFound')}
+                </CustomTableCell>
+                <CustomTableCell>{project.domain}</CustomTableCell>
+                <CustomTableCell>
+                  {project.start_date || t('notFound')}
+                </CustomTableCell>
+                <CustomTableCell>
+                  {project.end_date || 'until now'}
+                </CustomTableCell>
+                <CustomTableCell onClick={() => setDeleteId(project.id)}>
+                  <DeleteForeverIcon />
+                </CustomTableCell>
+              </CustomTableRow>
 
-                <TableRow onClick={() => setUpdateId(project.id)}>
-                  <TableCellDescrition colSpan={6}>
-                    {project.description}
-                  </TableCellDescrition>
-                </TableRow>
-              </React.Fragment>
-            );
-          })}
+              <TableRow>
+                <TableCellDescrition colSpan={6}>
+                  {project.description}
+                </TableCellDescrition>
+              </TableRow>
+            </React.Fragment>
+          ))}
         </TableBody>
       </CustomTable>
+      {isDeleteId && (userId === user.id || user.role == 'Admin') && (
+        <Suspense>
+          <DeleteCvProject
+            onClick={handleClearDeleteId}
+            projectId={
+              sortedProjects.find((p) => p.id === isDeleteId)?.project.id || ''
+            }
+            projectName={
+              sortedProjects.find((p) => p.id === isDeleteId)?.name || ''
+            }
+          />
+        </Suspense>
+      )}
+      {isUpdateId && (userId === user.id || user.role == 'Admin') && (
+        <Suspense>
+          <UpdateCvProject
+            onClick={handleClearUpdateId}
+            project={sortedProjects.find((p) => p.id === isUpdateId)!}
+            onSuccess={onSuccess}
+          />
+        </Suspense>
+      )}
     </CustomTableContainer>
   );
 };

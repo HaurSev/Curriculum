@@ -118,7 +118,6 @@ const UpdateUser: React.FC<UpdateUserProps> = ({ onClick, user }) => {
           <FormTitle>{t('updateUser')}</FormTitle>
           <CloseButton onClick={onClick} />
         </FormHeader>
-
         <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
           <FormContent>
             <FormColumn>

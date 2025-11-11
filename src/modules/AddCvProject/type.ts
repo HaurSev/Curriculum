@@ -18,14 +18,6 @@ export const AddCvProjectSchema = z
     roles: z.array(z.string()),
     responsibilities: z.array(z.string()),
   })
-  .refine((data) => new Date(data.startDate) <= new Date(), {
-    message: 'Start date should be earlier than today',
-    path: ['startDate'],
-  })
-  .refine((data) => new Date(data.endDate) <= new Date(), {
-    message: 'End date cannot be earlier than today',
-    path: ['startDate'],
-  })
   .refine(
     (data) =>
       !data.endDate || new Date(data.endDate) >= new Date(data.startDate),
@@ -37,4 +29,5 @@ export const AddCvProjectSchema = z
 
 export interface AddCvProjectProps {
   onClick: () => void;
+  onSuccess: () => void;
 }

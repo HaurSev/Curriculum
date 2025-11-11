@@ -48,6 +48,7 @@ export const ButtonStack = styled(Stack)(({ theme }) => ({
   flexDirection: 'row',
   justifyContent: 'flex-end',
   gap: theme.spacing(5),
+  paddingTop: theme.spacing(5),
 }));
 
 export const HorizontalStack = styled(Stack)(({ theme }) => ({

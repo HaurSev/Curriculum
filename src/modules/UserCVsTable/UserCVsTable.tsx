@@ -19,7 +19,12 @@ import { TableBody, TableCell, TableSortLabel } from '@mui/material';
 const DeleteCV = lazy(() => import('../DeleteCV/DeleteCV.tsx'));
 const UpdateCV = lazy(() => import('../UpdateCV/UpdateCV.tsx'));
 
-const UserCVsTable: React.FC<UserCVsTableProps> = ({ searchValue, cvs }) => {
+const UserCVsTable: React.FC<UserCVsTableProps> = ({
+  searchValue,
+  cvs,
+  onUpdated,
+  onDelete,
+}) => {
   const { t } = useTranslation(['common', 'CVs']);
 
   const navigate = useNavigate();
@@ -117,12 +122,20 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({ searchValue, cvs }) => {
               <React.Fragment key={cv.id || index}>
                 {openDeleteId === cv.id && (
                   <Suspense>
-                    <DeleteCV cv={cv} onClick={() => handleOpenDelete('')} />
+                    <DeleteCV
+                      cv={cv}
+                      onClick={() => handleOpenDelete('')}
+                      onSuccess={onDelete}
+                    />
                   </Suspense>
                 )}
                 {openUpdateId === cv.id && (
                   <Suspense>
-                    <UpdateCV cv={cv} onClick={() => handleOpenUpdate('')} />
+                    <UpdateCV
+                      cv={cv}
+                      onClick={() => handleOpenUpdate('')}
+                      onUpdated={onUpdated}
+                    />
                   </Suspense>
                 )}
                 <StyledTableRow
