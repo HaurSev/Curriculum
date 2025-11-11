@@ -15,6 +15,7 @@ export interface UpdateUserProfileProps {
   last_name: string;
   position_name: string;
   department_name: string;
+  onUpdate: () => void;
 }
 
 export interface UpdatePositionDepartmentDate {

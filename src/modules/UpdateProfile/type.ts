@@ -3,6 +3,7 @@ import * as z from 'zod';
 export interface UpdateProfileProps {
   onClick: () => void;
   user: UserData;
+  onSuccess: () => void;
 }
 
 export type UpdateProfileData = {

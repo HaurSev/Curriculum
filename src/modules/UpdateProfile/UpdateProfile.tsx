@@ -17,7 +17,11 @@ import {
   type UpdateProfileProps,
 } from './type';
 
-const UpdateProfile: React.FC<UpdateProfileProps> = ({ onClick, user }) => {
+const UpdateProfile: React.FC<UpdateProfileProps> = ({
+  onClick,
+  user,
+  onSuccess,
+}) => {
   const [t] = useTranslation(['users', 'common']);
   const [updateProfile] = useLazyUpdateProfile();
 
@@ -81,13 +85,22 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onClick, user }) => {
           },
         },
       });
+
+      if (!response.data) return;
+
+      const currentUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+      const newUser = { ...currentUser, ...response.data.updateProfile };
+      sessionStorage.setItem('user', JSON.stringify(newUser));
+
+      onSuccess();
+
       toast.success('User updated successfully', {
         position: 'top-center',
         autoClose: 3000,
         theme: 'dark',
         transition: Bounce,
       });
-      console.log('Updated user:', response.data);
+
       onClick();
     } catch (error) {
       toast.error(`${error}`, {
@@ -108,7 +121,6 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onClick, user }) => {
           </Typography>
           <CloseIcon onClick={onClick} sx={{ cursor: 'pointer' }} />
         </FormHeader>
-
         <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
           <FormBody>
             <Stack spacing={5} width="50%">
