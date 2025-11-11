@@ -18,6 +18,8 @@ import {
   SectionTitle,
   DescriptionText,
 } from './style';
+import { generatePdf } from './generatePdf';
+import { useLazySkillCategories } from '../../graphql/queries/skillsCategory.ts';
 
 const CvPreviewPage = () => {
   const [t] = useTranslation(['CVs']);
@@ -42,6 +44,26 @@ const CvPreviewPage = () => {
     getCv();
   }, []);
 
+  const [loadSkillCategories, { data: categoriesData }] =
+    useLazySkillCategories();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await loadSkillCategories();
+        if (!response.data?.skillCategories) return;
+      } catch (error) {
+        toast.error(`${error}`, {
+          position: 'top-center',
+          autoClose: 5000,
+          theme: 'dark',
+          transition: Bounce,
+        });
+      }
+    };
+    fetchCategories();
+  }, [loadSkillCategories]);
+
   if (loading) return <CircularProgress />;
 
   return (
@@ -59,7 +81,14 @@ const CvPreviewPage = () => {
             </Typography>
             <PositionText>{data?.cv.user?.position?.name}</PositionText>
           </Stack>
-          <ExportButton variant="outlined">{t('exportPDF')}</ExportButton>
+          <ExportButton
+            variant="outlined"
+            onClick={() =>
+              generatePdf(categoriesData?.skillCategories || [], data?.cv)
+            }
+          >
+            {t('exportPDF')}
+          </ExportButton>
         </InfoBlock>
         <InfoBlock>
           <SmallBlock>
