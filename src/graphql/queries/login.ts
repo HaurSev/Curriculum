@@ -12,6 +12,8 @@ export const LOGIN = gql`
         profile {
           avatar
           full_name
+          first_name
+          last_name
         }
       }
       access_token
