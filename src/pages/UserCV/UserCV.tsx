@@ -45,7 +45,6 @@ const UserCV = () => {
       });
     }
   }, [error]);
-
   if (loading) return <CircularProgress />;
 
   return (
@@ -67,7 +66,6 @@ const UserCV = () => {
             )}
           </HeaderContent>
         </HeaderPart>
-
         <Suspense>
           <UserCvTable searchValue={searchValue} cvs={data?.cvs || []} />
         </Suspense>

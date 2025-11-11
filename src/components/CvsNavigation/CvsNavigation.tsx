@@ -19,7 +19,6 @@ const CvsNavigation: React.FC<CvsHeaderProps> = ({ active }) => {
             navigate(AppRoutes.Cvs.Children.Details.Create(cvId || ''))
           }
         >
-          {' '}
           {t('CVs:details')}
         </ActiveButton>
       ) : (
@@ -29,7 +28,6 @@ const CvsNavigation: React.FC<CvsHeaderProps> = ({ active }) => {
             navigate(AppRoutes.Cvs.Children.Details.Create(cvId || ''))
           }
         >
-          {' '}
           {t('CVs:details')}
         </DefButton>
       )}

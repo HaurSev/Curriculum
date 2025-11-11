@@ -10,6 +10,7 @@ export const StyledList = styled(List)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
+  height: '100vh',
 }));
 
 export const Container = styled(Box)(({ theme }) => ({
