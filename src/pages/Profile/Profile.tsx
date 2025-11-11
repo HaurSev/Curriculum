@@ -57,7 +57,7 @@ const Profile = () => {
       <SideBar active="employees" />
       <MainPart>
         <HeaderPart>
-          <Header full_name={data?.user.profile.full_name || ''}></Header>
+          <Header fullName={data?.user.profile.full_name || ''}></Header>
 
           <ProfileHeader active="profile" />
         </HeaderPart>

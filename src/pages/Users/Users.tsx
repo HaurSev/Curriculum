@@ -3,7 +3,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import UsersTable from '../../modules/UsersTable/UsersTable';
 import { CircularProgress, Typography } from '@mui/material';
 import theme from '../../theme/theme';
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { useLazyUsers, type UserData } from '../../graphql/queries/users';
 import Search from '../../components/Search/Search';
 import { Container, HeaderPart, MainPart } from '../Components';
@@ -36,6 +36,17 @@ const Users = () => {
     }
   }, [error]);
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [],
+  );
+
   if (loading) return <CircularProgress />;
 
   return (
@@ -43,7 +54,7 @@ const Users = () => {
       {isOpen === true && user !== null ? (
         <Suspense>
           <UpdateProfile
-            onClick={() => setOpen(false)}
+            onClick={handleClose}
             user={user}
             onSuccess={refetch}
           />
@@ -62,7 +73,7 @@ const Users = () => {
             {t('employees')}
           </Typography>
           <Search
-            onChange={(e) => setSearchValue(e.target.value)}
+            onChange={handleSearchChange}
             searchValue={searchValue}
           ></Search>
         </HeaderPart>

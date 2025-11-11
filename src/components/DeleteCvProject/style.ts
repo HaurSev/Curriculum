@@ -39,7 +39,7 @@ export const FormHeader = styled(Stack)(({ theme }) => ({
 
 export const FormBody = styled(Stack)(({ theme }) => ({
   display: 'flex',
-  alignItems: 'flex-end',
+  alignItems: 'flex-start',
   width: '100%',
   gap: theme.spacing(5),
   paddingTop: theme.spacing(2),

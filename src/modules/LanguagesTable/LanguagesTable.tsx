@@ -5,7 +5,14 @@ import {
   TableCell,
   TableSortLabel,
 } from '@mui/material';
-import React, { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import React, {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLazyLanguages } from '../../graphql/queries/languages';
 import { Bounce, toast } from 'react-toastify';
@@ -34,13 +41,23 @@ const LanguagesTable: React.FC<LanguagesTableProps> = ({ searchValue }) => {
   const [openUpdateId, setOpenUpdateId] = useState<string | null>(null);
   const [order, setOrder] = useState<Order>('asc');
 
-  const handleOpenDelete = (id: string) => {
+  const handleOpenDelete = useCallback((id: string) => {
     setOpenDeleteId((prev) => (prev === id ? null : id));
-  };
+  }, []);
 
-  const handleOpenUpdate = (id: string) => {
+  const handleOpenUpdate = useCallback((id: string) => {
     setOpenUpdateId((prev) => (prev === id ? null : id));
-  };
+  }, []);
+
+  const getOpenDeleteHandler = useCallback(
+    (id: string) => () => handleOpenDelete(id),
+    [handleOpenDelete],
+  );
+
+  const getOpenUpdateHandler = useCallback(
+    (id: string) => () => handleOpenUpdate(id),
+    [handleOpenUpdate],
+  );
 
   const [loadLanguages, { data, loading, error }] = useLazyLanguages();
 
@@ -107,19 +124,19 @@ const LanguagesTable: React.FC<LanguagesTableProps> = ({ searchValue }) => {
         <TableBody>
           {sortedUsers.map((lang, index) => (
             <StyledTableRow key={lang.id || index}>
-              <TableCell onClick={() => handleOpenUpdate(lang.id)}>
+              <TableCell onClick={getOpenUpdateHandler(lang.id)}>
                 {lang.name}
               </TableCell>
               <TableCell>{lang.native_name}</TableCell>
               <TableCell>{lang.iso2}</TableCell>
-              <ActionTableCell onClick={() => handleOpenDelete(lang.id)}>
+              <ActionTableCell onClick={getOpenDeleteHandler(lang.id)}>
                 <MoreIcon />
               </ActionTableCell>
               {openDeleteId === lang.id && (
                 <Suspense>
                   <DeleteLanguage
                     language={lang}
-                    onClick={() => setOpenDeleteId(null)}
+                    onClick={getOpenDeleteHandler('')}
                   />
                 </Suspense>
               )}
@@ -127,7 +144,7 @@ const LanguagesTable: React.FC<LanguagesTableProps> = ({ searchValue }) => {
                 <Suspense>
                   <UpdateLanguage
                     language={lang}
-                    onClick={() => setOpenUpdateId(null)}
+                    onClick={getOpenUpdateHandler('')}
                   />
                 </Suspense>
               )}

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useMemo, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TableBody, TableRow, TableSortLabel } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -32,14 +32,35 @@ const ProjectsTable: React.FC<UserProjectsTableProps> = ({
   const user = JSON.parse(userData || '');
 
   const [isDeleteId, setDeleteId] = useState('');
-  const handleClearDeleteId = () => {
-    setDeleteId('');
-  };
 
   const [isUpdateId, setUpdateId] = useState('');
-  const handleClearUpdateId = () => {
+
+  const handleOpenUpdate = useCallback((e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    setUpdateId(id);
+  }, []);
+
+  const handleOpenDelete = useCallback((id: string) => {
+    setDeleteId(id);
+  }, []);
+
+  const handleClearDeleteId = useCallback(() => {
+    setDeleteId('');
+  }, []);
+
+  const handleClearUpdateId = useCallback(() => {
     setUpdateId('');
-  };
+  }, []);
+
+  const getOpenUpdateHandler = useCallback(
+    (id: string) => (e: React.MouseEvent) => handleOpenUpdate(e, id),
+    [handleOpenUpdate],
+  );
+
+  const getOpenDeleteHandler = useCallback(
+    (id: string) => () => handleOpenDelete(id),
+    [handleOpenDelete],
+  );
 
   const filteredProjects = useMemo(() => {
     if (!projects) return [];
@@ -80,7 +101,7 @@ const ProjectsTable: React.FC<UserProjectsTableProps> = ({
         <CustomTableHead>
           <TableRow>
             <CustomTableCell>
-              <TableSortLabel onClick={() => handleSort()}>
+              <TableSortLabel onClick={handleSort}>
                 {t('projects:name')}
               </TableSortLabel>
             </CustomTableCell>
@@ -95,12 +116,7 @@ const ProjectsTable: React.FC<UserProjectsTableProps> = ({
           {sortedProjects.map((project, index) => (
             <React.Fragment key={project.id || index}>
               <CustomTableRow>
-                <CustomTableCell
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setUpdateId(project.id);
-                  }}
-                >
+                <CustomTableCell onClick={getOpenUpdateHandler(project.id)}>
                   {project.name}
                 </CustomTableCell>
                 <CustomTableCell>
@@ -113,7 +129,7 @@ const ProjectsTable: React.FC<UserProjectsTableProps> = ({
                 <CustomTableCell>
                   {project.end_date || 'until now'}
                 </CustomTableCell>
-                <CustomTableCell onClick={() => setDeleteId(project.id)}>
+                <CustomTableCell onClick={getOpenDeleteHandler(project.id)}>
                   <DeleteForeverIcon />
                 </CustomTableCell>
               </CustomTableRow>

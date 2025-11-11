@@ -9,24 +9,25 @@ import {
   ArrowIcon,
   PersonIcon,
 } from './style';
+import type { HeaderProps } from './type';
 
-interface HeaderProps {
-  full_name: string;
-}
-
-const Header: React.FC<HeaderProps> = ({ full_name }) => {
+const Header: React.FC<HeaderProps> = ({ fullName }) => {
   const navigate = useNavigate();
   const [t] = useTranslation();
 
+  const handleNavigate = () => {
+    navigate(AppRoutes.Users.Path);
+  };
+
   return (
     <HeaderContainer>
-      <NavigationButton onClick={() => navigate(AppRoutes.Users.Path)}>
+      <NavigationButton onClick={handleNavigate}>
         {t('employee')}
       </NavigationButton>
       <ArrowIcon />
       <UserButton>
         <PersonIcon />
-        {full_name || t('username')}
+        {fullName || t('username')}
       </UserButton>
     </HeaderContainer>
   );

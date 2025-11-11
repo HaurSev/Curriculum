@@ -7,7 +7,13 @@ import {
   FormHeader,
   HorizontalStack,
 } from './style';
-import { Button, MenuItem, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  MenuItem,
+  TextField,
+  Typography,
+} from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import {
   type AddCVProjectData,
@@ -116,7 +122,17 @@ const AddCvProject: React.FC<AddCvProjectProps> = ({ onClick, onSuccess }) => {
     }
   };
 
-  if (loading) return <Button loading={loading}></Button>;
+  const handleResponsibilitiesBlur = () => {
+    const value = inputValue
+      .split(/[,;\s]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    setValue('responsibilities', value);
+    setInputValue(value.join(', '));
+  };
+
+  if (loading) return <CircularProgress />;
 
   return (
     <Container>
@@ -215,15 +231,18 @@ const AddCvProject: React.FC<AddCvProjectProps> = ({ onClick, onSuccess }) => {
                   setValue('responsibilities', value);
                 }
               }}
-              onBlur={() => {
-                const value = inputValue
-                  .split(/[,;\s]+/)
-                  .map((s) => s.trim())
-                  .filter(Boolean);
+              onBlur={
+                handleResponsibilitiesBlur
+                //   () => {
+                //   const value = inputValue
+                //     .split(/[,;\s]+/)
+                //     .map((s) => s.trim())
+                //     .filter(Boolean);
 
-                setValue('responsibilities', value);
-                setInputValue(value.join(', '));
-              }}
+                //   setValue('responsibilities', value);
+                //   setInputValue(value.join(', '));
+                // }
+              }
             />
           </FormBody>
 

@@ -23,13 +23,30 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('common');
+
   const userData = JSON.parse(sessionStorage.getItem('user') || '');
+
+  const handleUsersNavigate = () => {
+    navigate(AppRoutes.Users.Path);
+  };
+  const handleSkillsNavigate = () => {
+    navigate(AppRoutes.Skills);
+  };
+  const handleLanguagesNavigate = () => {
+    navigate(AppRoutes.Languages);
+  };
+  const handleCvsNavigate = () => {
+    navigate(AppRoutes.Cvs.Path);
+  };
+  const handleProfileNavigate = () => {
+    navigate(AppRoutes.Users.Children.Profile.Create(userData.id));
+  };
 
   return (
     <StyledList>
       <Container>
         <ListItemButton
-          onClick={() => navigate(AppRoutes.Users.Path)}
+          onClick={handleUsersNavigate}
           className={active === 'employees' ? 'active' : ''}
         >
           <ListItemIcon>
@@ -39,7 +56,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
         </ListItemButton>
         <ListItemButton
           className={active === 'skills' ? 'active' : ''}
-          onClick={() => navigate(AppRoutes.Skills)}
+          onClick={handleSkillsNavigate}
         >
           <ListItemIcon>
             <StyledMovingIcon isActive={active === 'skills'} />
@@ -48,7 +65,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
         </ListItemButton>
         <ListItemButton
           className={active === 'language' ? 'active' : ''}
-          onClick={() => navigate(AppRoutes.Languages)}
+          onClick={handleLanguagesNavigate}
         >
           <ListItemIcon>
             <StyledGTranslateIcon isActive={active === 'language'} />
@@ -57,7 +74,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
         </ListItemButton>
         <ListItemButton
           className={active === 'cv' ? 'active' : ''}
-          onClick={() => navigate(AppRoutes.Cvs.Path)}
+          onClick={handleCvsNavigate}
         >
           <ListItemIcon>
             <StyledPortraitIcon isActive={active === 'cv'} />
@@ -70,11 +87,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'employees' }) => {
         <LanguageSwitcher />
 
         <UserStack>
-          <BackIcon
-            onClick={() =>
-              navigate(AppRoutes.Users.Children.Profile.Create(userData.id))
-            }
-          />
+          <BackIcon onClick={handleProfileNavigate} />
           {userData.avatar ? (
             <UserAvatar src={userData.avatar} />
           ) : (

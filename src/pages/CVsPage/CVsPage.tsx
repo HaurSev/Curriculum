@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SideBar from '../../components/SideBar/SideBar';
 import { useLazyCvs } from '../../graphql/queries/cvs';
@@ -61,6 +61,13 @@ const CVsPage = () => {
     getCvs();
   }, [loadCvs]);
 
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [],
+  );
+
   if (loading) return <CircularProgress />;
 
   return (
@@ -70,10 +77,7 @@ const CVsPage = () => {
         <HeaderPart>
           <PageTitle>{t('cv')}</PageTitle>
           <HeaderContent>
-            <Search
-              searchValue={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
+            <Search searchValue={searchValue} onChange={handleSearchChange} />
             <AddCvButton onClick={handleSetAdd}>
               <AddIcon />
               {t('CVs:createCV')}

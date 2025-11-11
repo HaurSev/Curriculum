@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useMemo, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
@@ -26,7 +26,6 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
   onDelete,
 }) => {
   const { t } = useTranslation(['common', 'CVs']);
-
   const navigate = useNavigate();
 
   const [openDeleteId, setOpenDeleteId] = useState<string | null>(null);
@@ -34,13 +33,53 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<'name' | 'employee'>('name');
 
-  const handleOpenDelete = (id: string) => {
+  const handleOpenDelete = useCallback((id: string) => {
     setOpenDeleteId((prev) => (prev === id ? null : id));
-  };
+  }, []);
 
-  const handleOpenUpdate = (id: string) => {
+  const handleOpenUpdate = useCallback((id: string) => {
     setOpenUpdateId((prev) => (prev === id ? null : id));
-  };
+  }, []);
+
+  const handleCloseDelete = useCallback(() => {
+    setOpenDeleteId(null);
+  }, []);
+
+  const handleCloseUpdate = useCallback(() => {
+    setOpenUpdateId(null);
+  }, []);
+
+  const handleSort = useCallback(
+    (property: 'name' | 'employee') => {
+      const isAsc = orderBy === property && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(property);
+    },
+    [order, orderBy],
+  );
+
+  const getSortHandler = useCallback(
+    (property: 'name' | 'employee') => () => handleSort(property),
+    [handleSort],
+  );
+
+  const getOpenDeleteHandler = useCallback(
+    (id: string) => (event: React.MouseEvent) => {
+      event.preventDefault();
+      handleOpenDelete(id);
+    },
+    [handleOpenDelete],
+  );
+
+  const getOpenUpdateHandler = useCallback(
+    (id: string) => () => handleOpenUpdate(id),
+    [handleOpenUpdate],
+  );
+
+  const getNavigateHandler = useCallback(
+    (id: string) => () => navigate(AppRoutes.Cvs.Children.Details.Create(id)),
+    [navigate],
+  );
 
   const filteredCVs = useMemo(() => {
     if (!cvs) return [];
@@ -59,7 +98,6 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
 
   const sortedCVs = useMemo(() => {
     if (!filteredCVs) return [];
-
     return [...filteredCVs].sort((a, b) => {
       let aValue = '';
       let bValue = '';
@@ -73,9 +111,6 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
           aValue = a.user?.email ?? '';
           bValue = b.user?.email ?? '';
           break;
-        default:
-          aValue = '';
-          bValue = '';
       }
 
       return order === 'asc'
@@ -83,12 +118,6 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
         : bValue.localeCompare(aValue);
     });
   }, [filteredCVs, order, orderBy]);
-
-  const handleSort = (property: 'name' | 'employee') => {
-    const isAsc = order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
 
   return (
     <StyledTableContainer>
@@ -99,7 +128,7 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
               <TableSortLabel
                 active={orderBy === 'name'}
                 direction={orderBy === 'name' ? order : 'asc'}
-                onClick={() => handleSort('name')}
+                onClick={getSortHandler('name')}
               >
                 {t('CVs:cvName')}
               </TableSortLabel>
@@ -109,75 +138,64 @@ const UserCVsTable: React.FC<UserCVsTableProps> = ({
               <TableSortLabel
                 active={orderBy === 'employee'}
                 direction={orderBy === 'employee' ? order : 'asc'}
-                onClick={() => handleSort('employee')}
+                onClick={getSortHandler('employee')}
               />
               {t('CVs:employee')}
             </SortableTableCell>
             <TableCell></TableCell>
           </StyledTableRow>
         </StyledTableHead>
-        <TableBody>
-          {sortedCVs.map((cv, index) => {
-            return (
-              <React.Fragment key={cv.id || index}>
-                {openDeleteId === cv.id && (
-                  <Suspense>
-                    <DeleteCV
-                      cv={cv}
-                      onClick={() => handleOpenDelete('')}
-                      onDelete={onDelete}
-                    />
-                  </Suspense>
-                )}
-                {openUpdateId === cv.id && (
-                  <Suspense>
-                    <UpdateCV
-                      cv={cv}
-                      onClick={() => handleOpenUpdate('')}
-                      onUpdated={onUpdated}
-                    />
-                  </Suspense>
-                )}
-                <StyledTableRow
-                  onContextMenu={(event) => {
-                    event.preventDefault();
-                    handleOpenDelete(cv.id);
-                  }}
-                  onClick={() => handleOpenUpdate(cv.id)}
-                >
-                  <TableCell align="left">{cv.name}</TableCell>
-                  <TableCell align="left">{cv.education}</TableCell>
-                  <TableCell align="left">
-                    {cv.user?.email || t('notFound')}
-                  </TableCell>
-                  <ActionTableCell
-                    onClick={() =>
-                      navigate(AppRoutes.Cvs.Children.Details.Create(cv.id))
-                    }
-                  >
-                    <MoreIcon />
-                  </ActionTableCell>
-                </StyledTableRow>
 
-                <DescriptionTableRow
-                  onClick={() => handleOpenUpdate(cv.id)}
-                  onContextMenu={(event) => {
-                    event.preventDefault();
-                    handleOpenDelete(cv.id);
-                  }}
+        <TableBody>
+          {sortedCVs.map((cv, index) => (
+            <React.Fragment key={cv.id || index}>
+              {openDeleteId === cv.id && (
+                <Suspense>
+                  <DeleteCV
+                    cv={cv}
+                    onClick={handleCloseDelete}
+                    onDelete={onDelete}
+                  />
+                </Suspense>
+              )}
+
+              {openUpdateId === cv.id && (
+                <Suspense>
+                  <UpdateCV
+                    cv={cv}
+                    onClick={handleCloseUpdate}
+                    onUpdated={onUpdated}
+                  />
+                </Suspense>
+              )}
+
+              <StyledTableRow
+                onContextMenu={getOpenDeleteHandler(cv.id)}
+                onClick={getOpenUpdateHandler(cv.id)}
+              >
+                <TableCell align="left">{cv.name}</TableCell>
+                <TableCell align="left">{cv.education}</TableCell>
+                <TableCell align="left">
+                  {cv.user?.email || t('notFound')}
+                </TableCell>
+                <ActionTableCell onClick={getNavigateHandler(cv.id)}>
+                  <MoreIcon />
+                </ActionTableCell>
+              </StyledTableRow>
+
+              <DescriptionTableRow
+                onClick={getOpenUpdateHandler(cv.id)}
+                onContextMenu={getOpenDeleteHandler(cv.id)}
+              >
+                <DescriptionTableCell
+                  colSpan={4}
+                  onClick={getNavigateHandler(cv.id)}
                 >
-                  <DescriptionTableCell
-                    colSpan={4}
-                    onClick={() =>
-                      navigate(AppRoutes.Cvs.Children.Details.Create(cv.id))
-                    }
-                  >
-                    {cv.description}
-                  </DescriptionTableCell>
-                </DescriptionTableRow>
-              </React.Fragment>
-            );
-          })}
+                  {cv.description}
+                </DescriptionTableCell>
+              </DescriptionTableRow>
+            </React.Fragment>
+          ))}
         </TableBody>
       </StyledTable>
     </StyledTableContainer>

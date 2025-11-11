@@ -64,6 +64,10 @@ const CvPreviewPage = () => {
     fetchCategories();
   }, [loadSkillCategories]);
 
+  const handleGenerate = () => {
+    generatePdf(categoriesData?.skillCategories || [], data?.cv);
+  };
+
   if (loading) return <CircularProgress />;
 
   return (
@@ -81,12 +85,7 @@ const CvPreviewPage = () => {
             </Typography>
             <PositionText>{data?.cv.user?.position?.name}</PositionText>
           </Stack>
-          <ExportButton
-            variant="outlined"
-            onClick={() =>
-              generatePdf(categoriesData?.skillCategories || [], data?.cv)
-            }
-          >
+          <ExportButton variant="outlined" onClick={handleGenerate}>
             {t('exportPDF')}
           </ExportButton>
         </InfoBlock>

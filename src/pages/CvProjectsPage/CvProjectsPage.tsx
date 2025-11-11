@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Container, HeaderPart, MainPart } from '../Components';
 import SideBar from '../../components/SideBar/SideBar';
 import { CircularProgress } from '@mui/material';
@@ -59,6 +59,16 @@ const CvProjectsPage = () => {
     getCvProjects();
   }, [loadCvProjects]);
 
+  const handleGetCvProjects = () => {
+    getCvProjects();
+  };
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [],
+  );
+
   if (loading) return <CircularProgress />;
 
   return (
@@ -69,10 +79,7 @@ const CvProjectsPage = () => {
           <CvsHeader cv={data?.cv.name || ' '}></CvsHeader>
           <CvsNavigation active="projects"></CvsNavigation>
           <SerachBox>
-            <Search
-              searchValue={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
+            <Search searchValue={searchValue} onChange={handleSearchChange} />
             {(user.id === data?.cv?.user?.id || user.role === 'Admin') && (
               <AddProjectButton onClick={handleSetOpen}>
                 <AddIcon />
@@ -87,7 +94,7 @@ const CvProjectsPage = () => {
               projects={data?.cv.projects || []}
               searchValue={searchValue}
               userId={data?.cv.user?.id || ''}
-              onSuccess={() => getCvProjects()}
+              onSuccess={handleGetCvProjects}
             />
           </Suspense>
         )}
@@ -96,7 +103,7 @@ const CvProjectsPage = () => {
         <Suspense>
           <AddCvProject
             onClick={handleSetOpen}
-            onSuccess={() => getCvProjects()}
+            onSuccess={handleGetCvProjects}
           />
         </Suspense>
       )}

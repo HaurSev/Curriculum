@@ -31,6 +31,16 @@ const UpdateCvProject: React.FC<UpdateCvProjectProps> = ({
   const todayDate = new Date();
   const [inputValue, setInputValue] = useState('');
 
+  const handleBlure = () => {
+    const value = inputValue
+      .split(/[,;\s]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    setValue('responsibilities', value);
+    setInputValue(value.join(', '));
+  };
+
   const {
     register,
     handleSubmit,
@@ -167,15 +177,7 @@ const UpdateCvProject: React.FC<UpdateCvProjectProps> = ({
                   setValue('responsibilities', value);
                 }
               }}
-              onBlur={() => {
-                const value = inputValue
-                  .split(/[,;\s]+/)
-                  .map((s) => s.trim())
-                  .filter(Boolean);
-
-                setValue('responsibilities', value);
-                setInputValue(value.join(', '));
-              }}
+              onBlur={handleBlure}
             />
           </FormBody>
 

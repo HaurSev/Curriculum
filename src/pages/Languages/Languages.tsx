@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import SideBar from '../../components/SideBar/SideBar';
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useCallback, useState } from 'react';
 import LanguagesTable from '../../modules/LanguagesTable/LanguagesTable';
 import Search from '../../components/Search/Search';
 import { Container, HeaderPart, MainPart } from '../Components';
@@ -20,6 +20,13 @@ const Languages = () => {
     setAddOpen(!isAddOpen);
   };
 
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [],
+  );
+
   return (
     <Container>
       <SideBar active="language" />
@@ -27,10 +34,7 @@ const Languages = () => {
         <HeaderPart>
           <PageTitle>{t('common:languages')}</PageTitle>
           <HeaderContent>
-            <Search
-              searchValue={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
+            <Search searchValue={searchValue} onChange={handleSearchChange} />
             <AddLanguageButton onClick={handlSetAddOpen}>
               <AddIcon />
               {t('addLanguage')}

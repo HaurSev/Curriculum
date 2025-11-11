@@ -1,12 +1,7 @@
 import TableBody from '@mui/material/TableBody';
 import { useTranslation } from 'react-i18next';
-import { useState, useMemo } from 'react';
-import {
-  // useLazyUsers,
-  type UserData,
-  type UserProfile,
-} from '../../graphql/queries/users';
-// import { Bounce, toast } from 'react-toastify';
+import { useState, useMemo, useCallback } from 'react';
+import { type UserData, type UserProfile } from '../../graphql/queries/users';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
 import type { Order, UserTableProps } from './type';
@@ -36,27 +31,10 @@ const UsersTable: React.FC<UserTableProps> = ({
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
   const userId = user.id;
 
-  // const [loadUsers, { data, loading, error }] = useLazyUsers();
-
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<
     keyof UserData | keyof UserProfile | null
   >(null);
-
-  // useEffect(() => {
-  //   loadUsers();
-  // }, [loadUsers]);
-
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error(`Error: ${error.message}`, {
-  //       position: 'top-center',
-  //       autoClose: 5000,
-  //       theme: 'dark',
-  //       transition: Bounce,
-  //     });
-  //   }
-  // }, [error]);
 
   const filteredUsers = useMemo(() => {
     if (!users) return [];
@@ -109,13 +87,38 @@ const UsersTable: React.FC<UserTableProps> = ({
     });
   }, [filteredUsers, order, orderBy]);
 
-  const handleSort = (property: keyof UserData | keyof UserProfile) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+  const handleSort = useCallback(
+    (property: keyof UserData | keyof UserProfile) => {
+      const isAsc = orderBy === property && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(property);
+    },
+    [order, orderBy],
+  );
+
+  const getSortHandler = useCallback(
+    (property: keyof UserData | keyof UserProfile) => () =>
+      handleSort(property),
+    [handleSort],
+  );
+
+  const getProfileNavigate = (id: string) => {
+    navigate(AppRoutes.Users.Children.Profile.Create(id));
   };
 
-  // if (loading) return <CircularProgress />;
+  const handleUserClick = useCallback(
+    (selectedUser: UserData) => () => {
+      onClick(selectedUser);
+    },
+    [onClick],
+  );
+
+  const handleProfileNavigate = useCallback(
+    (id: string) => () => {
+      getProfileNavigate(id);
+    },
+    [onClick],
+  );
 
   return (
     <StyledTableContainer>
@@ -127,7 +130,7 @@ const UsersTable: React.FC<UserTableProps> = ({
               <SortLabel
                 active={orderBy === 'first_name'}
                 direction={orderBy === 'first_name' ? order : 'asc'}
-                onClick={() => handleSort('first_name')}
+                onClick={getSortHandler('first_name')}
               >
                 {t('firstName')}
               </SortLabel>
@@ -136,7 +139,7 @@ const UsersTable: React.FC<UserTableProps> = ({
               <SortLabel
                 active={orderBy === 'last_name'}
                 direction={orderBy === 'last_name' ? order : 'asc'}
-                onClick={() => handleSort('last_name')}
+                onClick={getSortHandler('last_name')}
               >
                 {t('lastName')}
               </SortLabel>
@@ -145,7 +148,7 @@ const UsersTable: React.FC<UserTableProps> = ({
               <SortLabel
                 active={orderBy === 'email'}
                 direction={orderBy === 'email' ? order : 'asc'}
-                onClick={() => handleSort('email')}
+                onClick={getSortHandler('email')}
               >
                 {t('email')}
               </SortLabel>
@@ -154,7 +157,7 @@ const UsersTable: React.FC<UserTableProps> = ({
               <SortLabel
                 active={orderBy === 'department_name'}
                 direction={orderBy === 'department_name' ? order : 'asc'}
-                onClick={() => handleSort('department_name')}
+                onClick={getSortHandler('department_name')}
               >
                 {t('department')}
               </SortLabel>
@@ -163,7 +166,7 @@ const UsersTable: React.FC<UserTableProps> = ({
               <SortLabel
                 active={orderBy === 'position_name'}
                 direction={orderBy === 'position_name' ? order : 'asc'}
-                onClick={() => handleSort('position_name')}
+                onClick={getSortHandler('position_name')}
               >
                 {t('position')}
               </SortLabel>
@@ -177,9 +180,7 @@ const UsersTable: React.FC<UserTableProps> = ({
               <TableCell
                 component="th"
                 scope="row"
-                onClick={() =>
-                  navigate(AppRoutes.Users.Children.Profile.Create(user.id))
-                }
+                onClick={handleProfileNavigate(user.id)}
               >
                 {user.profile.avatar ? (
                   <UserAvatar src={user.profile.avatar} />
@@ -198,13 +199,9 @@ const UsersTable: React.FC<UserTableProps> = ({
               <TableCell align="left">{user.position_name || '-'}</TableCell>
               <ActionTableCell>
                 {user.id === userId ? (
-                  <MoreIcon onClick={() => onClick(user)} />
+                  <MoreIcon onClick={handleUserClick(user)} />
                 ) : (
-                  <ArrowIcon
-                    onClick={() =>
-                      navigate(AppRoutes.Users.Children.Profile.Create(user.id))
-                    }
-                  />
+                  <ArrowIcon onClick={handleProfileNavigate(user.id)} />
                 )}
               </ActionTableCell>
             </StyledTableRow>

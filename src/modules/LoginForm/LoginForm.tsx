@@ -20,6 +20,10 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
 
+  const handleNavigate = () => {
+    navigate(AppRoutes.ForgotPassword);
+  };
+
   const { t } = useTranslation(['authorisation', 'common']);
   const [login, { loading }] = useLazyLogin();
 
@@ -109,7 +113,7 @@ const LoginForm = () => {
               variant="text"
               fullWidth
               disabled={loading}
-              onClick={() => navigate(AppRoutes.ForgotPassword)}
+              onClick={handleNavigate}
             >
               {t('forgotPassword')}
             </FormButton>

@@ -6,17 +6,17 @@ import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import { useTranslation } from 'react-i18next';
 import { Container } from './style';
+import { type CvsHeaderProps } from './type';
 
-interface CvsHeader {
-  cv: string;
-}
-
-const CvsHeader: React.FC<CvsHeader> = ({ cv }) => {
+const CvsHeader: React.FC<CvsHeaderProps> = ({ cv }) => {
   const navigate = useNavigate();
+  const handleNavigate = () => {
+    navigate(AppRoutes.Cvs.Path);
+  };
   const [t] = useTranslation();
   return (
     <Container>
-      <Button onClick={() => navigate(AppRoutes.Cvs.Path)}>{t('cv')}</Button>
+      <Button onClick={handleNavigate}>{t('cv')}</Button>
       <KeyboardArrowRightIcon />
       <Button style={{ color: theme.palette.text.secondary }}>
         {cv || ''}

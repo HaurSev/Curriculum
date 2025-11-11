@@ -9,6 +9,18 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
 
+  const handleProfileNavigate = () => {
+    navigate(AppRoutes.Users.Children.Profile.Create(userId || ''));
+  };
+
+  const handleSkillNavigate = () => {
+    navigate(AppRoutes.Users.Children.Skills.Create(userId || ''));
+  };
+
+  const handleLanguageNavigate = () => {
+    navigate(AppRoutes.Users.Children.UserLanguages.Create(userId || ''));
+  };
+
   const { t } = useTranslation('common');
 
   return (
@@ -16,9 +28,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
       <StyledButtonGroup variant="text">
         <ProfileButton
           variant="text"
-          onClick={() =>
-            navigate(AppRoutes.Users.Children.Profile.Create(userId || ''))
-          }
+          onClick={handleProfileNavigate}
           isActive={active === 'profile'}
         >
           {t('profile')}
@@ -26,9 +36,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
 
         <ProfileButton
           variant="text"
-          onClick={() =>
-            navigate(AppRoutes.Users.Children.Skills.Create(userId || ''))
-          }
+          onClick={handleSkillNavigate}
           isActive={active === 'skills'}
         >
           {t('skills')}
@@ -36,11 +44,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ active }) => {
 
         <ProfileButton
           variant="text"
-          onClick={() =>
-            navigate(
-              AppRoutes.Users.Children.UserLanguages.Create(userId || ''),
-            )
-          }
+          onClick={handleLanguageNavigate}
           isActive={active === 'languages'}
         >
           {t('languages')}

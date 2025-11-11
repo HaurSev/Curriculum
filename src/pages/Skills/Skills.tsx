@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import SideBar from '../../components/SideBar/SideBar';
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useCallback, useState } from 'react';
 import SkillTable from '../../modules/SkillTable/SkillTable';
 import { Container, HeaderPart, MainPart } from '../Components';
 import AddIcon from '@mui/icons-material/Add';
@@ -21,6 +21,13 @@ const Skills = () => {
     setAddOpen(!isAddOpen);
   };
 
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [],
+  );
+
   return (
     <Container>
       <SideBar active="skills" />
@@ -30,7 +37,7 @@ const Skills = () => {
           <HeaderContent>
             <Search
               searchValue={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={handleSearchChange}
             ></Search>
             <AddSkillButton onClick={handlSetAddOpen}>
               <AddIcon />

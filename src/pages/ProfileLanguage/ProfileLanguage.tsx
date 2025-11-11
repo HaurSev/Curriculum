@@ -109,7 +109,7 @@ const ProfileLanguage = () => {
       <SideBar active="language" />
       <MainPart>
         <HeaderPart>
-          <Header full_name={data?.profile.full_name || ''} />
+          <Header fullName={data?.profile.full_name || ''} />
           <ProfileHeader active="languages" />
         </HeaderPart>
 

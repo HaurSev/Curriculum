@@ -101,7 +101,7 @@ const ProfileSkills = () => {
       <SideBar active="skills" />
       <MainPart>
         <HeaderPart>
-          <Header full_name={data?.profile.full_name || ''} />
+          <Header fullName={data?.profile.full_name || ''} />
           <ProfileHeader active="skills" />
         </HeaderPart>
         <Suspense>

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import SideBar from '../../components/SideBar/SideBar';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -45,6 +45,14 @@ const UserCV = () => {
       });
     }
   }, [error]);
+
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSearchValue(event.target.value);
+    },
+    [],
+  );
+
   if (loading) return <CircularProgress />;
 
   return (
@@ -54,10 +62,7 @@ const UserCV = () => {
         <HeaderPart>
           <PageTitle>{t('cv')}</PageTitle>
           <HeaderContent>
-            <Search
-              onChange={(e) => setSearchValue(e.target.value)}
-              searchValue={searchValue}
-            />
+            <Search onChange={handleSearchChange} searchValue={searchValue} />
             {userId == user.id && (
               <AddCvButton onClick={handleSetAdd}>
                 <AddIcon />
