@@ -37,7 +37,8 @@ const LoginForm = () => {
       if (!response.data) return;
 
       const { email, id, role } = response.data.login.user;
-      const { avatar, full_name } = response.data.login.user.profile;
+      const { avatar, full_name, last_name, first_name } =
+        response.data.login.user.profile;
       sessionStorage.setItem('access_token', response.data.login.access_token);
       sessionStorage.setItem(
         'refresh_token',
@@ -45,7 +46,15 @@ const LoginForm = () => {
       );
       sessionStorage.setItem(
         'user',
-        JSON.stringify({ id, email, role, full_name, avatar }),
+        JSON.stringify({
+          id,
+          email,
+          role,
+          full_name,
+          avatar,
+          first_name,
+          last_name,
+        }),
       );
 
       navigate(AppRoutes.Users.Path);
