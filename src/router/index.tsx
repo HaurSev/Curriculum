@@ -5,40 +5,36 @@ import { lazy, Suspense } from 'react';
 import { CircularProgress } from '@mui/material';
 
 const ProfileLanguage = lazy(
-  () => import('../pages/ProfileLanguage/ProfileLanguage.tsx'),
+  () => import('../pages/ProfileLanguage/ProfileLanguage'),
 );
-const CVsPage = lazy(() => import('../pages/CVsPage/CVsPage.tsx'));
-const Login = lazy(() => import('../pages/Login/Login.tsx'));
-const Signup = lazy(() => import('../pages/Signup/Signup.tsx'));
+const CVsPage = lazy(() => import('../pages/CVsPage/CVsPage'));
+const Login = lazy(() => import('../pages/Login/Login'));
+const Signup = lazy(() => import('../pages/Signup/Signup'));
 const ForgotPassword = lazy(
-  () => import('../pages/ForgotPassword/ForgotPassword.tsx'),
+  () => import('../pages/ForgotPassword/ForgotPassword'),
 );
-const Users = lazy(() => import('../pages/Users/Users.tsx'));
-const Profile = lazy(() => import('../pages/Profile/Profile.tsx'));
+const Users = lazy(() => import('../pages/Users/Users'));
+const Profile = lazy(() => import('../pages/Profile/Profile'));
 const ProfileSkills = lazy(
-  () => import('../pages/ProfileSkills/ProfileSkills.tsx'),
+  () => import('../pages/ProfileSkills/ProfileSkills'),
 );
-const UserCv = lazy(() => import('../pages/UserCV/UserCV.tsx'));
+const UserCv = lazy(() => import('../pages/UserCV/UserCV'));
 
-const Languages = lazy(() => import('../pages/Languages/Languages.tsx'));
+const Languages = lazy(() => import('../pages/Languages/Languages'));
 
-const Skills = lazy(() => import('../pages/Skills/Skills.tsx'));
+const Skills = lazy(() => import('../pages/Skills/Skills'));
 
 const CvDetailsPage = lazy(
-  () => import('../pages/CvDetailsPage/CvDetailsPage.tsx'),
+  () => import('../pages/CvDetailsPage/CvDetailsPage'),
 );
 
-const CvSkillsPage = lazy(
-  () => import('../pages/CvSkillsPage/CvSkillsPage.tsx'),
-);
+const CvSkillsPage = lazy(() => import('../pages/CvSkillsPage/CvSkillsPage'));
 
 const CvProjectsPage = lazy(
-  () => import('../pages/CvProjectsPage/CvProjectsPage.tsx'),
+  () => import('../pages/CvProjectsPage/CvProjectsPage'),
 );
 
-const CvPreview = lazy(
-  () => import('../pages/CvPreviewPage/CvPreviewPage.tsx'),
-);
+const CvPreview = lazy(() => import('../pages/CvPreviewPage/CvPreviewPage'));
 
 const router = createBrowserRouter([
   {
