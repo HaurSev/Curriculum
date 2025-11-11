@@ -17,6 +17,7 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({
   first_name,
   avatar,
   userId,
+  onUpdate,
 }) => {
   const [t] = useTranslation(['users', 'common']);
 
@@ -47,6 +48,8 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({
         });
 
         if (response?.data) {
+          onUpdate();
+
           toast.success(t('common:successfully'), {
             position: 'top-center',
             autoClose: 3000,
